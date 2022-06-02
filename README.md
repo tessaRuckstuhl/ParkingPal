@@ -1,41 +1,41 @@
 # PARKINGPAL - SEBA MASTER 2022
-
 ## Installation
 
-- [Node.js](https://nodejs.org/) version as stated in .nvmrc
+- [Node.js](https://nodejs.org/) use version in .nvrmc
+- NPM
 
 ```sh
 node -v
 > v16.*
+
+mpn -v
+> v8.*
 ```
+
 - [MongoDB](https://mongodb.com/) you can use local or MongoDB Atlas
 
 
-### Server
-
-- NodeJS
-- MongoDB
-- ExpressJS
-- JWT
-- Passport JS
-
-First, fill out .env with valid values (check .env.example for reference)
+## Server Setup
+### Copy .env.example and fill out a local .env with valid values
+```sh
+cp .env.example .env  
+```
+### Run server
 
 ```sh
 cd server 
-npm i
-npm run dev
+npm i # only required on package updates and first setup
+npm run dev:server # start server in dev mode (nodemon)
 ```
-Server should listen on port 3001
 
-## 
-### Client
+On success, server should now be running on port 3001.
 
-- ReactJS
-- Axios
-- React Router Dom
-- MUI
-- TAilwindCSS
+## Client Setup
+### Copy .env.example and fill out a local .env with valid values
+```sh
+cp .env.example .env  
+```
+### Start client
 
 ```sh
 cd client 
@@ -43,13 +43,12 @@ npm i
 npm start
 ```
 
-Client should run on port 3000
+Client should now be running on port 3000
 
-## Development Guidelines
+## Other
+### React Component Definitions
 
-### Client
-
-#### Component Definition
+Use functional components over class components:
 
 ```javascript
 const Welcome = (props) => { 
@@ -58,10 +57,15 @@ const Welcome = (props) => {
 
 export default Welcome;
 ```
+### Code Formatting
 
-#### Styling
+[Prettier](https://prettier.io/docs/en/options.html) - > .prettierrc
+ 
+Can be set as default formatter in VSCODE
+## Styling
 
 - [TailwindCSS](https://tailwindcss.com/) - for styling components
 - [Mui UI Library](https://mui.com/) - as component library
+
 
 

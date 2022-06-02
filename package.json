@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start:server": "node server/src/server.js",
-    "dev:server": "nodemon --watch server server/src/server.js",
-    "client": "cd client && npm start"
+    "dev:server": "nodemon --watch server server/src/server.js"
   },
   "engines": {
     "node": ">=12.0.0 <17",
