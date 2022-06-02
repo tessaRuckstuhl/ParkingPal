@@ -1,0 +1,14 @@
+cache:
+  paths:
+    - node_modules/
+
+image: node:16.14.2
+
+stages:
+  - lint
+
+lint:
+  stage: lint
+  script:
+    - npm install --also=dev
+    - npm run lint
