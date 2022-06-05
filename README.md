@@ -23,7 +23,6 @@ cp .env.example .env
 ### Run server
 
 ```sh
-cd server 
 npm i # only required on package updates and first setup
 npm run dev:server # start server in dev mode (nodemon)
 ```
