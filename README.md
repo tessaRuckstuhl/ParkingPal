@@ -8,7 +8,7 @@
 node -v
 > v16.*
 
-mpn -v
+npm -v
 > v8.*
 ```
 
