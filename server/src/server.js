@@ -8,18 +8,21 @@ const path = require('path');
 const api = require('./routes');
 const { isAuthenticated } = require('./middlewares');
 
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.resolve('.env') });
+}
+
 const app = express();
 app.use(cors());
+// leave this here...
+require('./services/passport')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
 
 
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: path.resolve('.env') });
-  
-}
+
 
 
 // connect to mongodb
