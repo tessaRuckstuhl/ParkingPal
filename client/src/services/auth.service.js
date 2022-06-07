@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const AuthService = {
   signup(credentials) {
-    return axios.post(`${process.env.REACT_APP_API_URL}signup`, credentials);
+    return axios.post(`${process.env.REACT_APP_API_URL}user/signup`, credentials);
   },
   login(credentials) {
-    return axios.post(`${process.env.REACT_APP_API_URL}login`, credentials);
+    return axios.post(`${process.env.REACT_APP_API_URL}user/login`, credentials);
   },
   logout() {
     return localStorage.removeItem('token');

@@ -21,10 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
 
-
-
-
-
 // connect to mongodb
 mongoose
   .connect(process.env.MONGODB_URI, {
