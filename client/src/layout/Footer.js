@@ -41,7 +41,7 @@ const Footer = () => {
         {/* links by sections */}
         {sections.map((section, idx) => (
           <div key={idx}>
-            <div className="text-sm mb-3 font-semibold">{section.sectionTitle}</div>
+            <div className="text-sm mb-2 font-semibold">{section.sectionTitle}</div>
             <div>
               {section.links.map((sectionLink, idx) => (
                 <div key={idx}>
