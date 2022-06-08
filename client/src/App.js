@@ -8,7 +8,7 @@ import AuthComponent from './services/AuthComponent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
-
+import PageNotFound from './pages/404';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
@@ -17,20 +17,19 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <MainContextProvider>
           <Default>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Login />}></Route>
-              <Route path="signup" element={<Signup />}></Route>
-              <Route
-                path="dashboard"
-                element={
-                  <AuthComponent>
-                    <Dash />
-                  </AuthComponent>
-                }
-              ></Route>
-            </Routes>
-          </BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Login />}></Route>
+                <Route path="signup" element={<Signup />}></Route>
+                <Route
+                  path="dashboard"
+                  element={
+                    <AuthComponent>
+                      <Dash />
+                    </AuthComponent>
+                  }
+                ></Route>
+                <Route path='*' element={<PageNotFound />} />
+              </Routes>
           </Default>
         </MainContextProvider>
       </ThemeProvider>

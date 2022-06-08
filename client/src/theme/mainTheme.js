@@ -12,7 +12,7 @@ const mainTheme = {
       main: '#6F11F2'
     },
     secondary: {
-      main: '#4b6197'
+      main: '#3C3C3C'
     },
     text: {
       primary: '#000000',

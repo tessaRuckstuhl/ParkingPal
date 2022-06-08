@@ -4,11 +4,11 @@ import Navbar from './Navbar';
 
 const Default = ({ children }) => {
   return (
-    <div>
+    <>
       <Navbar />
-      <div className="px-20 py-3">{children}</div>
+      {children}
       <Footer />
-    </div>
+    </>
   );
 };
 
