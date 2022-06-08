@@ -17,15 +17,14 @@ module.exports = {
   signup: (req, res, next) => {
     const schema = Joi.object({
       username: Joi.string().email(),
-      password: Joi.string().regex(
-        // must contain at least 1 lowercase
-        // must contain at least 1 uppercase
-        // must contain at least 1 numeric
-        // [!@#$%^&{}[]*?] must contain at least 1 special character
-        // the password should be between 8-32
-        // new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,32})")
-        new RegExp('^[a-zA-Z0-9]{6,12}$')
-      )
+      // must contain at least 1 letter
+      // must contain at least 1 numeric
+      password: Joi.string().alphanum(),
+      surname: Joi.string(),
+      firstName: Joi.string(),
+      birthdate: Joi.date()
+
+
     });
     const { error } = schema.validate(req.body);
     if (error) {
@@ -38,15 +37,13 @@ module.exports = {
         case 'password':
           res.status(400).send({
             error: `password does not match the combination.
-              must contain at least 1 lowercase.
-              must contain at least 1 uppercase.
-            must contain at least 1 numeric.
-            [!@#$%^&{}[]*?] must contain at least 1 special character.
-            the password should be between 8-3.
+              must contain at least 1 letter.
+              must contain at least 1 number.
             `
           });
           break;
         default:
+          console.log(error.details[0])
           res.status(400).send({
             error: 'invalid registration info'
           });

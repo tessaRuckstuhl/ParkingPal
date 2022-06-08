@@ -21,6 +21,7 @@ module.exports = {
     try {
       const user = await User.create(req.body);
       const userObjJson = user.toJSON();
+
       return res.send({
         user: userObjJson,
         token: jwtSignUser(userObjJson)

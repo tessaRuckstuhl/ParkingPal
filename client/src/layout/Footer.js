@@ -45,8 +45,8 @@ const Footer = () => {
             <div className="text-sm mb-3 font-semibold">{section.sectionTitle}</div>
             <div>
               {section.links.map((sectionLink, idx) => (
-                <div>
-                  <a key={idx} href={sectionLink.link} className="text-xs mb-2 hover:underline">
+                <div key={idx}>
+                  <a href={sectionLink.link} className="text-xs mb-2 hover:underline">
                     {sectionLink.linkTitle}
                   </a>
                 </div>

@@ -6,7 +6,9 @@ const Default = ({ children }) => {
   return (
     <>
       <Navbar />
+      <div className='p-5'>
       {children}
+      </div>
       <Footer />
     </>
   );

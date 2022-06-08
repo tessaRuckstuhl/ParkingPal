@@ -1,6 +1,6 @@
 import React from 'react';
 import { MainContextProvider } from './contexts/MainContext';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dash from './pages/Dash';
@@ -14,9 +14,13 @@ const App = () => {
   const theme = createTheme(mainTheme);
   return (
     <div style={{ height: '100vh' }}>
+      {/* mui theme */}
       <ThemeProvider theme={theme}>
+        {/* token context  */}
         <MainContextProvider>
-          <Default>
+            {/* Default Layout, includes header and footer */}
+            <Default>
+              {/* Routes */}
               <Routes>
                 <Route path="/" element={<Login />}></Route>
                 <Route path="signup" element={<Signup />}></Route>
@@ -28,9 +32,10 @@ const App = () => {
                     </AuthComponent>
                   }
                 ></Route>
-                <Route path='*' element={<PageNotFound />} />
+                {/* matches anything except the above */}
+                <Route path="*" element={<PageNotFound />} />
               </Routes>
-          </Default>
+            </Default>
         </MainContextProvider>
       </ThemeProvider>
     </div>

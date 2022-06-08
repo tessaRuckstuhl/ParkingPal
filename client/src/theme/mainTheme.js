@@ -19,7 +19,7 @@ const mainTheme = {
       secondary: '#000000'
     },
     background: {
-      paper: '#252525',
+      paper: '#F3F3F0',
       default: '#303030'
     }
   },
