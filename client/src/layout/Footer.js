@@ -29,7 +29,6 @@ const Footer = () => {
     {
       sectionTitle: 'About',
       links: [
-        { link: '/404', linkTitle: 'Newsroom' },
         { link: '/404', linkTitle: 'Learn about new features' },
         { link: '/404', linkTitle: 'Get to know the team' },
         { link: '/404', linkTitle: 'Careers' },
