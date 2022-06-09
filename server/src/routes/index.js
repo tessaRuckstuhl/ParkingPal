@@ -7,6 +7,6 @@ const router = express.Router();
 // /api/user
 router.use('/user', user);
 // /api/parkingspace
-router.use('/parkingSpace', parkingSpace)
+router.use('/parkingspace', parkingSpace)
 
 module.exports = router;

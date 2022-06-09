@@ -5,12 +5,6 @@ const ParkingSpaceSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    index: {
-      unique: true
-    }
   },
   location: {
     type: String,

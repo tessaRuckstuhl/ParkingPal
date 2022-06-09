@@ -2,22 +2,16 @@ const router = require('express').Router();
 const parkingSpaceController = require('../controllers/parkingSpaceController');
 
 
-// api/parkingSpace
-router.get('/', (req, res) => {
-  res.send({
-    message: 'ParkingSpaces'
-  });
-});
-// api/parkingSpace/add
-router.post('/add', parkingSpaceController.addParkingSpace);
+// api/parkingSpace/
+router.post('/', parkingSpaceController.createParkingSpace);
 
-// api/parkingSpace/$id
-router.get('/$id',parkingSpaceController.getParkingSpace);
+// api/parkingSpace/:id
+router.get('/:id',parkingSpaceController.getParkingSpaceById);
 
-// api/parkingSpace/delete/$id
-router.delete('/delete/$id',parkingSpaceController.removeParkingSpace);
+// api/parkingSpace/:id
+router.delete('/:id',parkingSpaceController.deleteParkingSpace);
 
-// api/parkingSpace/getAll
-router.get('/getAll',parkingSpaceController.getAllParkingSpaces);
+// api/parkingSpace/
+router.get('/',parkingSpaceController.listParkingSpaces);
 
 module.exports = router;
