@@ -13,7 +13,7 @@ const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
   return (
-    <div style={{ height: '100vh' }}>
+    <div className='h-full'>
       {/* mui theme */}
       <ThemeProvider theme={theme}>
         {/* token context  */}

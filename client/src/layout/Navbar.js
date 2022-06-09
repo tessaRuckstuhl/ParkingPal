@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 const Navbar = () => {
   return (
-    <div className="flex justify-between py-2 px-5">
+    <div className="flex justify-between items-center px-5 h-[50px]">
         <Link to="dashboard">
-          <img src="./parkingpal-logo.png" width={24} height={24} alt="Parkingpal logo"></img>
+          <img src="./parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
       <div className="flex space-x-4 items-center">
         <Link to="404">

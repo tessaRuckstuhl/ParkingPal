@@ -19,6 +19,8 @@ const Signup = () => {
     firstName: '',
     birthdate: '1998-01-01',
   });
+
+  const [checked, setChecked] = useState(false);
   const { jwt, setJwt } = useContext(MainContext);
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState('');
@@ -34,6 +36,10 @@ const Signup = () => {
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,75 +71,93 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <Typography component="h1" variant="h5">
-        Sign Up Page
-      </Typography>
-      <form noValidate onSubmit={(e) => handleSubmit(e)}>
-        <TextField
-          {...textFieldConfigs}
-          id="username"
-          label="Email"
-          name="username"
-          autoComplete="username"
-          autoFocus
-        />
-        <TextField
-          {...textFieldConfigs}
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-        />
-        <TextField
-          {...textFieldConfigs}
-          name="firstName"
-          label="First Name"
-          id="firstName"
-          autoComplete="given-name"
-        />
-        <TextField
-          {...textFieldConfigs}
-          name="surname"
-          label="Surname"
-          id="surname"
-          autoComplete="family-name"
-        />
-        <TextField
-          {...textFieldConfigs}
-          name="birthdate"
-          label="Birthdate"
-          id="birthdate"
-          type="date"
-          defaultValue="1998-01-01"
-        />
+    <div className="flex flex-col items-center ">
+      <div className="w-1/2">
+        <div className="text-2xl font-bold mb-7">
+          Sign up to <span className="text-purple">ParkingPal</span>
+        </div>
+        <form noValidate onSubmit={(e) => handleSubmit(e)}>
+          <div className="flex space-x-5">
+            <TextField
+              {...textFieldConfigs}
+              name="firstName"
+              label="Name"
+              id="firstName"
+              autoComplete="given-name"
+            />
+            <TextField
+              {...textFieldConfigs}
+              name="surname"
+              label="Surname"
+              id="surname"
+              autoComplete="family-name"
+            />
+          </div>
+          <TextField
+            {...textFieldConfigs}
+            id="username"
+            label="Email"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            {...textFieldConfigs}
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
 
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
-        {showAlert ? (
-          <Alert style={{ whiteSpace: 'pre-line' }} severity="warning">
-            {alertText}
-          </Alert>
-        ) : null}
-        <Button type="submit" fullWidth variant="contained" color="primary">
-          Sign Up
-        </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link href="404" variant="body2">
-              Forgot password?
-            </Link>
-          </Grid>
-          <Grid item>
+          <TextField
+            {...textFieldConfigs}
+            name="birthdate"
+            label="Birthdate"
+            id="birthdate"
+            type="date"
+            defaultValue="1998-01-01"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                value="accept"
+                checked={checked}
+                onChange={handleCheckboxChange}
+                color="primary"
+              />
+            }
+            label={
+              <div>
+                <span>I accept the </span>
+                <Link to={'/terms'}>terms of use</Link>
+                <span> and </span>
+                <Link to={'/privacy'}>privacy policy</Link>
+              </div>
+            }
+          />
+          {showAlert ? (
+            <Alert style={{ whiteSpace: 'pre-line' }} severity="warning">
+              {alertText}
+            </Alert>
+          ) : null}
+            <Button               
+              disabled={Object.values(formData).filter((o) => o == '').length > 0 || checked == false}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Sign Up
+            </Button>
+          <div className="flex justify-end mt-1">
             <Link href="/" variant="body2">
               {'Have an Account? Sign In'}
             </Link>
-          </Grid>
-        </Grid>
-      </form>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -6,7 +6,8 @@ const Default = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className='p-5'>
+      {/* making sure the page stretches between navbar and footer */}
+      <div className='p-5 h-[calc(100%_-_270px)]'>
       {children}
       </div>
       <Footer />

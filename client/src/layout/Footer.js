@@ -36,7 +36,7 @@ const Footer = () => {
     },
   ];
   return (
-    <div className="bg-offWhite flex flex-col px-10">
+    <div className="bg-offWhite flex flex-col justify-center px-10 h-[220px]">
       <div className="flex py-5 justify-between">
         {/* links by sections */}
         {sections.map((section, idx) => (
