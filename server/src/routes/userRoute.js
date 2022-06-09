@@ -9,6 +9,10 @@ router.get('/', (req, res) => {
     message: '💻'
   });
 });
+router.delete('/:id', userController.deleteById);
+
+router.patch('/:id', userController.updateById);
+
 // api/user/signup
 router.post('/signup', signup, userController.signup);
 
