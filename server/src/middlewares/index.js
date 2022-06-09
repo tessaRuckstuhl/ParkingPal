@@ -35,6 +35,7 @@ module.exports = {
           });
           break;
         case 'password':
+           // TODO: update Error message
           res.status(400).send({
             error: `password does not match the combination.
               must contain at least 1 letter.
