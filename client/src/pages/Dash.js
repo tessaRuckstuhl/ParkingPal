@@ -25,10 +25,6 @@ const Dash = () => {
   return (
     <div>
         <h1>Dashboard...</h1>
-        <div >
-          <pre>{JSON.stringify(parsedData, null, 2)}</pre>
-        </div>
-
         <Button
           onClick={() => logout()}
           fullWidth
@@ -37,6 +33,7 @@ const Dash = () => {
         >
           Logout
           </Button>
+      
     </div >
   );
 };
