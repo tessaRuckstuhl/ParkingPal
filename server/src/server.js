@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
   res.send('Nothing to see here...');
 });
 app.use('/api', api);
-app.use(isAuthenticated);
+//app.use(isAuthenticated);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

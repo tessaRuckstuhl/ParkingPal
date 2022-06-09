@@ -13,36 +13,36 @@ const ReviewSchema = new Schema({
         }
     },
     rating: {
-        type: BigInt,
+        type: Number,
         required: true
     },
     description: {
         type: String,
         trim: true,
-    },
-    neighborhoodRating: {
-        type: BigInt,
-    },
-    communicationRating: {
-        type: BigInt,
-    },
-    accessRating: {
-        type: BigInt,
-    },
-    accuracyRating: {
-        type: BigInt,
-    },
-    locationRating: {
-        type: BigInt,
-    },
-    valueRating: {
-        type: BigInt,
     }
+    // neighborhoodRating: {
+    //     type: BigInt,
+    // },
+    // communicationRating: {
+    //     type: BigInt,
+    // },
+    // accessRating: {
+    //     type: BigInt,
+    // },
+    // accuracyRating: {
+    //     type: BigInt,
+    // },
+    // locationRating: {
+    //     type: BigInt,
+    // },
+    // valueRating: {
+    //     type: BigInt,
+    // }
 }, {
     timestamps: true
 });
 
 
-const User = mongoose.model('Review', ReviewSchema);
+const Review = mongoose.model('Review', ReviewSchema);
 
 module.exports = Review;

@@ -11,15 +11,15 @@ router.get('/review', (req, res) => {
 });
 
 // api/review/create
-router.post('/create', create, reviewController.create);
+router.post('/create', reviewController.createReview);
 
 // api/review/read
-router.get('/read', reviewController.read);
+router.get('/read', reviewController.readReview);
 
 // api/review/update
-router.put('/update', reviewController.update);
+//router.put('/update', reviewController.updateR);
 
 // api/review/delete
-router.delete('/delete', reviewController.delete);
+router.delete('/delete', reviewController.deleteReview);
 
 module.exports = router;

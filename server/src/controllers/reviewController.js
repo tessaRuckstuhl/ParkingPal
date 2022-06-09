@@ -1,12 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { Review } = require('../models');
 
-function jwtSignUser(user) {
-    const ONE_WEEK = 7 * 24 * 60 * 60;
-    return jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: ONE_WEEK
-    });
-}
 
 module.exports = {
     findByID: (req, res) => {
@@ -24,17 +18,23 @@ module.exports = {
                 review: reviewObjJson
             });
         } catch (error) {
+            // TODO Error, for duplicate key error
+            console.log(error)
             return res.status(400).send({ error: 'something is wrong' });
         }
     },
     async deleteReview(req, res) {
         try {
-            const { review } = req;
+            const { reviewer } = req.body;
+
+            const review = await Review.findOne({ reviewer });
+
             if (!review) {
                 return res.status(404).send({ error: 'review does not exist' });
             }
+            await Review.deleteOne({ reviewer }) // TODO need to be delete by id, not by reviewer
 
-            await Review.delete(review)             // TODO Geht das so?
+
             const reviewObjJson = review.toJSON();
             return res.send({
                 review: reviewObjJson
@@ -63,11 +63,4 @@ module.exports = {
 
 // UPDATE fehlt noch!
 
-// Fragen: 
-/*
-1. Wie muss ich mich um den JWT Token kümmern? 
-2. Was macht der zweite Parameter bei dem Routing?
-3. Brauche ich Methoden bei meinem Model?  
 
-
-*/
