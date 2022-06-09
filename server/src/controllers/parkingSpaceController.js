@@ -4,7 +4,7 @@ module.exports = {
   async addParkingSpace(req, res) {
     try {
         const newParkingSpace = await ParkingSpace.create(req.body);
-        
+
         return res.status(200).send('ParkingSpace added!')      
     } catch (error) {
         return res.status(400).send({ error : 'Error when creating a Parking Space'});
@@ -28,15 +28,13 @@ module.exports = {
     }
 
   },
-
   async getAllParkingSpaces(req, res) {
     try {
-      ParkingSpace.find().then(() => res.json('All ParkingSpaces returned!'))
+      const allParkingSpaces = await ParkingSpace.find()
+      return res.send(allParkingSpaces);
     }
     catch (error) {
       return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });
     }
-
-
 }
 };

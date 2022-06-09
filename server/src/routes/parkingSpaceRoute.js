@@ -17,7 +17,7 @@ router.get('/$id',parkingSpaceController.getParkingSpace);
 // api/parkingSpace/delete/$id
 router.delete('/delete/$id',parkingSpaceController.removeParkingSpace);
 
-// api/parkingSpace/all
-router.get('/all',parkingSpaceController.getAllParkingSpaces);
+// api/parkingSpace/getAll
+router.get('/getAll',parkingSpaceController.getAllParkingSpaces);
 
 module.exports = router;
