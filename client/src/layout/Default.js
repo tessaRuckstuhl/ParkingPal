@@ -4,11 +4,14 @@ import Navbar from './Navbar';
 
 const Default = ({ children }) => {
   return (
-    <div>
+    <>
       <Navbar />
-      <div className="px-20 py-3">{children}</div>
+      {/* making sure the page stretches between navbar and footer */}
+      <div className='p-5 h-[calc(100%_-_270px)]'>
+      {children}
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

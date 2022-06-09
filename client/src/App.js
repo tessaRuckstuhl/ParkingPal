@@ -1,6 +1,6 @@
 import React from 'react';
 import { MainContextProvider } from './contexts/MainContext';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dash from './pages/Dash';
@@ -11,31 +11,36 @@ import Default from './layout/Default';
 import ParkingSpace from './pages/AddParkingSpace'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 
+import PageNotFound from './pages/404';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
   return (
-    <div style={{ height: '100vh' }}>
+    <div className='h-full'>
+      {/* mui theme */}
       <ThemeProvider theme={theme}>
+        {/* token context  */}
         <MainContextProvider>
-          <Default>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Login />}></Route>
-              <Route path="addPS" element={<ParkingSpace />}></Route>
-              <Route path="all" element={<ListViewParkingSpaces/>}></Route>
-              <Route path="signup" element={<Signup />}></Route>
-              <Route
-                path="dashboard"
-                element={
-                  <AuthComponent>
-                    <Dash />
-                  </AuthComponent>
-                }
-              ></Route>
-            </Routes>
-          </BrowserRouter>
-          </Default>
+            {/* Default Layout, includes header and footer */}
+            <Default>
+              {/* Routes */}
+              <Routes>
+                <Route path="/" element={<Login />}></Route>
+                <Route path="addPS" element={<ParkingSpace />}></Route>
+                <Route path="all" element={<ListViewParkingSpaces/>}></Route>
+                <Route path="signup" element={<Signup />}></Route>
+                <Route
+                  path="dashboard"
+                  element={
+                    <AuthComponent>
+                      <Dash />
+                    </AuthComponent>
+                  }
+                ></Route>
+                {/* matches anything except the above */}
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </Default>
         </MainContextProvider>
       </ThemeProvider>
     </div>

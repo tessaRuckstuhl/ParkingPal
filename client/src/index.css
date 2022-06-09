@@ -9,9 +9,11 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f3f3f0;
 }
 
+html, body, #root {
+  height: 100%
+}
 /* Scroll bar stylings */
 ::-webkit-scrollbar {
   width: 5px;
