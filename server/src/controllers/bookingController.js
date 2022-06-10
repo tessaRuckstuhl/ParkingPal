@@ -29,32 +29,29 @@ module.exports = {
     }
   },
 
-  async updateById(req, res) {
-    const {id} = req.params;
-    const update = req.body;
+  async deleteBooking(req, res) {
     try {
-      const updatedUser = await User.findOneAndUpdate({_id: id}, {...update}, {new:true})
-      const userObjJson = updatedUser.toJSON();
-      return res.send({
-        user: userObjJson,
-      });
+      const { id } = req.params;
+      await Booking.deleteOne(id);
+      return res.status(200).send({success: 'Booking was deleted'})
+
     } catch (error) {
-      return res.status(400).send({ error: 'something is wrong' });
+      return res.status(500).send({ error: 'Could not remove this Booking' }); 
     }
   },
 
-
-  //we will not expose _id to the user therefore we need to delete with location or name
-  async deleteParkingSpace(req, res) {
-    try {
-      const { id } = req.params;
-      await ParkingSpace.deleteOne(id);
-      return res.status(200).send({success: 'ParkingSpace was deleted'})
-
-    } catch (error) {
-      return res.status(500).send({ error: 'Could not remove this ParkingSpace' }); // 'we have an error we don\'t know what to do' })
-    }
-  }
-
-
+// Ich weiss nicht welchen REST Befehl ich bei Postman verwenden soll für 
+//   async updateBookingById(req, res) {
+//     const {id} = req.params;
+//     const update = req.body;
+//     try {
+//       const updatedBooking = await Booking.findOneAndUpdate({_id: id}, {...update}, {new:true})
+//       const bookingObjJson = updatedBooking.toJSON();
+//       return res.send({
+//         booking: bookingObjJson,
+//       });
+//     } catch (error) {
+//       return res.status(400).send({ error: 'something is wrong' });
+//     }
+//   },
 };

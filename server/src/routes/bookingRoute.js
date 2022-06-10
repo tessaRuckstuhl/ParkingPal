@@ -9,11 +9,11 @@ router.post('/', bookingController.createBooking);
 // api/booking/:id
 router.get('/:id',bookingController.getBookingById);
 
-// // api/booking/:id
-// router.delete('/:id',bookingController.deletebooking);
+// api/booking/:id
+router.delete('/:id',bookingController.deleteBooking);
 
-// // api/booking/
-// router.get('/',bookingController.listbookings);
+// api/booking/ Please help
+//router.update('/:id',bookingController.updateBookingById);
 
 
 module.exports = router;
