@@ -40,18 +40,17 @@ module.exports = {
     }
   },
 
-// Ich weiss nicht welchen REST Befehl ich bei Postman verwenden soll für 
-//   async updateBookingById(req, res) {
-//     const {id} = req.params;
-//     const update = req.body;
-//     try {
-//       const updatedBooking = await Booking.findOneAndUpdate({_id: id}, {...update}, {new:true})
-//       const bookingObjJson = updatedBooking.toJSON();
-//       return res.send({
-//         booking: bookingObjJson,
-//       });
-//     } catch (error) {
-//       return res.status(400).send({ error: 'something is wrong' });
-//     }
-//   },
+  async updateBookingById(req, res) {
+    const {id} = req.params;
+    const update = req.body;
+    try {
+      const updatedBooking = await Booking.findOneAndUpdate({_id: id}, {...update}, {new:true})
+      const bookingObjJson = updatedBooking.toJSON();
+      return res.send({
+        booking: bookingObjJson,
+      });
+    } catch (error) {
+      return res.status(400).send({ error: 'something is wrong' });
+    }
+  },
 };

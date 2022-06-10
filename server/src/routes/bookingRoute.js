@@ -12,8 +12,7 @@ router.get('/:id',bookingController.getBookingById);
 // api/booking/:id
 router.delete('/:id',bookingController.deleteBooking);
 
-// api/booking/ Please help
-//router.update('/:id',bookingController.updateBookingById);
-
+// api/booking/ 
+router.patch('/:id',bookingController.updateBookingById);
 
 module.exports = router;
