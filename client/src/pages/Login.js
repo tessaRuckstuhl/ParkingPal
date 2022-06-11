@@ -13,9 +13,8 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 
 const Login = () => {
-  console.log('Login')
-  const [username, setUsername] = useState('');// useState('markooo11')
-  const [password, setPassword] = useState('');// useState('pass')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const { jwt, setJwt } = useContext(MainContext);
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState('');
@@ -54,7 +53,8 @@ const Login = () => {
       setJwt(token);
       navigate('/dashboard');
     } catch (error) {
-      alertToggle(error?.response?.data?.error);
+      console.log(error)
+      alertToggle(error?.response?.data?.error || error.message);
     }
   };
 

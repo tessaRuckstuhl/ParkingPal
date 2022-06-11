@@ -12,15 +12,22 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 
 const Signup = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    surname: '',
+    firstName: '',
+    birthdate: '1998-01-01',
+  });
+
+  const [checked, setChecked] = useState(false);
   const { jwt, setJwt } = useContext(MainContext);
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState('');
   const loading = (time) => new Promise((resolve) => setTimeout(resolve, time));
   const navigate = useNavigate();
 
-  const alertToggle = async(msg) => {
+  const alertToggle = async (msg) => {
     setAlertText(msg);
     setShowAlert(true);
     await loading(4000);
@@ -28,31 +35,23 @@ const Signup = () => {
   };
 
   const handleChange = (event) => {
-    switch (event.target.name) {
-      case 'username':
-        setUsername(event.target.value);
-        break;
-      case 'password':
-        setPassword(event.target.value);
-        break;
-      default:
-        break;
-    }
+    setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-  const handleSubmit = async(event) => {
+
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked);
+  };
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const user = {
-        username,
-        password
-      };
+      const user = { ...formData, birthdate: new Date(formData.birthdate) };
       const response = await AuthService.signup(user);
       const { token } = response?.data;
       localStorage.setItem('token', token);
       setJwt(token);
       navigate('/dashboard');
     } catch (error) {
-      alertToggle(error?.response?.data?.error);
+      alertToggle(error?.response?.data?.error || error.message);
     }
   };
 
@@ -62,67 +61,104 @@ const Signup = () => {
     }
   }, [jwt, navigate]);
 
+  const textFieldConfigs = {
+    variant: 'outlined',
+    margin: 'normal',
+    InputLabelProps: { shrink: true, required: true },
+    onChange: (e) => handleChange(e),
+    fullWidth: true,
+    required: true,
+  };
+
   return (
-      <div >
-        <Typography component="h1" variant="h5">
-          Sign Up Page
-        </Typography>
+    <div className="flex flex-col items-center ">
+      <div className="w-1/2">
+        <div className="text-2xl font-bold mb-7">
+          Sign up to <span className="text-purple">ParkingPal</span>
+        </div>
         <form noValidate onSubmit={(e) => handleSubmit(e)}>
+          <div className="flex space-x-5">
+            <TextField
+              {...textFieldConfigs}
+              name="firstName"
+              label="Name"
+              id="firstName"
+              autoComplete="given-name"
+            />
+            <TextField
+              {...textFieldConfigs}
+              name="surname"
+              label="Surname"
+              id="surname"
+              autoComplete="family-name"
+            />
+          </div>
           <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
+            {...textFieldConfigs}
             id="username"
-            label="Username"
+            label="Email"
             name="username"
             autoComplete="username"
             autoFocus
-            onChange={(e) => handleChange(e)}
           />
           <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
+            {...textFieldConfigs}
             name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(e) => handleChange(e)}
           />
+
+          <TextField
+            {...textFieldConfigs}
+            name="birthdate"
+            label="Birthdate"
+            id="birthdate"
+            type="date"
+            defaultValue="1998-01-01"
+          />
+
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            control={
+              <Checkbox
+                value="accept"
+                checked={checked}
+                onChange={handleCheckboxChange}
+                color="primary"
+              />
+            }
+            label={
+              <div>
+                <span>I accept the </span>
+                <Link to={'/terms'}>terms of use</Link>
+                <span> and </span>
+                <Link to={'/privacy'}>privacy policy</Link>
+              </div>
+            }
           />
-          {
-            showAlert
-              ? <Alert style={{ whiteSpace: 'pre-line' }} severity="warning">{alertText}</Alert>
-              : null
-          }
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
-            Sign Up
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/" variant="body2">
-                {'Have an Account? Sign In'}
-              </Link>
-            </Grid>
-          </Grid>
+          {showAlert ? (
+            <Alert style={{ whiteSpace: 'pre-line' }} severity="warning">
+              {alertText}
+            </Alert>
+          ) : null}
+            <Button               
+              disabled={Object.values(formData).filter((o) => o == '').length > 0 || checked == false}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Sign Up
+            </Button>
+          <div className="flex justify-end mt-1">
+            <Link href="/" variant="body2">
+              {'Have an Account? Sign In'}
+            </Link>
+          </div>
         </form>
       </div>
+    </div>
   );
 };
 
