@@ -19,25 +19,25 @@ const ReviewSchema = new Schema({
     description: {
         type: String,
         trim: true,
+    },
+    neighborhoodRating: {
+        type: Number,
+    },
+    communicationRating: {
+        type: Number,
+    },
+    accessRating: {
+        type: Number,
+    },
+    accuracyRating: {
+        type: Number,
+    },
+    locationRating: {
+        type: Number,
+    },
+    valueRating: {
+        type: Number,
     }
-    // neighborhoodRating: {
-    //     type: BigInt,
-    // },
-    // communicationRating: {
-    //     type: BigInt,
-    // },
-    // accessRating: {
-    //     type: BigInt,
-    // },
-    // accuracyRating: {
-    //     type: BigInt,
-    // },
-    // locationRating: {
-    //     type: BigInt,
-    // },
-    // valueRating: {
-    //     type: BigInt,
-    // }
 }, {
     timestamps: true
 });

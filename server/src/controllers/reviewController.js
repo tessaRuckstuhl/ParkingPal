@@ -16,7 +16,7 @@ module.exports = {
             const updatedReview = await Review.findOneAndUpdate({ _id: id }, { ...update }, { new: true })
             const reviewObjJson = updatedReview.toJSON();
             return res.send({
-                user: reviewObjJson,
+                review: reviewObjJson,
             });
         } catch (error) {
             return res.status(400).send({ error: 'something is wrong' });
