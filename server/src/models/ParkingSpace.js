@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const ParkingSpaceSchema = new Schema({
   name: {
-    type: User,
+    type: String,
     required: true,
   },
   owner: {
