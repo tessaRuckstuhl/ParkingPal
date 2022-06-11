@@ -3,14 +3,15 @@ const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const ReviewSchema = new Schema({
-    reviewer: {
+    user_id: {
         type: String,
         required: true,
         lowercase: true,
         trim: true,
-        index: {
-            unique: true
-        }
+    },
+    booking_id:{
+        required: true,
+        type: String
     },
     rating: {
         type: Number,

@@ -4,7 +4,7 @@ const { Review } = require('../models');
 
 module.exports = {
     findByID: (req, res) => {
-        const { review } = req;
+        const { review } = req.params;
         if (!review) {
             return res.status(400).send({ error: 'server is having an issue please try again later' });
         }
