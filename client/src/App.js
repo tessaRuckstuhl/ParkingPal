@@ -8,7 +8,7 @@ import AuthComponent from './services/AuthComponent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
-import ParkingSpace from './pages/AddParkingSpace'
+import ParkingSpace from './pages/CreatePS'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 
 import PageNotFound from './pages/404';
@@ -26,7 +26,7 @@ const App = () => {
               {/* Routes */}
               <Routes>
                 <Route path="/" element={<Login />}></Route>
-                <Route path="addPS" element={<ParkingSpace />}></Route>
+                <Route path="parkingSpaceCreation" element={<ParkingSpace />}></Route>
                 <Route path="all" element={<ListViewParkingSpaces/>}></Route>
                 <Route path="signup" element={<Signup />}></Route>
                 <Route

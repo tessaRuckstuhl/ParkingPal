@@ -19,7 +19,7 @@ const ListViewParkingSpaces = () => {
     }, []);
 
     const showAll = async () => {
-        const result = await ParkingSpaceService.getAllPS();
+        const result = await ParkingSpaceService.listParkingSpaces();
         setParkingSpaces(result);
     }
 

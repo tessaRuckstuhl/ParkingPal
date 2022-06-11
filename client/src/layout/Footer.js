@@ -16,7 +16,7 @@ const Footer = () => {
       sectionTitle: 'Community',
       links: [
         { link: '/404', linkTitle: 'Celebrating diversity & belonging' },
-        { link: '/404', linkTitle: 'Combating discriniation' },
+        { link: '/404', linkTitle: 'Combating discrimiation' },
       ],
     },
     {
