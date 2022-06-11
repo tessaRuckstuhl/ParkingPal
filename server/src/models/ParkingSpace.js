@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+
 const ParkingSpaceSchema = new Schema({
   name: {
-    type: String,
+    type: User,
+    required: true,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   location: {

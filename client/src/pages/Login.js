@@ -64,9 +64,10 @@ const Login = () => {
     }
   }, [jwt, navigate]);
   return (
-      <div >
+      <div className="flex flex-col items-center ">
+        <div className="w-1/2">
         <Typography component="h1" variant="h5">
-          Sign in
+          <b>Sign in</b>
         </Typography>
         <form noValidate onSubmit={(e) => handleSubmit(e)}>
           <TextField
@@ -125,6 +126,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </form>
+        </div>
       </div>
   );
 };
