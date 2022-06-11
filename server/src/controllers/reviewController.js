@@ -9,9 +9,22 @@ module.exports = {
             return res.status(400).send({ error: 'server is having an issue please try again later' });
         }
         return res.json(review);
+    }, async updateById(req, res) {
+        const { id } = req.params;
+        const update = req.body;
+        try {
+            const updatedReview = await Review.findOneAndUpdate({ _id: id }, { ...update }, { new: true })
+            const reviewObjJson = updatedReview.toJSON();
+            return res.send({
+                user: reviewObjJson,
+            });
+        } catch (error) {
+            return res.status(400).send({ error: 'something is wrong' });
+        }
     },
     async createReview(req, res) {
         try {
+            console.log(1)
             const review = await Review.create(req.body);
             const reviewObjJson = review.toJSON();
             return res.send({
@@ -22,45 +35,16 @@ module.exports = {
             console.log(error)
             return res.status(400).send({ error: 'something is wrong' });
         }
-    },
-    async deleteReview(req, res) {
+    }, async deleteById(req, res) {
+        const { id } = req.params
         try {
-            const { reviewer } = req.body;
-
-            const review = await Review.findOne({ reviewer });
-
-            if (!review) {
-                return res.status(404).send({ error: 'review does not exist' });
-            }
-            await Review.deleteOne({ reviewer }) // TODO need to be delete by id, not by reviewer
-
-
-            const reviewObjJson = review.toJSON();
-            return res.send({
-                review: reviewObjJson
-            });
+            await Review.deleteOne({ _id: id })
+            return res.status(200).send({ success: 'Review was deleted' })
         } catch (error) {
-            return res.status(500).send({ error });// 'we have an error we don\'t know what to do' })
+            return res.status(400).send({ error: 'something is wrong' });
         }
     },
-    async readReview(req, res) {
-        try {
-            const { id } = req.body; // I need more attributes here. 
-            const review = await Review.findOne({ id });
-            if (!review) {
-                return res.status(404).send({ error: 'review does not exist' });
-            }
-            const reviewObjJson = review.toJSON();
-            return res.send({
-                review: reviewObjJson
-            });
-        } catch (error) {
-            return res.status(500).send({ error });// 'we have an error we don\'t know what to do' })
-        }
-    }
 };
 
-
-// UPDATE fehlt noch!
 
 
