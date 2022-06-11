@@ -7,9 +7,7 @@ const Default = ({ children }) => {
     <>
       <Navbar />
       {/* making sure the page stretches between navbar and footer */}
-      <div className='p-5 h-[calc(100%_-_270px)]'>
-      {children}
-      </div>
+      <div className="min-h-[calc(100%_-_270px)] overflow-auto">{children}</div>
       <Footer />
     </>
   );
