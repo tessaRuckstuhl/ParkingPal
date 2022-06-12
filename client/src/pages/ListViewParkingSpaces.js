@@ -28,8 +28,8 @@ const ListViewParkingSpaces = () => {
                 onClick={
                     () => navigate('/parkingSpaceCreation')}
             >Create Parking Space</Button>
-            <div>{parkingSpaces.map((parkingSpace=> {return <Card className="mt-4">{JSON.stringify(parkingSpace)}</Card>}
-            ))}</div>
+            <div>{parkingSpaces.map((parkingSpace,k)=> {return <Card key={k} className="mt-4">{JSON.stringify(parkingSpace)}</Card>}
+            )}</div>
         </div>
         
     );

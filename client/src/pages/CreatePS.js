@@ -52,16 +52,27 @@ const AddParkingSpace = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const user = parseJwt(localStorage.getItem('token'))
       const parkingSpace = {
         name: parkingSpaceName,
         location: location,
         size: size,
-        basePrice: basePrice
+        basePrice: basePrice,
+        owner: user
       };
+      console.log(parkingSpace);
       const response = await ParkingSpaceService.create(parkingSpace);
     } catch (error) {
     }
   };
+
+  const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
 
   useEffect(() => {
 
