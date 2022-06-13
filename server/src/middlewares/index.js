@@ -23,8 +23,6 @@ module.exports = {
       surname: Joi.string(),
       firstName: Joi.string(),
       birthdate: Joi.date()
-
-
     });
     const { error } = schema.validate(req.body);
     if (error) {

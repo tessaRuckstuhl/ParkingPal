@@ -5,9 +5,11 @@ import AuthService from '../services/auth.service';
 import Button from '@mui/material/Button';
 import {Buffer} from 'buffer';
 
+
+
 const Dash = () => {
   const { jwt, setJwt } = useContext(MainContext);
-  const [parsedData, setParsedData] = useState('');
+  const [parsedData,setParsedData] = useState('')
   const navigate = useNavigate();
   const logout = () => {
     AuthService.logout();
@@ -26,11 +28,9 @@ const Dash = () => {
   }, [jwt, navigate, setJwt]);
   return (
     <div>
-      <h1>Dashboard...</h1>
       <div>
-        <pre>{JSON.stringify(parsedData, null, 2)}</pre>
+        <pre>"You are logged in</pre>
       </div>
-
       <Button onClick={() => logout()} fullWidth variant="contained" color="secondary">
         Logout
       </Button>
