@@ -14,7 +14,7 @@ const ListViewParkingSpaces = () => {
 
 
     useEffect(async () => {
-        const result = await ParkingSpaceService.listAllPS();
+        const result = await ParkingSpaceService.listAllParkingSpaces();
         setParkingSpaces(result.data);
     }, []);
 
@@ -26,7 +26,7 @@ const ListViewParkingSpaces = () => {
                 variant="contained"
                 color="primary"
                 onClick={
-                    () => navigate('/parkingSpaceCreation')}
+                    () => navigate('/parking/create')}
             >Create Parking Space</Button>
             <div>{parkingSpaces.map((parkingSpace,k)=> {return <Card key={k} className="mt-4">{JSON.stringify(parkingSpace)}</Card>}
             )}</div>

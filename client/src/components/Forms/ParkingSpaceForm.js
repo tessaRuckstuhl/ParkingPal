@@ -1,13 +1,13 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParkingSpaceService from '../services/parkingSpace.service';
+import ParkingSpaceService from '../../services/parkingSpace.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 
-const AddParkingSpace = () => {
+const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [location, setLocation] = useState('');
   const [size, setSize] = useState('');
@@ -227,4 +227,4 @@ const AddParkingSpace = () => {
   );
 };
 
-export default AddParkingSpace;
+export default ParkingSpaceForm;

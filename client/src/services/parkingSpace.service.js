@@ -2,19 +2,19 @@ import axios from 'axios';
 
 const PSService = {
 
-    create(params) {
-        return axios.post(`${process.env.REACT_APP_API_URL}parkingSpace`, params);
+    create(body) {
+        return axios.post(`${process.env.REACT_APP_API_URL}parkingSpace`, body);
     },
-    update(params) {
-        return axios.patch(`${process.env.REACT_APP_API_URL}parkingSpace/update`, params);
+    update(body) {
+        return axios.patch(`${process.env.REACT_APP_API_URL}parkingSpace`, body);
     },
     delete(id) {
         return axios.delete(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
-    listPS(id) {
+    listParkingSpace(id) {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
-    listAllPS() {
+    listAllParkingSpaces() {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`);
     }
 };
