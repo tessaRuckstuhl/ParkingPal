@@ -1,17 +1,15 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
-const ReviewSchema = new Schema({
-    user_id: {
-        type: String,
-        required: true,
-        lowercase: true,
-        trim: true,
+const ParkingSpaceReviewSchema = new Schema({
+    reviewer: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
-    booking_id:{
-        required: true,
-        type: String
+    parkingSpace: {
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingSpace',
+        //required: true,
     },
     rating: {
         type: Number,
@@ -19,7 +17,6 @@ const ReviewSchema = new Schema({
     },
     description: {
         type: String,
-        trim: true,
     },
     neighborhoodRating: {
         type: Number,
@@ -44,6 +41,31 @@ const ReviewSchema = new Schema({
 });
 
 
-const Review = mongoose.model('Review', ReviewSchema);
+const UserReviewSchema = new Schema({
+    reviewer: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    reviewed: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    rating: {
+        type: Number,
+        required: true
+    },
+    description: {
+        type: String,
+    }
+}, {
+    timestamps: true
+});
 
-module.exports = Review;
+
+const UserReview = mongoose.model('UserReview', UserReviewSchema);
+const ParkingSpaceReview = mongoose.model('ParkingSpaceReview', ParkingSpaceReviewSchema);
+
+module.exports = UserReview;
+module.exports = ParkingSpaceReview;

@@ -10,16 +10,24 @@ router.get('/review', (req, res) => {
   });
 });
 
-// api/review/create
-router.post('/', reviewController.createReview);
+// api/review/parkingspace
+router.post('/parkingSpace', reviewController.createReviewParkingSpace);
 
-// api/review/read
+// api/review/user
+router.post('/user', reviewController.createReviewUser);
+
+// api/review/
 router.get('/:id', reviewController.findByID);
 
-// api/review/update
+// api/review/
 router.put('/:id', reviewController.updateById);
 
-// api/review/delete
+// api/review/
 router.delete('/:id', reviewController.deleteById);
+
+// Return all reviews that match the user or parkingspace id
+// Necessary?
+// api/review/all
+router.get('/all/:id', reviewController.getReviewList);
 
 module.exports = router;
