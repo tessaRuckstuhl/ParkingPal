@@ -2,26 +2,42 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    index: {
-      unique: true
-    }
+const UserSchema = new Schema(
+  {
+    // aka email, must be unique
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      index: {
+        unique: true,
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    surname: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    birthdate: {
+      type: Date,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   try {
     if (!this.isModified('password')) {
       return next();
@@ -33,7 +49,7 @@ UserSchema.pre('save', async function(next) {
   }
 });
 
-UserSchema.pre('updateOne', async function(next) {
+UserSchema.pre('updateOne', async function (next) {
   try {
     if (this._update.password) {
       const hashedPass = await bcrypt.hash(this._update.password, 10);
@@ -44,7 +60,7 @@ UserSchema.pre('updateOne', async function(next) {
     return next(error);
   }
 });
-UserSchema.methods.verfiyPassword = async function(plainPassword) {
+UserSchema.methods.verfiyPassword = async function (plainPassword) {
   return bcrypt.compare(plainPassword, this.password);
 };
 const User = mongoose.model('User', UserSchema);

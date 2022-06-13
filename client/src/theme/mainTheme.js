@@ -12,14 +12,14 @@ const mainTheme = {
       main: '#6F11F2'
     },
     secondary: {
-      main: '#4b6197'
+      main: '#3C3C3C'
     },
     text: {
       primary: '#000000',
       secondary: '#000000'
     },
     background: {
-      paper: '#252525',
+      paper: '#F3F3F0',
       default: '#303030'
     }
   },
