@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center px-5 h-[50px]">
         <Link to="dashboard">
-          <img src="./parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
+          <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
       <div className="flex space-x-4 items-center">
         <Link to="404">

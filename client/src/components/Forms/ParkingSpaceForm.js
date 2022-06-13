@@ -60,7 +60,6 @@ const ParkingSpaceForm = () => {
         basePrice: basePrice,
         owner: user
       };
-      console.log(parkingSpace);
       const response = await ParkingSpaceService.create(parkingSpace);
     } catch (error) {
     }
