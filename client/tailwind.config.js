@@ -6,10 +6,19 @@ module.exports = {
       current: 'currentColor',
       white: '#ffffff',
       offWhite: '#F3F3F0',
+      darkGray: '#3C3C3C',
       black: '#000000',
       purple: '#6F11F2',
     },
-    extend: {},
+    borderWidth: {
+      DEFAULT: '.5px',
+    },
+
+    extend: {
+      boxShadow: {
+        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+      },
+    },
   },
   plugins: [],
-}
+};

@@ -1,7 +1,10 @@
 const User = require('./User');
-const Review  = require('./Review');
+const Review = require('./Review');
+const ParkingSpace = require('./ParkingSpace');
+
 
 module.exports = {
   User,
-  Review
+  Review,
+  ParkingSpace
 };

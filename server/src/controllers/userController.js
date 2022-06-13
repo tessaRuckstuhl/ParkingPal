@@ -17,10 +17,35 @@ module.exports = {
     return res.json(user);
   },
 
+  async deleteById(req, res) {
+    const {id} = req.params
+    try {
+      await User.deleteOne({_id: id})
+      return res.status(200).send({success: 'User was deleted'})
+    } catch (error) {
+      return res.status(400).send({ error: 'something is wrong' });
+    }
+  },
+
+  async updateById(req, res) {
+    const {id} = req.params;
+    const update = req.body;
+    try {
+      const updatedUser = await User.findOneAndUpdate({_id: id}, {...update}, {new:true})
+      const userObjJson = updatedUser.toJSON();
+      return res.send({
+        user: userObjJson,
+      });
+    } catch (error) {
+      return res.status(400).send({ error: 'something is wrong' });
+    }
+  },
+
   async signup(req, res) {
     try {
       const user = await User.create(req.body);
       const userObjJson = user.toJSON();
+
       return res.send({
         user: userObjJson,
         token: jwtSignUser(userObjJson)
