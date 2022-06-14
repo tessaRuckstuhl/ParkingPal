@@ -41,31 +41,7 @@ const ParkingSpaceReviewSchema = new Schema({
 });
 
 
-const UserReviewSchema = new Schema({
-    reviewer: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-    reviewed: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-    rating: {
-        type: Number,
-        required: true
-    },
-    description: {
-        type: String,
-    }
-}, {
-    timestamps: true
-});
 
-
-const UserReview = mongoose.model('UserReview', UserReviewSchema);
 const ParkingSpaceReview = mongoose.model('ParkingSpaceReview', ParkingSpaceReviewSchema);
 
-module.exports = UserReview;
 module.exports = ParkingSpaceReview;

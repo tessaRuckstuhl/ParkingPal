@@ -1,6 +1,7 @@
 const express = require('express');
 const user = require('./userRoute');
-const review = require('./reviewRoute');
+const userReview = require('./userReviewRoute');
+const parkingSpaceReview = require('./parkingSpaceReviewRoute');
 const parkingSpace = require('./parkingSpaceRoute')
 
 const router = express.Router();
@@ -9,7 +10,9 @@ const router = express.Router();
 router.use('/user', user);
 // /api/parkingspace
 router.use('/parkingspace', parkingSpace)
-// /api/review
-router.use('/review', review);
+// /api/user-review
+router.use('/user-review', userReview);
+// /api/parkingspace-review
+router.use('/parkingspace-review', parkingSpaceReview);
 
 module.exports = router;
