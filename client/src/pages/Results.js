@@ -1,17 +1,21 @@
-import React, {useState} from 'react';
-import Map from '../components/Map/Map';
-import somePlaces from '../components/Map/places.json'
+import React, { useState } from 'react';
+import MapWrapper from '../components/Map/MapWrapper';
+import somePlaces from '../components/Map/places.json';
+import ResultsList from '../components/Results/ResultsList';
 
 const Results = () => {
-  const [places, setPlaces] = useState(somePlaces.results);
-
   return (
-    <div className="flex">
-      <div className="w-1/2">ResultsList</div>
-      {/* height has to be set for map, h => page height - (footer+header) */}
-      <div className="h-[calc(100vh_-_270px)] w-[calc(100vw_-_50%)]">
-        <Map />
-      </div>
+    <div className="flex h-[calc(100vh_-_270px)]">
+      {somePlaces && (
+        <>
+          <div className="w-1/2 overflow-y-auto">
+            <ResultsList results={somePlaces.results} />
+          </div>
+          <div className="w-1/2">
+            <MapWrapper results={somePlaces.results} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,17 +1,24 @@
-import React from 'react';
-const Marker = (props) => {
-  const { name } = props;
-  const handleClick = () => {
-    console.log(`You clicked on ${tooltip}`);
-  };
-  return (
-    <div
-      onClick={handleClick}
-      className="w-28 h-7 bg-offWhite text-black rounded-xl hover:bg-purple"
-    >
-      {name}
-    </div>
-  );
+import React, { useState } from 'react';
+const Marker = (options) => {
+  const [marker, setMarker] = useState();
+
+  React.useEffect(() => {
+    if (!marker) {
+      setMarker(new google.maps.Marker());
+    }
+    // remove marker from map on unmount
+    return () => {
+      if (marker) {
+        marker.setMap(null);
+      }
+    };
+  }, [marker]);
+  React.useEffect(() => {
+    if (marker) {
+      marker.setOptions(options);
+    }
+  }, [marker, options]);
+  return null;
 };
 
 export default Marker;
