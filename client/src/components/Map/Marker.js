@@ -7,12 +7,11 @@ const Marker = (options) => {
     const listing = document.getElementById(marker.resultId);
     // highlight shortly...
     listing.style.background = '#f1f1f1';
-    console.log(listing.style.background)
     setTimeout(function () {
       listing.style.background = 'white';
     }, 2000);
     // scroll into view
-    listing.scrollIntoView({ behavior: 'smooth' });
+    listing.scrollIntoView({ behavior: 'smooth', block:'start' });
   };
 
   useEffect(() => {
