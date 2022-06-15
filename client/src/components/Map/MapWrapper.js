@@ -7,7 +7,7 @@ const MapWrapper = (props) => {
   const { results, center, setCenter } = props;
   const [mapResults, setMapResults] = useState(results);
   const [clicks, setClicks] = useState([]);
-  const [zoom, setZoom] = useState(8); // initial zoom
+  const [zoom, setZoom] = useState(15); // initial zoom
 
 
   const render = (status) => {
@@ -37,7 +37,7 @@ const MapWrapper = (props) => {
           mapResults={mapResults}
         >
           {results.map((result, i) => (
-            <Marker key={i} position={{ lat: result.lat, lng: result.lng} } label={result.name} resultId={result._id} />
+            <Marker key={i} position={{ lat: result.lat, lng: result.lng} } address={result.location} label={'€'+ result.basePrice} resultId={result._id} />
           ))}
         </Map>
       </Wrapper>

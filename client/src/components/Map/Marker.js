@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 const Marker = (options) => {
   const [marker, setMarker] = useState();
 
-  const onClick = (e) => {
-    console.log('marker', marker);
+  const onClick = () => {
     const listing = document.getElementById(marker.resultId);
     // highlight shortly...
     listing.style.background = '#f1f1f1';
@@ -11,7 +10,7 @@ const Marker = (options) => {
       listing.style.background = 'white';
     }, 2000);
     // scroll into view
-    listing.scrollIntoView({ behavior: 'smooth', block:'start' });
+    listing.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   useEffect(() => {
@@ -27,8 +26,9 @@ const Marker = (options) => {
   }, [marker]);
 
   useEffect(() => {
+    console.log('ue', marker)
     if (marker) {
-      marker.setOptions({ ...options });
+      marker.setOptions({ ...options, icon: '/temp/custom-marker.svg'});
       marker.addListener('click', onClick);
     }
   }, [marker, options]);

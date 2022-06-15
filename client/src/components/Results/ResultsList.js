@@ -9,7 +9,7 @@ const ResultsList = (props) => {
       {results.map((result, idx) => (
         <div key={idx}>
           <Divider variant="middle" />
-          <Listing listing={result} setCenter={setCenter} />
+          <Listing  listing={result} setCenter={setCenter} />
         </div>
       ))}
     </>
