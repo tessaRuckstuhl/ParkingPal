@@ -1,0 +1,105 @@
+{
+    "data": [
+        {
+            "_id": "62a1b8d4b3334e2538e1a5c3",
+            "name": "alex",
+            "location": "Horst 2",
+            "size": 44,
+            "basePrice": 4,
+            "createdAt": "2022-06-09T09:09:40.041Z",
+            "updatedAt": "2022-06-09T09:09:40.041Z",
+            "lat": 34.0771192,
+            "lng": -118.2587199,
+            "__v": 0
+        },
+        {
+            "_id": "62a1f3dc31a20263cf61405a",
+            "name": "tessa",
+            "location": "Horst 2",
+            "lat": 34.083527,
+            "lng": -118.370157,
+            "size": 5,
+            "basePrice": 6,
+            "dayPrice": 3,
+            "createdAt": "2022-06-09T13:21:32.986Z",
+            "updatedAt": "2022-06-09T13:21:32.986Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a1f5167624be684e5d1b81",
+            "name": "testi",
+            "location": "Horst 2",
+            "lat": 34.083527,
+            "lng": -128.370157,
+            "size": 5,
+            "basePrice": 6,
+            "dayPrice": 3,
+            "createdAt": "2022-06-09T13:26:46.312Z",
+            "updatedAt": "2022-06-09T13:26:46.312Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a1f5b5f4b9a76a7f609994",
+            "name": "Testi",
+            "location": "Horst 2",
+            "lat": 39.083527,
+            "lng": -118.370157,
+            "size": 5,
+            "basePrice": 6,
+            "dayPrice": 3,
+            "createdAt": "2022-06-09T13:29:25.915Z",
+            "updatedAt": "2022-06-09T13:29:25.915Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a46a13ec309009346e701c",
+            "name": "Testtest",
+            "location": "Hier",
+            "lat": 40.083527,
+            "lng": -118.370157,
+            "size": 40,
+            "basePrice": 12,
+            "createdAt": "2022-06-11T10:10:27.931Z",
+            "updatedAt": "2022-06-11T10:10:27.931Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a500ce24f3ae422cace8eb",
+            "name": "hallo",
+            "location": "ludi",
+            "lat": 39.083527,
+            "lng": -108.370157,
+            "size": 1213,
+            "basePrice": 1,
+            "createdAt": "2022-06-11T20:53:34.389Z",
+            "updatedAt": "2022-06-11T20:53:34.389Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a5b931f1c2f80258dff5fd",
+            "name": "Thisworks",
+            "location": "GrillParty2",
+            "size": 1232313,
+            "basePrice": 123313141,
+            "lat": 50.083527,
+            "lng": -130.370157,
+            "owner": "629f5ef16d7fec1d5cfc2b9b",
+            "createdAt": "2022-06-12T10:00:17.069Z",
+            "updatedAt": "2022-06-12T10:00:17.069Z",
+            "__v": 0
+        },
+        {
+            "_id": "62a5ba29f1c2f80258dff603",
+            "name": "AlexParkingSpace",
+            "location": "AM Hang 4",
+            "size": 40,
+            "basePrice": 4444,
+            "lat": 39.083527,
+            "lng": -130.370157,
+            "owner": "629f5ef16d7fec1d5cfc2b9b",
+            "createdAt": "2022-06-12T10:04:25.799Z",
+            "updatedAt": "2022-06-12T10:04:25.799Z",
+            "__v": 0
+        }
+    ]
+}

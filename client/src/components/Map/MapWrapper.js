@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './Map';
 import Marker from './Marker';
 
 const MapWrapper = (props) => {
   const { results } = props;
-  const [mapResults, setMapResults] = useState(results)
+  const [mapResults, setMapResults] = useState(results);
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(5); // initial zoom
   const [center, setCenter] = useState({
-    lat: results[0].geometry.location.lat,
-    lng: results[0].geometry.location.lng,
+    lat: results[0].lat,
+    lng: results[0].lng,
   });
 
   const render = (status) => {
@@ -19,7 +19,8 @@ const MapWrapper = (props) => {
 
   const onClick = (e) => {
     // avoid directly mutating state
-    setClicks([...clicks, e.latLng]);
+
+    console.log(e)
   };
 
   const onIdle = (m) => {
@@ -80,10 +81,9 @@ const MapWrapper = (props) => {
           onIdle={onIdle}
           zoom={zoom}
           mapResults={mapResults}
-          // style={{ flexGrow: '1' }}
         >
           {results.map((result, i) => (
-            <Marker key={i} position={result.geometry.location} />
+            <Marker key={i} position={{ lat: result.lat, lng: result.lng} } label={result.name} resultId={result._id} />
           ))}
         </Map>
       </Wrapper>
