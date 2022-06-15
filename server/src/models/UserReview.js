@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserReviewSchema = new Schema({
-    reviewer: {
+    reviewer_id: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-    reviewed: { // TODO Naming
+    reviewed_id: { 
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,

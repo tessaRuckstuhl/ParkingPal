@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ParkingSpaceReviewSchema = new Schema({
-    reviewer: {
+    reviewer_id: {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    parkingSpace: {
+    parkingSpace_id: {
         type: Schema.Types.ObjectId,
         ref: 'ParkingSpace',
         //required: true,
