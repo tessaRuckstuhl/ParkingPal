@@ -3,9 +3,13 @@ import { Divider } from '@mui/material';
 import React from 'react';
 
 const Listing = (props) => {
-  const { listing } = props;
+  const { listing, setCenter } = props;
+
+  const onClick = (e) => {
+    setCenter({lat:listing.lat, lng:listing.lng})
+  }
   return (
-    <div id={listing._id} className="flex space-x-5 p-5 bg-white">
+    <div id={listing._id} className="flex space-x-5 p-5 bg-white" onClick={() => onClick(listing)}>
       {/* Listing image */}
       <img className="rounded" src="/garage.jpg" width={250} height={150}></img>
       {/* Listing description */}

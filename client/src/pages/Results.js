@@ -3,10 +3,14 @@ import MapWrapper from '../components/Map/MapWrapper';
 import somePlaces from '../components/Map/places.json';
 import dummyPlaces from '../components/Map/dummyResults.json';
 import ResultsList from '../components/Results/ResultsList';
+import ResultsFilter from '../components/Results/ResultsFilter';
 import PSService from '../services/parkingSpace.service';
 const Results = () => {
   const [parkingSpaceResults, setParkingSpaceResults] = useState([]);
-
+  const [center, setCenter] = useState({
+    lat: 0,
+    lng: 0,
+  });
   useEffect(() => {
     getAllParkingSpacesRequest();
   }, []);
@@ -15,23 +19,21 @@ const Results = () => {
     // const parkingSpaces =  await PSService.listAllParkingSpaces()
     const parkingSpaces = dummyPlaces;
     setParkingSpaceResults(parkingSpaces.data);
+    setCenter({lat:parkingSpaces.data[0].lat, lng: parkingSpaces.data[0].lng})
   };
-
-  const onClick = (e) => {
-    // avoid directly mutating state
-   console.log('clicked...')
-  };
-
 
   return (
     <div className="flex h-[calc(100vh_-_270px)]">
       {parkingSpaceResults.length > 0 && (
         <>
-          <div className="w-1/2 overflow-y-auto">
-            <ResultsList results={parkingSpaceResults} />
+          <div className="w-1/2 flex-col ">
+            {/* <ResultsFilter results={parkingSpaceResults} /> */}
+            <div className="overflow-y-auto h-full">
+              <ResultsList results={parkingSpaceResults} setCenter={setCenter} />
+            </div>
           </div>
           <div className="w-1/2">
-            <MapWrapper results={parkingSpaceResults} />
+            <MapWrapper results={parkingSpaceResults} center={center} setCenter={setCenter} />
           </div>
         </>
       )}

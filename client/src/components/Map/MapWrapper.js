@@ -4,14 +4,11 @@ import Map from './Map';
 import Marker from './Marker';
 
 const MapWrapper = (props) => {
-  const { results } = props;
+  const { results, center, setCenter } = props;
   const [mapResults, setMapResults] = useState(results);
   const [clicks, setClicks] = useState([]);
-  const [zoom, setZoom] = useState(5); // initial zoom
-  const [center, setCenter] = useState({
-    lat: results[0].lat,
-    lng: results[0].lng,
-  });
+  const [zoom, setZoom] = useState(8); // initial zoom
+
 
   const render = (status) => {
     return <h1>{status}</h1>;
