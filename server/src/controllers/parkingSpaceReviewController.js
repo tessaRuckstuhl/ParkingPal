@@ -10,7 +10,8 @@ module.exports = {
             return res.status(400).send({ error: 'server is having an issue please try again later' });
         }
         return res.json(review);
-    }, getReviewList: (req, res) => {
+    }, 
+    async getReviewList(req, res) {
         try {
             const allReviews = await ParkingSpaceReview.find();
             return res.send(allReviews);
