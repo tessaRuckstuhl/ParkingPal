@@ -2,12 +2,23 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ParkingSpaceService from '../../services/parkingSpace.service';
+import ReviewService from '../../services/review.service';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper, Divider, Rating } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 
 const ReviewForm = () => {
+  const [reviewDescription, setReviewDescription] = useState('');
+  const [neighborhoodRating, setNeighborhoodRating] = useState('2.5');
+  const [accessRating, setAccessRating] = useState('2.5');
+  const [locationRating, setLocationRating] = useState('2.5');
+  const [communicationRating, setCommunicationRating] = useState('2.5');
+  const [accuracyRating, setAccuracyRating] = useState('2.5');
+  const [valueRating, setValueRating] = useState('2.5');
+
+
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [location, setLocation] = useState('');
   const [size, setSize] = useState('');
@@ -27,6 +38,27 @@ const ReviewForm = () => {
 
   const handleChange = (event) => {
     switch (event.target.name) {
+      case 'reviewdescription':
+        setReviewDescription(event.target.value);
+        break;
+      case 'neighborhoodrating':
+        setNeighborhoodRating(event.target.value);
+        break;
+      case 'accessrating':
+        setAccessRating(event.target.value);
+        break;
+      case 'locationrating':
+        setLocationRating(event.target.value);
+        break;
+      case 'communicationrating':
+        setCommunicationRating(event.target.value);
+        break;
+      case 'accuracyrating':
+        setAccuracyRating(event.target.value);
+        break;
+      case 'valuerating':
+        setValueRating(event.target.value);
+        break;
       case 'parkingspacename':
         setParkingSpaceName(event.target.value);
         break;
@@ -53,6 +85,20 @@ const ReviewForm = () => {
     event.preventDefault();
     try {
       const user = parseJwt(localStorage.getItem('token'))
+      const review = {
+        description: reviewDescription,
+        neighborhoodRating: neighborhoodRating,
+        accessRating: accessRating,
+        locationRating: locationRating,
+        communicationRating: communicationRating,
+        accuracyRating: accuracyRating,
+        valueRating: valueRating,
+
+        owner: user,
+        parkingSpace_id: "Mock"// How do I geht this value?
+      };
+      const response = await ReviewService.create(review);
+
       const parkingSpace = {
         name: parkingSpaceName,
         location: location,
@@ -60,7 +106,7 @@ const ReviewForm = () => {
         basePrice: basePrice,
         owner: user
       };
-      const response = await ParkingSpaceService.create(parkingSpace);
+      const responseOld = await ParkingSpaceService.create(parkingSpace);
     } catch (error) {
     }
   };
@@ -82,14 +128,16 @@ const ReviewForm = () => {
         <div className="mb-6 text-xl">
           <b>Rate your parking place experience</b>
         </div>
+
+        <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
         <div className="mb-6 text-xl">
           <p>Your parking space booking came just to an end.<br />Now take a minute to reflect on the parking place and leave a quick review. </p>
         </div>
-        <div>
-          <Divider>
+        <Divider>
 
-          </Divider>
-        </div>
+        </Divider>
+       
+        
         <div>
           <p>You booked this parking place provides by<br />Alexander Mock. Adresse Platzhalter. Willkürliche Zeitdauer </p>
 
@@ -109,29 +157,94 @@ const ReviewForm = () => {
           <Grid container spacing={3}>
             <Grid item xs={4}>
               <Item>Neighborhood</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="neighborhoodrating"
+                label="Neighbor Rating"
+                name="neighborhoodrating"
+                value={neighborhoodRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
             <Grid item xs={4}>
               <Item>Access</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-            </Grid>
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="accessrating"
+                label="Access Rating"
+                name="accessrating"
+                value={accessRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />            </Grid>
             <Grid item xs={4}>
               <Item>Location</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="locationrating"
+                label="Location Rating"
+                name="locationrating"
+                value={locationRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={4}>
               <Item>Communication</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="communicationrating"
+                label="Communication Rating"
+                name="communicationrating"
+                value={communicationRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
             <Grid item xs={4}>
               <Item>Accuracy</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="accuracyrating"
+                label="Accuracy Rating"
+                name="accuracyrating"
+                value={accuracyRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
             <Grid item xs={4}>
               <Item>Value</Item>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                defaultValue={2.5}
+                precision={0.5}
+                variant="outlined"
+                required
+                id="valuerating"
+                label="Value Rating"
+                name="valuerating"
+                value={valueRating}
+                autoFocus
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
           </Grid>
         </div>
@@ -148,156 +261,25 @@ const ReviewForm = () => {
             margin="normal"
             required
             fullWidth
-            id="parkingspacename"
-            label="Description"
+            id="reviewdescription"
+            label="Review Description"
             name="reviewdescription"
-            style = {{height: 100}}
-            value={parkingSpaceName}
+            style={{ height: 100 }}
+            value={reviewDescription}
             autoFocus
             onChange={(e) => handleChange(e)}
           />
-
         </div>
-
-        <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-
-          <p>Step 1: Name your parking place</p>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="parkingspacename"
-            label="Parking Space Name"
-            name="parkingspacename"
-            value={parkingSpaceName}
-            autoFocus
-            onChange={(e) => handleChange(e)}
-          />
-          <b>Step 2: Upload photos of your parking space and its environment</b>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Item style={{ height: 100 }}>Photo Placeholder</Item>
-            </Grid>
-            <Grid item xs={6}>
-              <Item style={{ height: 100 }}>Photo Placeholder</Item>
-            </Grid>
-          </Grid>
-          <p>Step 3: Provide additional information to help</p>
-          <Grid container spacing={3}>
-            <Grid item xs={4}>
-              <Item>Parking Properties</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="dummy"
-                label="dummy"
-                id="dummy"
-                value={null}
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <Item>Size</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="size"
-                label="Parking Space Size"
-                id="size"
-                value={size}
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <Item>Cancellation and Access</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="dummy"
-                label="dummy"
-                id="dummy"
-                value={null}
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-          </Grid>
-
-          <p>Step 4: Edit your description</p>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="description"
-            label="Description"
-            id=""
-            value={null}
-            onChange={(e) => handleChange(e)}
-          />
-          <p>Step 5: When is your parking place available?</p>
-          <p>Step 6: Set a price</p>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="basePrice"
-            label="Base Price"
-            id="baseprice"
-            value={basePrice}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="dayPrice"
-            label="Day Price"
-            id="dayPrice"
-            value={dayPrice}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="longTermStayPrice"
-            label="Long Term Stay Price"
-            id="longTermStayPrice"
-            value={longTermStayPrice}
-            onChange={(e) => handleChange(e)}
-          />
-          <p>Step 7: Enter the address</p>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="location"
-            label="Location"
-            id="location"
-            value={location}
-            onChange={(e) => handleChange(e)}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Create Parking Space
-          </Button>
-          <div className="mt-4">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/all')}
-            >All Parking Spaces</Button>
-          </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          Submit Review
+        </Button>
         </form>
+        
+
       </div>
     </div>
   );
