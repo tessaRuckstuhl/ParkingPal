@@ -59,24 +59,6 @@ const ReviewForm = () => {
       case 'valuerating':
         setValueRating(event.target.value);
         break;
-      case 'parkingspacename':
-        setParkingSpaceName(event.target.value);
-        break;
-      case 'location':
-        setLocation(event.target.value);
-        break;
-      case 'size':
-        setSize(event.target.value);
-        break;
-      case 'dayPrice':
-        setDayPrice(event.target.value);
-        break;
-      case 'basePrice':
-        setBasePrice(event.target.value);
-        break;
-      case 'longTermStayPrice':
-        setLongTermStayPrice(event.target.value);
-        break;
       default:
         break;
     }
@@ -98,15 +80,6 @@ const ReviewForm = () => {
         parkingSpace_id: "Mock"// How do I geht this value?
       };
       const response = await ReviewService.create(review);
-
-      const parkingSpace = {
-        name: parkingSpaceName,
-        location: location,
-        size: size,
-        basePrice: basePrice,
-        owner: user
-      };
-      const responseOld = await ParkingSpaceService.create(parkingSpace);
     } catch (error) {
     }
   };
