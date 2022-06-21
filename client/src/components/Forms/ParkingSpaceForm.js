@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import { Grid, Paper } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 
+
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [location, setLocation] = useState('');
@@ -14,6 +15,8 @@ const ParkingSpaceForm = () => {
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
+  const [images,setImages] = useState('');
+
 
   const navigate = useNavigate();
 
@@ -52,6 +55,7 @@ const ParkingSpaceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      //you can also take it out of the main context
       const user = parseJwt(localStorage.getItem('token'))
       const parkingSpace = {
         name: parkingSpaceName,
@@ -72,6 +76,7 @@ const ParkingSpaceForm = () => {
     return null;
   }
 };
+//npm install react-file-base64  
 
   useEffect(() => {
 
@@ -98,6 +103,7 @@ const ParkingSpaceForm = () => {
             onChange={(e) => handleChange(e)}
           />
           <b>Step 2: Upload photos of your parking space and its environment</b>
+          <input type="file" multiple ></input>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 100 }}>Photo Placeholder</Item>
