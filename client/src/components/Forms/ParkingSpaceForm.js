@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper } from '@mui/material/';
 import { styled } from '@mui/material/styles';
+import ImageUploaderForm from './ImageUploaderForm';
+
 
 
 const ParkingSpaceForm = () => {
@@ -103,7 +105,7 @@ const ParkingSpaceForm = () => {
             onChange={(e) => handleChange(e)}
           />
           <b>Step 2: Upload photos of your parking space and its environment</b>
-          <input type="file" multiple ></input>
+          <ImageUploaderForm/>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 100 }}>Photo Placeholder</Item>
