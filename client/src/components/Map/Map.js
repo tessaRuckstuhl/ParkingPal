@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createCustomEqual } from 'fast-equals';
 import { isLatLngLiteral } from '@googlemaps/typescript-guards';
 
-const Map = ({ onClick, onIdle, children, style, ...options }) => {
+const Map = ({ onIdle, children, style, ...options }) => {
   const ref = React.useRef(null);
   const [map, setMap] = React.useState();
 
@@ -23,15 +23,12 @@ const Map = ({ onClick, onIdle, children, style, ...options }) => {
   React.useEffect(() => {
     if (map) {
       ['click', 'idle'].forEach((eventName) => google.maps.event.clearListeners(map, eventName));
-      if (onClick) {
-        map.addListener('click', onClick);
-      }
 
       if (onIdle) {
         map.addListener('idle', () => onIdle(map));
       }
     }
-  }, [map, onClick, onIdle]);
+  }, [map, onIdle]);
 
   return (
     <>

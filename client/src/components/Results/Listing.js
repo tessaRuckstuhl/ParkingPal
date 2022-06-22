@@ -12,19 +12,21 @@ const Listing = (props) => {
   return (
     <div
       id={listing._id}
-      className="flex space-x-5 p-5 bg-white hover:cursor-pointer "
+      className="flex space-x-5 p-5 bg-white  "
       onClick={() => onClick(listing)}
+      onMouseEnter={() => onClick(listing)}
+
     >
       {/* Listing image */}
       <img className="rounded" src="/temp/garage.jpg" width={250} height={150}></img>
       {/* Listing description */}
       <div className="flex-1 flex flex-col justify-between">
         {/* Listing Title */}
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           <div>
             <div className="text-lightGray text-sm">10 min upfront booking - TODO</div>
             <Link to={'/404'}>
-              <div className="text-lg hover:underline">{listing.name}</div>
+              <div className="text-lg hover:underline hover:cursor-pointer">{listing.name}</div>
             </Link>
           </div>
           <FavoriteBorderOutlined />

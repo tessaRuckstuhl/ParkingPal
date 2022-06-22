@@ -35,3 +35,13 @@ html, body, #root {
 ::-webkit-scrollbar-thumb:hover {
   background: #6B7280;
 }
+
+/* remove maps close icon from infowindow */
+button.gm-ui-hover-effect {
+  visibility: hidden;
+}
+
+/* infowindow style */
+.gm-style .gm-style-iw {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+}    

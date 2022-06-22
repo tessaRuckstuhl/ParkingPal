@@ -7,17 +7,10 @@ const MapWrapper = (props) => {
   const { results, center, setCenter } = props;
   const [mapResults, setMapResults] = useState(results);
   const [clicks, setClicks] = useState([]);
-  const [zoom, setZoom] = useState(15); // initial zoom
-
+  const [zoom, setZoom] = useState(12); // initial zoom
 
   const render = (status) => {
     return <h1>{status}</h1>;
-  };
-
-  const onClick = (e) => {
-    // avoid directly mutating state
-
-    console.log(e)
   };
 
   const onIdle = (m) => {
@@ -29,15 +22,16 @@ const MapWrapper = (props) => {
   return (
     <div className="flex">
       <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} render={render}>
-        <Map
-          center={center}
-          onClick={onClick}
-          onIdle={onIdle}
-          zoom={zoom}
-          mapResults={mapResults}
-        >
+        <Map center={center} onIdle={onIdle} zoom={zoom} mapResults={mapResults}>
           {results.map((result, i) => (
-            <Marker key={i} position={{ lat: result.lat, lng: result.lng} } address={result.location} label={'€'+ result.basePrice} resultId={result._id} />
+            <Marker
+              key={i}
+              position={{ lat: result.lat, lng: result.lng }}
+              address={result.location}
+              label={'€' + result.basePrice}
+              resultId={result._id}
+              name={result.name}
+            />
           ))}
         </Map>
       </Wrapper>
