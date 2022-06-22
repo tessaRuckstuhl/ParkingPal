@@ -23,7 +23,7 @@ const Results = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh_-_270px)]">
+    <div className="flex h-[calc(100vh_-_250px)]">
       {parkingSpaceResults.length > 0 && (
         <>
           <div className="w-1/2 flex-col overflow-y-auto h-full ">

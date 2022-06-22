@@ -12,6 +12,7 @@ import CreateParkingSpace from './pages/CreateParkingSpace';
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces';
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
+import Bar from './components/Filter/Bar';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);

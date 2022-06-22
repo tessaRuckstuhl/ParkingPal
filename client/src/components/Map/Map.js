@@ -32,7 +32,7 @@ const Map = ({ onIdle, children, style, ...options }) => {
 
   return (
     <>
-      <div ref={ref} className="flex-1 h-[calc(100vh_-_270px)]" />
+      <div ref={ref} className="flex-1 h-[calc(100vh_-_250px)]" />
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           // set the map prop on the child component
