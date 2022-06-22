@@ -6,15 +6,14 @@ import { Link } from 'react-router-dom';
 const Listing = (props) => {
   const { listing, setCenter } = props;
 
-  const onClick = (e) => {
+  const recenter = (e) => {
     setCenter({ lat: listing.lat, lng: listing.lng });
   };
   return (
     <div
       id={listing._id}
       className="flex space-x-5 p-5 bg-white  "
-      onClick={() => onClick(listing)}
-      onMouseEnter={() => onClick(listing)}
+      onMouseEnter={() => recenter(listing)}
 
     >
       {/* Listing image */}
