@@ -5,10 +5,10 @@ import ResultsList from '../components/Results/ResultsList';
 import ResultsFilter from '../components/Results/ResultsFilter';
 import {FilterContext} from '../contexts/FilterContext'
 const Results = () => {
-  // center = Peterskirch in Munich
+  // center = TUM Stammgelände
   const [center, setCenter] = useState({
-    lat: 48.1348661,
-    lng: 11.5565986
+    lat:48.1488436,
+    lng:11.5658499
   });
   const {results} = useContext(FilterContext)
   useEffect(() => {
@@ -20,7 +20,7 @@ const Results = () => {
 
   return (
     <div className="flex h-[calc(100vh_-_250px)]">
-      {results.length > 0 && (
+      {results.length > 0 ? (
         <>
           <div className="w-1/2 flex-col overflow-y-auto h-full ">
             <ResultsFilter results={results} />
@@ -30,7 +30,7 @@ const Results = () => {
             <MapWrapper results={results} center={center} setCenter={setCenter} />
           </div>
         </>
-      )}
+      ): ( <h1>Ooops, try changing your filters. We could not find any results...</h1>)}
     </div>
   );
 };

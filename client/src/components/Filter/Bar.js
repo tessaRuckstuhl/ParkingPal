@@ -114,7 +114,7 @@ const Bar = () => {
         <MyFormHelperText text="When?" />
       </FormControl>
       {/* More filters */}
-      <MoreFilters/>
+      <MoreFilters handleFilterChange={handleFilterChange} searchWithFilters={searchWithFilters}/>
       {/* Submit Filter/Search */}
       <IconButton
         type="submit"
