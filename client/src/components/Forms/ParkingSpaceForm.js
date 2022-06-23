@@ -33,7 +33,17 @@ const ParkingSpaceForm = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
-
+  const clearAll = () => {
+    setParkingSpaceName("")
+    setStreet("")
+    setHouseNumber("")
+    setPostalCode("")
+    setCity("")
+    setSize("")
+    setBasePrice("")
+    setDayPrice("")
+    setLongTermStayPrice("")
+  }
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -82,9 +92,12 @@ const ParkingSpaceForm = () => {
         lng: response.data.results[0].geometry.location.lng,
         size: size,
         basePrice: basePrice,
+        dayPrice: dayPrice,
+        longTermStayPrice: longTermStayPrice,
         owner: user
       };
       await ParkingSpaceService.create(parkingSpace);
+      set
     } catch (error) {
     }
   };
