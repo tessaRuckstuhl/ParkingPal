@@ -6,7 +6,7 @@ import React from 'react';
 const ImageUploaderForm = () => {
     return(
     <div className="my-4">
-        <form  action="http://localhost:3001/upload" method="post" enctype="multipart/form-data">
+        <form  action="http://localhost:3001/api/images/upload" method="post" enctype="multipart/form-data">
             <div >
                 <input type="file" name="file" id="file"></input>
                 <label className='w-full' for="file">Choose File</label>
