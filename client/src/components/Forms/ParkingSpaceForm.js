@@ -12,12 +12,16 @@ import ImageUploaderForm from './ImageUploaderForm';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [location, setLocation] = useState('');
+  const [street, setStreet] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [postalCode, setPostalCode] = useState('')
+  const [city, setCity] = useState('')
   const [size, setSize] = useState('');
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
-  const [images,setImages] = useState('');
+  const [images, setImages] = useState('');
+  const [latLng, setLatLng] = useState('');
 
 
   const navigate = useNavigate();
@@ -33,10 +37,19 @@ const ParkingSpaceForm = () => {
   const handleChange = (event) => {
     switch (event.target.name) {
       case 'parkingspacename':
-        setParkingSpaceName(event.target.value);
+        setStreet(event.target.value);
         break;
-      case 'location':
-        setLocation(event.target.value);
+      case 'street':
+        setStreet(event.target.value);
+        break;
+      case 'houseNumber':
+        setHouseNumber(event.target.value);
+        break;
+      case 'postalCode':
+        setPostalCode(event.target.value);
+        break;
+      case 'city':
+        setCity(event.target.value);
         break;
       case 'size':
         setSize(event.target.value);
@@ -57,6 +70,7 @@ const ParkingSpaceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+
       //you can also take it out of the main context
       const user = parseJwt(localStorage.getItem('token'))
       const parkingSpace = {
@@ -72,13 +86,13 @@ const ParkingSpaceForm = () => {
   };
 
   const parseJwt = (token) => {
-  try {
-    return JSON.parse(atob(token.split('.')[1]));
-  } catch (e) {
-    return null;
-  }
-};
-//npm install react-file-base64  
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+  //npm install react-file-base64  
 
   useEffect(() => {
 
@@ -105,7 +119,7 @@ const ParkingSpaceForm = () => {
             onChange={(e) => handleChange(e)}
           />
           <b>Step 2: Upload photos of your parking space and its environment</b>
-          <ImageUploaderForm/>
+          <ImageUploaderForm />
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 100 }}>Photo Placeholder</Item>
@@ -113,7 +127,7 @@ const ParkingSpaceForm = () => {
             <Grid item xs={6}>
               <Item style={{ height: 100 }}>Photo Placeholder</Item>
             </Grid>
-          </Grid>          
+          </Grid>
           <p>Step 3: Provide additional information to help</p>
           <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -207,10 +221,39 @@ const ParkingSpaceForm = () => {
             variant="outlined"
             margin="normal"
             required
-            fullWidth
-            name="location"
-            label="Location"
-            id="location"
+            name="street"
+            label="Street"
+            id="street"
+            value={street}
+            onChange={(e) => handleChange(e)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            name="houseNumber"
+            label="House Number"
+            id="houseNumber"
+            value={houseNumber}
+            onChange={(e) => handleChange(e)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            name="postalCode"
+            label="Postal Code"
+            id="postalCode"
+            value={location}
+            onChange={(e) => handleChange(e)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            name="city"
+            label="City"
+            id="city"
             value={location}
             onChange={(e) => handleChange(e)}
           />

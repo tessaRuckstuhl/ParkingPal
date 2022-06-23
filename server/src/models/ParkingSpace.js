@@ -16,6 +16,12 @@ const ParkingSpaceSchema = new Schema({
     type: String,
     required: true
   },
+  lng: {
+    type: String
+  },
+  lat: {
+    type: String
+  },
   size: {
     type: Number,
     required: true

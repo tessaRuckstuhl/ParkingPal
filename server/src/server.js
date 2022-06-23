@@ -4,6 +4,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+//https://www.youtube.com/watch?v=3f5Q9wDePzY
+//https://www.youtube.com/watch?v=OvbRLY1QRIk
 //needed for file names of images
 const crypto = require('crypto');
 //for images 1
