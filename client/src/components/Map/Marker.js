@@ -13,7 +13,7 @@ const Marker = (options) => {
   };
   //  '<div id="content">' + options.name +'</div>'
   const infowindow = new google.maps.InfoWindow({
-    content: '<div id="content">' +'Lorem ipsum, hallo wie gehts mein Name ist Tessa Ruckstuhl und das ist mein Place...' +  options.name + '</div>',
+    content: '<div id="content">' + options.name + '</div>',
   });
 
   const onMouseOver = () => {

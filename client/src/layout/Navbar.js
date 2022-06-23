@@ -28,7 +28,7 @@ const Navbar = () => {
           <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
         {/* Filter and Search */}
-        <Bar/>
+        {showFilters && <Bar/>}
         {/* Language, Profile, .. */}
       <div className="flex space-x-4 items-center">
         <Link to="404">
