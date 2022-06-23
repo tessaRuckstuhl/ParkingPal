@@ -1,19 +1,13 @@
-import React, { useState , useContext} from 'react';
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputBase,
-  useFormControl,
-} from '@mui/material';
+import React, { useState, useContext } from 'react';
+import { FormControl, FormHelperText, IconButton, InputBase, useFormControl } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import moment from 'moment';
 import MoreFilters from './MoreFilters';
-import {FilterContext} from '../../contexts/FilterContext'
+import { FilterContext } from '../../contexts/FilterContext';
 
 const Bar = () => {
-  const {filters, setFilters, getAllParkingSpaces} = useContext(FilterContext)
+  const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
   function MyFormHelperText(props) {
     const { focused } = useFormControl() || {};
     const helperText = React.useMemo(() => {
@@ -33,13 +27,12 @@ const Bar = () => {
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
-    
-    setFilters({...filters, [e.target.name]: e.target.value})
-  }
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
 
   const searchWithFilters = async () => {
-    getAllParkingSpaces(filters)
-  }
+    getAllParkingSpaces(filters);
+  };
   return (
     <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[700px] ">
       {/* Search Location */}
@@ -57,7 +50,7 @@ const Bar = () => {
           aria-describedby="component-helper-text"
           onChange={handleFilterChange}
           value={filters?.location || ''}
-          name='location'
+          name="location"
         />
         <MyFormHelperText text="Where?" />
       </FormControl>
@@ -73,7 +66,10 @@ const Bar = () => {
             input: { padding: 0 },
           }}
           placeholder="Radius"
+          name="radius"
           type="number"
+          onChange={handleFilterChange}
+          value={filters?.radius || ''}
           inputProps={{ 'aria-label': 'search parking places' }}
         />
         <MyFormHelperText text="Flexible?" />
