@@ -1,5 +1,5 @@
 const { ParkingSpace } = require('../models');
-
+const {getLatLngByString} = require('../services/location')
 module.exports = {
   async createParkingSpace(req, res) {
     try {
@@ -33,12 +33,14 @@ module.exports = {
     try {
       console.log('req', req.query);
       const { location, basePrice, dayPrice } = req.query;
-
       // build query from filter configurations...
       let mongoQuery = {}
       if (location){
         mongoQuery.location = { $regex: new RegExp(location, 'i') }
+        const locationGeoCoded = await getLatLngByString(location);
+        console.log('locationGeoCoded',locationGeoCoded)
       }
+
       if (basePrice){
         mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) }
       }

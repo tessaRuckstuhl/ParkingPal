@@ -33,6 +33,7 @@ const Bar = () => {
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
+    
     setFilters({...filters, [e.target.name]: e.target.value})
   }
 
