@@ -5,26 +5,18 @@ import ResultsList from '../components/Results/ResultsList';
 import ResultsFilter from '../components/Results/ResultsFilter';
 import {FilterContext} from '../contexts/FilterContext'
 const Results = () => {
+  // center = Peterskirch in Munich
   const [center, setCenter] = useState({
-    lat: 0,
-    lng: 0,
+    lat: 48.1348661,
+    lng: 11.5565986
   });
-  const {results, setResults} = useContext(FilterContext)
+  const {results} = useContext(FilterContext)
   useEffect(() => {
-    console.log('results', results)
     if(results.length > 0 ){
-      setCenter({ lat: results[0].lat, lng: results[0].lng });
-
+      setCenter({ lat:  results[0].lat, lng: results[0].lng });
     }
-    // getAllParkingSpacesRequest();
   }, []);
 
-  // const getAllParkingSpacesRequest = async () => {
-  //   const parkingSpaces =  await PSService.listAllParkingSpaces()
-  //   // const parkingSpaces = dummyPlaces;
-  //   setResults(parkingSpaces.data);
-  //   setCenter({ lat: parkingSpaces.data[0].lat, lng: parkingSpaces.data[0].lng });
-  // };
 
   return (
     <div className="flex h-[calc(100vh_-_250px)]">

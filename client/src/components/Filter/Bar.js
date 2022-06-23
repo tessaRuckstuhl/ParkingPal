@@ -11,10 +11,9 @@ import { Divider } from '@mui/material';
 import moment from 'moment';
 import MoreFilters from './MoreFilters';
 import {FilterContext} from '../../contexts/FilterContext'
-import PSService from '../../services/parkingSpace.service';
 
 const Bar = () => {
-  const {filters, setFilters, setResults} = useContext(FilterContext)
+  const {filters, setFilters, getAllParkingSpaces} = useContext(FilterContext)
   function MyFormHelperText(props) {
     const { focused } = useFormControl() || {};
     const helperText = React.useMemo(() => {
@@ -38,9 +37,7 @@ const Bar = () => {
   }
 
   const searchWithFilters = async () => {
-    const filteredResults = await PSService.listAllParkingSpaces(filters)
-    console.log(filteredResults.data)
-    setResults(filteredResults.data)
+    getAllParkingSpaces(filters)
   }
   return (
     <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[650px] ">
