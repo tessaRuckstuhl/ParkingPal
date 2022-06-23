@@ -40,7 +40,7 @@ const Bar = () => {
     getAllParkingSpaces(filters)
   }
   return (
-    <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[650px] ">
+    <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[700px] ">
       {/* Search Location */}
       <FormControl className="w-[70%]">
         <InputBase
@@ -62,7 +62,7 @@ const Bar = () => {
       </FormControl>
       {/* Input Radius */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <FormControl className="w-[50%]">
+      <FormControl className="w-[60%]">
         <InputBase
           sx={{
             ml: '10px',
@@ -114,7 +114,7 @@ const Bar = () => {
         <MyFormHelperText text="When?" />
       </FormControl>
       {/* More filters */}
-      <MoreFilters handleFilterChange={handleFilterChange} searchWithFilters={searchWithFilters}/>
+      <MoreFilters handleFilterChange={handleFilterChange} />
       {/* Submit Filter/Search */}
       <IconButton
         type="submit"

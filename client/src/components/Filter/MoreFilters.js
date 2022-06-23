@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -8,17 +8,20 @@ import {
   DialogTitle,
   IconButton,
   Slider,
+  Badge,
 } from '@mui/material';
 import { Divider } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { FilterContext } from '../../contexts/FilterContext';
 const MoreFilters = (props) => {
-  const { filters, getAllParkingSpaces } = useContext(FilterContext);
+  const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
 
   // change filter in context
-  const { handleFilterChange, searchWithFilters } = props;
+  const { handleFilterChange } = props;
   const [open, setOpen] = useState(false);
+  const [filterCount, setFilterCount] = useState(0);
 
+  const enhancedFilterKeys = ['dayPrice', 'longTermStayPrice', 'basePrice'];
   const handleClick = () => {
     setOpen(true);
   };
@@ -31,16 +34,38 @@ const MoreFilters = (props) => {
     getAllParkingSpaces(filters);
     handleClose();
   };
+  const clearAll = async () => {
+    const tempFilters = filters;
+    enhancedFilterKeys.map((key) => {
+      delete tempFilters[key];
+    });
+
+    setFilters({ ...tempFilters });
+  };
+
+  useEffect(() => {
+    let count = 0;
+    enhancedFilterKeys.map((key) => {
+      if (filters?.hasOwnProperty(key)) {
+        count++;
+      }
+    });
+    setFilterCount(count);
+  }, [filters]);
+
 
   return (
     <>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <div
-        onClick={handleClick}
-        className="ml-2.5 text-xs font-bold whitespace-nowrap text-[#949494] cursor-pointer"
-      >
-        Add more filters
-      </div>
+      <Badge badgeContent={filterCount} color="secondary">
+        <div
+          onClick={handleClick}
+          className="ml-2.5 text-xs font-bold whitespace-nowrap pr-1 py-1 text-[#949494] cursor-pointer"
+        >
+          Add more filters
+        </div>
+      </Badge>
+
       {/* Popup dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>
@@ -52,7 +77,6 @@ const MoreFilters = (props) => {
               position: 'absolute',
               right: 8,
               top: 8,
-              // color: (theme) => theme.palette.grey[500],
             }}
           >
             <Close />
@@ -65,8 +89,7 @@ const MoreFilters = (props) => {
             <Slider
               onChange={handleFilterChange}
               name="basePrice"
-              defaultValue={ [5, 15]}
-              value={filters?.basePrice}
+              value={filters?.basePrice || [0, 100]}
               valueLabelDisplay="auto"
               getAriaLabel={(index) => (index === 0 ? 'Minimum hour price' : 'Maximum hour price')}
               getAriaValueText={(value) => `${value} €`}
@@ -82,7 +105,7 @@ const MoreFilters = (props) => {
             <Slider
               onChange={handleFilterChange}
               name="dayPrice"
-              defaultValue={filters?.dayPrice || [30, 60]}
+              value={filters?.dayPrice || [0, 300]}
               valueLabelDisplay="auto"
               min={0}
               max={300}
@@ -95,11 +118,33 @@ const MoreFilters = (props) => {
             />
           </DialogContent>
           <DialogContent>
+            <DialogContentText>Longterm Stay Price Range</DialogContentText>
+            <div className="text-xs font-darkGray mb-5">
+              Set a price for a longterm stay (&gt; 5 hours){' '}
+            </div>
+            <Slider
+              onChange={handleFilterChange}
+              name="longTermStayPrice"
+              value={filters?.longTermStayPrice || [0, 500]}
+              valueLabelDisplay="auto"
+              min={0}
+              max={500}
+              getAriaLabel={(index) =>
+                index === 0 ? 'Minimum longterm stay price' : 'Maximum longterm stay price'
+              }
+              getAriaValueText={(value) => `${value} €`}
+              marks={[
+                { value: 0, label: '0 €' },
+                { value: 500, label: '500 €' },
+              ]}
+            />
+          </DialogContent>
+          <DialogContent>
             <DialogContentText>Garage Type</DialogContentText>
           </DialogContent>
         </DialogContent>
         <DialogActions>
-          {/* <Button>Clear all</Button> */}
+          <Button onClick={clearAll}>Clear all</Button>
           <Button variant="contained" onClick={searchWithEnhancedFilters}>
             Show parking places
           </Button>
