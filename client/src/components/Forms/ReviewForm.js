@@ -97,10 +97,10 @@ const ReviewForm = () => {
   useEffect(() => {
 
 
-    const { token, email } = this.props.match.params
+    //const { token, email } = this.props.match.params
     // Wird beim Rendern der Seite ausgeführt 
     // hier Id von den params auslesen. 
-    const parkingspace_id = 234823492349
+    //const parkingspace_id = 234823492349
     // Wie kann ich darauf zugreifen?
 
   }, []);
