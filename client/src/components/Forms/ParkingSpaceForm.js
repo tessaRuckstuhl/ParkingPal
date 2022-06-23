@@ -20,8 +20,8 @@ const ParkingSpaceForm = () => {
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
+
   const [images, setImages] = useState('');
-  const [latLng, setLatLng] = useState('');
 
 
   const navigate = useNavigate();
@@ -34,10 +34,11 @@ const ParkingSpaceForm = () => {
     color: theme.palette.text.secondary,
   }));
 
+
   const handleChange = (event) => {
     switch (event.target.name) {
       case 'parkingspacename':
-        setStreet(event.target.value);
+        setParkingSpaceName(event.target.value);
         break;
       case 'street':
         setStreet(event.target.value);
@@ -70,17 +71,20 @@ const ParkingSpaceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-
+      let address = street + houseNumber + postalCode + city;
+      const response = await ParkingSpaceService.getCoordinates(address)
       //you can also take it out of the main context
       const user = parseJwt(localStorage.getItem('token'))
       const parkingSpace = {
         name: parkingSpaceName,
-        location: location,
+        location: response.data.results[0].formatted_address,
+        lat: response.data.results[0].geometry.location.lat,
+        lng: response.data.results[0].geometry.location.lng,
         size: size,
         basePrice: basePrice,
         owner: user
       };
-      const response = await ParkingSpaceService.create(parkingSpace);
+      await ParkingSpaceService.create(parkingSpace);
     } catch (error) {
     }
   };
@@ -92,11 +96,10 @@ const ParkingSpaceForm = () => {
       return null;
     }
   };
-  //npm install react-file-base64  
 
   useEffect(() => {
-
   }, []);
+
   return (
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
@@ -244,7 +247,7 @@ const ParkingSpaceForm = () => {
             name="postalCode"
             label="Postal Code"
             id="postalCode"
-            value={location}
+            value={postalCode}
             onChange={(e) => handleChange(e)}
           />
           <TextField
@@ -254,7 +257,7 @@ const ParkingSpaceForm = () => {
             name="city"
             label="City"
             id="city"
-            value={location}
+            value={city}
             onChange={(e) => handleChange(e)}
           />
           <Button
