@@ -6,7 +6,7 @@ import Marker from './Marker';
 const MapWrapper = (props) => {
   const { results, center, setCenter } = props;
   const [mapResults, setMapResults] = useState(results);
-  const [zoom, setZoom] = useState(12); // initial zoom
+  const [zoom, setZoom] = useState(10); // initial zoom
 
   const render = (status) => {
     return <h1>{status}</h1>;
