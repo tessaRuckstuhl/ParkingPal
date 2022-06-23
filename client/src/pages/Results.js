@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import MapWrapper from '../components/Map/MapWrapper';
-import somePlaces from '../components/Map/places.json';
 import dummyPlaces from '../components/Map/dummyResults.json';
 import ResultsList from '../components/Results/ResultsList';
 import ResultsFilter from '../components/Results/ResultsFilter';
