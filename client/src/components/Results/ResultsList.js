@@ -3,7 +3,6 @@ import React from 'react';
 import Listing from './Listing';
 const ResultsList = (props) => {
   const { results, setCenter } = props;
-  console.log(results);
   return (
     <>
       {results.map((result, idx) => (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import {
   FormControl,
   FormHelperText,
@@ -10,7 +10,11 @@ import { Search } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import moment from 'moment';
 import MoreFilters from './MoreFilters';
+import {FilterContext} from '../../contexts/FilterContext'
+import PSService from '../../services/parkingSpace.service';
+
 const Bar = () => {
+  const {filters, setFilters, setResults} = useContext(FilterContext)
   function MyFormHelperText(props) {
     const { focused } = useFormControl() || {};
     const helperText = React.useMemo(() => {
@@ -29,6 +33,15 @@ const Bar = () => {
   }
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
+  const handleFilterChange = (e) => {
+    setFilters({...filters, [e.target.name]: e.target.value})
+  }
+
+  const searchWithFilters = async () => {
+    const filteredResults = await PSService.listAllParkingSpaces(filters)
+    console.log(filteredResults.data)
+    setResults(filteredResults.data)
+  }
   return (
     <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[650px] ">
       {/* Search Location */}
@@ -44,6 +57,9 @@ const Bar = () => {
           placeholder="Location"
           inputProps={{ 'aria-label': 'search parking places' }}
           aria-describedby="component-helper-text"
+          onChange={handleFilterChange}
+          value={filters?.location || ''}
+          name='location'
         />
         <MyFormHelperText text="Where?" />
       </FormControl>
@@ -113,6 +129,7 @@ const Bar = () => {
             backgroundColor: '#6F11F2',
           },
         }}
+        onClick={searchWithFilters}
       >
         <Search sx={{ color: 'white' }} fontSize="inherit" />
       </IconButton>

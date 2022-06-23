@@ -32,7 +32,8 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const allParkingSpaces = await ParkingSpace.find();
+      console.log('req',req.query)
+      const allParkingSpaces = await ParkingSpace.find({location: {$regex: new RegExp(req.query.location, 'i')}});
       return res.send(allParkingSpaces);
     } catch (error) {
       return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });

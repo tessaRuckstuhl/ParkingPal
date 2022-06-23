@@ -14,8 +14,9 @@ const PSService = {
     listParkingSpace(id) {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
-    listAllParkingSpaces() {
-        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`);
+    listAllParkingSpaces(filters) {
+        console.log('body',filters)
+        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters});
     }
 };
 
