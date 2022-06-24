@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper, Divider, Rating } from '@mui/material/';
 import { styled } from '@mui/material/styles';
+import { set } from 'mongoose';
 
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
@@ -17,14 +18,9 @@ const ReviewForm = () => {
   const [communicationRating, setCommunicationRating] = useState('2.5');
   const [accuracyRating, setAccuracyRating] = useState('2.5');
   const [valueRating, setValueRating] = useState('2.5');
+  const [booking, setBooking] = useState(null)
 
-
-  const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [location, setLocation] = useState('');
-  const [size, setSize] = useState('');
-  const [basePrice, setBasePrice] = useState('');
-  const [dayPrice, setDayPrice] = useState('');
-  const [longTermStayPrice, setLongTermStayPrice] = useState('');
+  // use state null setzen
 
   const navigate = useNavigate();
 
@@ -94,15 +90,18 @@ const ReviewForm = () => {
     }
   };
 
+
+
+
+ 
+
   useEffect(() => {
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const bookingId = searchParams.get("id")
 
-    //const { token, email } = this.props.match.params
-    // Wird beim Rendern der Seite ausgeführt 
-    // hier Id von den params auslesen. 
-    //const parkingspace_id = 234823492349
-    // Wie kann ich darauf zugreifen?
-
+    const booking = await bookingService.get(bookingId)
+    setBooking(booking)
   }, []);
   return (
     
@@ -126,7 +125,10 @@ const ReviewForm = () => {
 
             <p>Here is a short summary of what was promised and expected</p>
 
-            <b>Placeholder Booking summary</b>
+            <b>Insert Component from Markus</b>
+
+
+      
           </div>
           <Divider>
 
