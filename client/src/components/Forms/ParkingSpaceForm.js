@@ -7,8 +7,13 @@ import TextField from '@mui/material/TextField';
 import { Grid, Paper } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
-
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Tooltip from '@mui/material/Tooltip';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
@@ -22,6 +27,7 @@ const ParkingSpaceForm = () => {
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
 
   const [images, setImages] = useState('');
+  const [value, setValue] = React.useState(null);
 
 
   const navigate = useNavigate();
@@ -62,8 +68,17 @@ const ParkingSpaceForm = () => {
       case 'city':
         setCity(event.target.value);
         break;
-      case 'size':
-        setSize(event.target.value);
+      case 'size-S':
+        setSize(1);
+        break;
+      case 'size-M':
+        setSize(2);
+        break;
+      case 'size-L':
+        setSize(3);
+        break;
+      case 'size-XL':
+        setSize(4);
         break;
       case 'dayPrice':
         setDayPrice(event.target.value);
@@ -119,8 +134,7 @@ const ParkingSpaceForm = () => {
         <div className="mb-6 text-xl">
           <b>Welcome to the Creator Dashboard</b>
         </div>
-        <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-
+        <form className="text-3x2 font-bold my-2" noValidate onSubmit={(e) => handleSubmit(e)}>
           <p>Step 1: Name your parking place</p>
           <TextField
             variant="outlined"
@@ -138,53 +152,39 @@ const ParkingSpaceForm = () => {
           <ImageUploaderForm />
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Item style={{ height: 100 }}>Photo Placeholder</Item>
             </Grid>
             <Grid item xs={6}>
-              <Item style={{ height: 100 }}>Photo Placeholder</Item>
             </Grid>
           </Grid>
           <p>Step 3: Provide additional information to help</p>
           <Grid container spacing={3}>
             <Grid item xs={4}>
               <Item>Parking Properties</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="dummy"
-                label="dummy"
-                id="dummy"
-                value={null}
-                onChange={(e) => handleChange(e)}
-              />
+              <FormGroup>
+                
+                <FormControlLabel control={<Checkbox />} label="Streetside" name="streetSide" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox defaultChecked />} label="Garage" name="garage" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="E-Charging" name="e-charging" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Illuminated" name="illuminated" onChange={(e) => handleChange(e)} />
+              </FormGroup>
             </Grid>
             <Grid item xs={4}>
               <Item>Size</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="size"
-                label="Parking Space Size"
-                id="size"
-                value={size}
-                onChange={(e) => handleChange(e)}
-              />
+              <FormGroup>
+                <FormControlLabel control={<Checkbox defaultChecked />} label="S" name="size-S" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="M" name="size-M" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="L" name="size-L" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="XL" name="size-XL" onChange={(e) => handleChange(e)} />
+              </FormGroup>
             </Grid>
             <Grid item xs={4}>
               <Item>Cancellation and Access</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="dummy"
-                label="dummy"
-                id="dummy"
-                value={null}
-                onChange={(e) => handleChange(e)}
-              />
+              <FormGroup>
+                <FormControlLabel control={<Checkbox defaultChecked />} label="Free cancellation 24 hours before booking" name="size-S" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="No meetup required"  onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Access via pin" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" onChange={(e) => handleChange(e)} />
+              </FormGroup>
             </Grid>
           </Grid>
 
@@ -200,7 +200,29 @@ const ParkingSpaceForm = () => {
             onChange={(e) => handleChange(e)}
           />
           <p>Step 5: When is your parking place available?</p>
+          <div className="my-4 space-x-4">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker className=""
+                label="From"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <DatePicker
+                label="To"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
           <p>Step 6: Set a price</p>
+          <div className="mb-2">
+          <Tooltip title="This is the default price per hour" placement="top" arrow >
           <TextField
             variant="outlined"
             margin="normal"
@@ -212,6 +234,8 @@ const ParkingSpaceForm = () => {
             value={basePrice}
             onChange={(e) => handleChange(e)}
           />
+          </Tooltip>
+          <Tooltip title="This ist the price, for a full day" placement="top" arrow >
           <TextField
             variant="outlined"
             margin="normal"
@@ -222,6 +246,8 @@ const ParkingSpaceForm = () => {
             value={dayPrice}
             onChange={(e) => handleChange(e)}
           />
+          </Tooltip>
+          <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
           <TextField
             variant="outlined"
             margin="normal"
@@ -232,47 +258,53 @@ const ParkingSpaceForm = () => {
             value={longTermStayPrice}
             onChange={(e) => handleChange(e)}
           />
+          </Tooltip>
+          </div>
+          
           <p>Step 7: Enter the address</p>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            name="street"
-            label="Street"
-            id="street"
-            value={street}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            name="houseNumber"
-            label="House Number"
-            id="houseNumber"
-            value={houseNumber}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            name="postalCode"
-            label="Postal Code"
-            id="postalCode"
-            value={postalCode}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            name="city"
-            label="City"
-            id="city"
-            value={city}
-            onChange={(e) => handleChange(e)}
-          />
+          <div className="space-x-2">
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              name="street"
+              label="Street"
+              id="street"
+              value={street}
+              onChange={(e) => handleChange(e)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              name="houseNumber"
+              label="House Number"
+              id="houseNumber"
+              value={houseNumber}
+              onChange={(e) => handleChange(e)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              name="postalCode"
+              label="Postal Code"
+              id="postalCode"
+              value={postalCode}
+              onChange={(e) => handleChange(e)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              name="city"
+              label="City"
+              id="city"
+              value={city}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+
           <Button
             type="submit"
             variant="contained"
