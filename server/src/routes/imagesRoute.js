@@ -23,9 +23,7 @@ const conn = mongoose.createConnection(process.env.MONGODB_URI, {
 
 let gfs;
 conn.once('open', () => {
-    gfs = new mongoose.mongo.GridFSBucket(conn.db), {
-        bucketName: 'images'
-    }
+    gfs = new mongoose.mongo.GridFSBucket(conn.db)
 })
 
 // Create storage engine
@@ -41,7 +39,6 @@ const storage = new GridFsStorage({
                 const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'images'
                 };
                 resolve(fileInfo);
             });
@@ -50,7 +47,7 @@ const storage = new GridFsStorage({
 });
 const store = multer({
     storage,
-    limits: { fileSize: 200000000 },
+    limits: { fileSize: 20000000 },
     fileFilter: function (req, file, cb) {
         checkFileType(file, cb)
     }
@@ -106,8 +103,10 @@ const deleteImage = (id) => {
 router.get('/:id', ({ params: { id } }, res) => {
     if (!id || id === 'undefined') return res.status(400).send('no image id');
     const _id = new mongoose.Types.ObjectId(id);
-    gfs.find({ _id }).toArray((err, files) => {
-        if (!files || files.length === 0)
+    console.log(gfs.find({_id}))
+    gfs.find({_id}).toArray((err, files) => {
+        console.log(files)
+        if (!files || files.length === 0) 
             return res.status(400).send('no files exist')
         gfs.openDownloadStream(_id).pipe(res);
     })
