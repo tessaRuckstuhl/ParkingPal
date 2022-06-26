@@ -9,14 +9,14 @@ import { styled } from '@mui/material/styles';
 
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
-  const [neighborhoodRating, setNeighborhoodRating] = useState('2.5');
-  const [accessRating, setAccessRating] = useState('2.5');
-  const [locationRating, setLocationRating] = useState('2.5');
-  const [communicationRating, setCommunicationRating] = useState('2.5');
-  const [accuracyRating, setAccuracyRating] = useState('2.5');
-  const [valueRating, setValueRating] = useState('2.5');
-  const [booking, setBooking] = useState(null)
-
+  const [neighborhoodRating, setNeighborhoodRating] = useState(2.5);
+  const [accessRating, setAccessRating] = useState(2.5);
+  const [locationRating, setLocationRating] = useState(2.5);
+  const [communicationRating, setCommunicationRating] = useState(2.5);
+  const [accuracyRating, setAccuracyRating] = useState(2.5);
+  const [valueRating, setValueRating] = useState(2.5);
+  const [booking, setBooking] = useState([""]) // FRAGE Setz ich hier dann [""] rein
+  const [parkingSpace, setParkingSpace] = useState([""]) // FRAGE Setz ich hier dann [""] rein
   // use state null setzen
 
   //const navigate = useNavigate();
@@ -58,23 +58,28 @@ const ReviewForm = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
     try {
-      const { id } = this.props.match.params // read id from url params
+      //const { id } = this.props.match.params // read id from url params
 
-      const user = parseJwt(localStorage.getItem('token'))
+     // const user = parseJwt(localStorage.getItem('token'))
       const review = {
         description: reviewDescription,
+        rating: 4,
         neighborhoodRating: neighborhoodRating,
-        accessRating: accessRating,
-        locationRating: locationRating,
-        communicationRating: communicationRating,
-        accuracyRating: accuracyRating,
-        valueRating: valueRating,
+        // accessRating: accessRating,
+        // locationRating: locationRating,
+        // communicationRating: communicationRating,
+        // accuracyRating: accuracyRating,
+        // valueRating: valueRating,
 
-        owner: user,        // Ich schreib hier gerade den kompletten user object rein, reicht hier ein String?
-        parkingSpace_id: "dfadf" // nur die id als string
+        reviewer_id: "629f5ef16d7fec1d5cfc2b9b",        // Ich schreib hier gerade den kompletten user object rein, reicht hier ein String?
+        parkingSpace_id: "62b43fe8ea081c71fe2f8ebe" // nur die id als string, muss eine valid id sein, sonst klappt es nicht. 
       };
+      console.log("nice")
+      console.log(review)
       const response = await ReviewService.create(review);
+      
     } catch (error) {
     }
   };
@@ -92,25 +97,60 @@ const ReviewForm = () => {
 
  
 
-  useEffect(() => {
+  useEffect(() => {     
+    
+    // Mock Booking
+    const booking = {
+      username: "username-mock",
+      owner: "owner-mock",
+      terms: "terms-mock",
+      issueDate: Date('December 17, 1995 03:24:00'),
+      startDate: Date('December 20, 1995 03:24:00'),
+      endDate: new Date('December 23, 1995 03:24:00'),
+    };
+
+    // Mock ParkingSpace
+    const parkingSpace = {
+      name: "parkingSpaceName-mock",
+      location: "location-mock",
+      size: "size-mock",
+      basePrice: "basePrice-mock",
+      owner: "user-mock"
+    };
+    
+    // Frage: Wenn ich die Seite neu lade, dann wird das Objekt mit den Dates nicht gesetzt - warum?
+
+    setBooking(booking)
+    setParkingSpace(parkingSpace)
+
+
+
 
     //const [searchParams, setSearchParams] = useSearchParams();
     //const bookingId = searchParams.get("id")
 
     //const booking = await bookingService.get(bookingId)
     //setBooking(booking)
+
+
+
   }, []);
   return (
     
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="mb-6 text-xl">
-          <b>Rate your parking place experience</b>
+          <b>Rate your parking place experience </b>
         </div>
 
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
           <div className="mb-6 text-xl">
             <p>Your parking space booking came just to an end.<br />Now take a minute to reflect on the parking place and leave a quick review. </p>
+          </div>
+          <div>
+            <p>You booked this parking place provides by {booking.username}, from     to  </p>
+
+            <p>Here is a short summary of what was promised and expected</p>
           </div>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -150,38 +190,23 @@ const ReviewForm = () => {
               <Item style={{ height: 300 }}>
               
               <div className=" font-regular  text-s">
-                <Grid container spacing = {2}>
-                  <Grid item xs = {6}>
-                    <a>10€ / day</a>
-                  </Grid>
-                  <Grid item xs = {6}>
-                    <a>⭐  5.0</a>
-                  </Grid>
-                </Grid>
+
+                    <a>Provided by {booking.username}</a>
+
                 <br></br>              
               </div>
               <div className="mb-6 font-regular  text-s">
-              <Grid container spacing={2}>
-                  <Grid item xs={5}>
-                  <Item style ={{ height: 70 }} key = {5} elevation={5}>
-                      <a>CHECK-IN</a>
-                      <br></br>
-                     <b> {`23.06`}</b>
-                  </Item>
-                  </Grid>
-                  <Grid item xs ={1}>
-                  <br></br>
-                  <b> - </b>
-                  </Grid> 
-                  <Grid item xs={5}>
-                  <Item style ={{ height: 70 }} key = {5} elevation={5}>
-                  <a>CHECK-OUT</a>
-                  <br></br>
-                      <b>{`25.06`}</b>
-                  </Item>
-                  </Grid>
-              </Grid>
+
               </div>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                12 reviews
+                </Grid>
+                <Grid item xs={6}>
+                
+                Identity verified
+                </Grid> 
+                </Grid>
               <br></br>
                   <Button
                     type="submit"
@@ -189,18 +214,10 @@ const ReviewForm = () => {
                     color="primary"                
                     fullWidth
                   >
-                    Book now
+                    Contact Host
                   </Button>
                   <div className="mt-6 font-light text-s">      
-                <Grid container spacing={2}>
-                <Grid item xs={6}>
-                Price Calculation
-                </Grid>
-                <Grid item xs={6}>
-                
-                Price
-                </Grid> 
-                </Grid> 
+            
                 </div>
                 
             </Item>
@@ -211,13 +228,7 @@ const ReviewForm = () => {
           <Divider>
 
           </Divider>
-          <div>
-            <p>You booked this parking place provides by<br />Alexander Mock. Adresse Platzhalter. Willkürliche Zeitdauer </p>
-
-            <p>Here is a short summary of what was promised and expected</p>
-
-            <b>Insert Component</b>
-          </div>
+          
           <Divider>
 
           </Divider>
