@@ -1,14 +1,11 @@
 
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ParkingSpaceService from '../../services/parkingSpace.service';
 import ReviewService from '../../services/review.service';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper, Divider, Rating } from '@mui/material/';
 import { styled } from '@mui/material/styles';
-import { set } from 'mongoose';
 
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
@@ -22,7 +19,7 @@ const ReviewForm = () => {
 
   // use state null setzen
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -75,7 +72,7 @@ const ReviewForm = () => {
         valueRating: valueRating,
 
         owner: user,        // Ich schreib hier gerade den kompletten user object rein, reicht hier ein String?
-        parkingSpace_id: id // nur die id als string
+        parkingSpace_id: "dfadf" // nur die id als string
       };
       const response = await ReviewService.create(review);
     } catch (error) {
@@ -97,11 +94,11 @@ const ReviewForm = () => {
 
   useEffect(() => {
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const bookingId = searchParams.get("id")
+    //const [searchParams, setSearchParams] = useSearchParams();
+    //const bookingId = searchParams.get("id")
 
-    const booking = await bookingService.get(bookingId)
-    setBooking(booking)
+    //const booking = await bookingService.get(bookingId)
+    //setBooking(booking)
   }, []);
   return (
     
@@ -115,20 +112,111 @@ const ReviewForm = () => {
           <div className="mb-6 text-xl">
             <p>Your parking space booking came just to an end.<br />Now take a minute to reflect on the parking place and leave a quick review. </p>
           </div>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Item style={{ height: 300 }}>Photo Placeholder</Item>
+            </Grid>
+            <Grid item xs={6}>
+              <Item style={{ height: 300 }}>Photo Placeholder</Item>
+            </Grid>
+        </Grid>   
+        <br></br>
+        <Grid container spacing={2}>
+            <Grid item xs={8}>
+              <Item style={{ height: 300, justifyContent:'begin', textAlign: 'justify' }}>
+                Information on Parkingspace from Backend
+              <Divider />
+              <div
+                style={{
+                  justifyContent: 'begin',
+                  textAlign: 'justify',
+
+                }}
+              >
+              <br></br>
+              <p>- bullet 1</p> 
+              <p>- bullet 2</p> 
+              <p>- bullet 3</p> 
+              <br></br>
+              <Divider />
+              <br></br>
+              <b>Description</b>
+              <br></br>
+              <p>Come check out this cool information which I have to retrieve from BackEnd first.</p>
+              </div> 
+              </Item>
+            </Grid>
+            <Grid item xs={4}>
+              <Item style={{ height: 300 }}>
+              
+              <div className=" font-regular  text-s">
+                <Grid container spacing = {2}>
+                  <Grid item xs = {6}>
+                    <a>10€ / day</a>
+                  </Grid>
+                  <Grid item xs = {6}>
+                    <a>⭐  5.0</a>
+                  </Grid>
+                </Grid>
+                <br></br>              
+              </div>
+              <div className="mb-6 font-regular  text-s">
+              <Grid container spacing={2}>
+                  <Grid item xs={5}>
+                  <Item style ={{ height: 70 }} key = {5} elevation={5}>
+                      <a>CHECK-IN</a>
+                      <br></br>
+                     <b> {`23.06`}</b>
+                  </Item>
+                  </Grid>
+                  <Grid item xs ={1}>
+                  <br></br>
+                  <b> - </b>
+                  </Grid> 
+                  <Grid item xs={5}>
+                  <Item style ={{ height: 70 }} key = {5} elevation={5}>
+                  <a>CHECK-OUT</a>
+                  <br></br>
+                      <b>{`25.06`}</b>
+                  </Item>
+                  </Grid>
+              </Grid>
+              </div>
+              <br></br>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"                
+                    fullWidth
+                  >
+                    Book now
+                  </Button>
+                  <div className="mt-6 font-light text-s">      
+                <Grid container spacing={2}>
+                <Grid item xs={6}>
+                Price Calculation
+                </Grid>
+                <Grid item xs={6}>
+                
+                Price
+                </Grid> 
+                </Grid> 
+                </div>
+                
+            </Item>
+            
+            </Grid>
+            
+        </Grid> 
           <Divider>
 
           </Divider>
-
-
           <div>
             <p>You booked this parking place provides by<br />Alexander Mock. Adresse Platzhalter. Willkürliche Zeitdauer </p>
 
             <p>Here is a short summary of what was promised and expected</p>
 
-            <b>Insert Component from Markus</b>
-
-
-      
+            <b>Insert Component</b>
           </div>
           <Divider>
 
@@ -271,6 +359,3 @@ const ReviewForm = () => {
 };
 
 export default ReviewForm;
-
-
-// id in den url params mitgegeben 
