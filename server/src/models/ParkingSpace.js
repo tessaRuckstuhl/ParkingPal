@@ -12,16 +12,30 @@ const ParkingSpaceSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  images: {
+    type: [String],
+    required: false,
+  },
+  description: {
+    type: String,
+    required : false
+  },
+  formattedAddress: {
+    type: String,
+    required: true
+  },
   location: {
-    type: String,
-    required: true
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: {
+      type: [String,String], 
+      required: true
+    }
   },
-  lng: {
-    type: String,
-    required: true
-  },
-  lat: {
-    type: String,
+  availability: {
+    type: [String,String],
     required: true
   },
   size: {

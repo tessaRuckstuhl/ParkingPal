@@ -9,25 +9,32 @@ import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [street, setStreet] = useState('');
-  const [houseNumber, setHouseNumber] = useState('');
-  const [postalCode, setPostalCode] = useState('')
-  const [city, setCity] = useState('')
+  const [images, setImages] = useState([]);
+
+  const [description, setDescription] = useState('');
+
   const [size, setSize] = useState('');
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
 
-  const [images, setImages] = useState('');
-  const [value, setValue] = React.useState(null);
+  const [fromValue, setFromValue] = React.useState(null);
+  const [toValue, setToValue] = React.useState(null);
+  const [availability, setAvailability] = useState([]);
+  const [street, setStreet] = useState('');
+  const [houseNumber, setHouseNumber] = useState('');
+  const [postalCode, setPostalCode] = useState('')
+  const [city, setCity] = useState('')
 
 
   const navigate = useNavigate();
@@ -89,6 +96,10 @@ const ParkingSpaceForm = () => {
       case 'longTermStayPrice':
         setLongTermStayPrice(event.target.value);
         break;
+      case 'description':
+        setDescription(event.target.value);
+        break;
+
       default:
         break;
     }
@@ -102,17 +113,22 @@ const ParkingSpaceForm = () => {
       const user = parseJwt(localStorage.getItem('token'))
       const parkingSpace = {
         name: parkingSpaceName,
-        location: response.data.results[0].formatted_address,
-        lat: response.data.results[0].geometry.location.lat,
-        lng: response.data.results[0].geometry.location.lng,
+        owner: user,
+        formattedAddress: response.data.results[0].formatted_address,
+        location: {
+          type: "Point",
+          coordinates: [response.data.results[0].geometry.location.lat, response.data.results[0].geometry.location.lng]
+        },
+        availability: availability,
         size: size,
         basePrice: basePrice,
         dayPrice: dayPrice,
         longTermStayPrice: longTermStayPrice,
-        owner: user
+
       };
+      console.log(parkingSpace)
       await ParkingSpaceService.create(parkingSpace);
-      set
+      clearAll()
     } catch (error) {
     }
   };
@@ -126,7 +142,7 @@ const ParkingSpaceForm = () => {
   };
 
   useEffect(() => {
-  }, []);
+  }, [availability]);
 
   return (
     <div className="flex flex-col items-center ">
@@ -161,7 +177,6 @@ const ParkingSpaceForm = () => {
             <Grid item xs={4}>
               <Item>Parking Properties</Item>
               <FormGroup>
-                
                 <FormControlLabel control={<Checkbox />} label="Streetside" name="streetSide" onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox defaultChecked />} label="Garage" name="garage" onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="E-Charging" name="e-charging" onChange={(e) => handleChange(e)} />
@@ -181,13 +196,12 @@ const ParkingSpaceForm = () => {
               <Item>Cancellation and Access</Item>
               <FormGroup>
                 <FormControlLabel control={<Checkbox defaultChecked />} label="Free cancellation 24 hours before booking" name="size-S" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="No meetup required"  onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="No meetup required" onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Access via pin" onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
           </Grid>
-
           <p>Step 4: Edit your description</p>
           <TextField
             variant="outlined"
@@ -195,72 +209,82 @@ const ParkingSpaceForm = () => {
             fullWidth
             name="description"
             label="Description"
-            id=""
+            id="description"
             value={null}
             onChange={(e) => handleChange(e)}
           />
           <p>Step 5: When is your parking place available?</p>
           <div className="my-4 space-x-4">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker className=""
+              <DateTimePicker className=""
                 label="From"
-                value={value}
+                value={fromValue}
                 onChange={(newValue) => {
-                  setValue(newValue);
+                  setFromValue(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
-              <DatePicker
+              <DateTimePicker
                 label="To"
-                value={value}
+                value={toValue}
                 onChange={(newValue) => {
-                  setValue(newValue);
+                  setToValue(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
+                {availability.length > 0 ? availability.map((from) => {
+                  return <div>{from}</div>
+                }): null}
+              <Button variant="contained" color="primary" onClick={() => {
+                console.log(availability)
+                let available = [fromValue.format("DD-MM-YYYY HH:MM"), toValue.format("DD-MM-YYYY HH:MM")]
+                setToValue(null);
+                setFromValue(null);
+                setAvailability(state => [...state, available[0], available[1]]);
+              }}>Add Availability</Button>
             </LocalizationProvider>
           </div>
           <p>Step 6: Set a price</p>
           <div className="mb-2">
-          <Tooltip title="This is the default price per hour" placement="top" arrow >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="basePrice"
-            label="Base Price"
-            id="baseprice"
-            value={basePrice}
-            onChange={(e) => handleChange(e)}
-          />
-          </Tooltip>
-          <Tooltip title="This ist the price, for a full day" placement="top" arrow >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="dayPrice"
-            label="Day Price"
-            id="dayPrice"
-            value={dayPrice}
-            onChange={(e) => handleChange(e)}
-          />
-          </Tooltip>
-          <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="longTermStayPrice"
-            label="Long Term Stay Price"
-            id="longTermStayPrice"
-            value={longTermStayPrice}
-            onChange={(e) => handleChange(e)}
-          />
-          </Tooltip>
+            <Tooltip title="This is the default price per hour" placement="top" arrow >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="basePrice"
+                label="Base Price"
+                id="baseprice"
+                value={basePrice}
+                onChange={(e) => handleChange(e)}
+              />
+            </Tooltip>
+            <Tooltip title="This ist the price, for a full day" placement="top" arrow >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="dayPrice"
+                label="Day Price"
+                id="dayPrice"
+                value={dayPrice}
+                onChange={(e) => handleChange(e)}
+              />
+            </Tooltip>
+            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="longTermStayPrice"
+                label="Long Term Stay Price"
+                id="longTermStayPrice"
+                value={longTermStayPrice}
+                onChange={(e) => handleChange(e)}
+              />
+            </Tooltip>
           </div>
-          
+
           <p>Step 7: Enter the address</p>
           <div className="space-x-2">
             <TextField

@@ -36,6 +36,7 @@
     "buffer": "^6.0.3",
     "fast-equals": "^4.0.1",
     "google-map-react": "^2.1.10",
+    "moment": "^2.29.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "6.3",
