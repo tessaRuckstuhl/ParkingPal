@@ -6,7 +6,7 @@ const Login = () => {
     <>
       <div className='flex flex-col'>
         <div className='text-lg'>Temporary Navigation Tree... Add your page here...</div>
-        <Link to="create/booking"><div className='hover:underline'>Create a new booking</div></Link>
+        <Link to="parking/create"><div className='hover:underline'>Create a new parking space listing</div></Link>
         <Link to="map"><div className='hover:underline'>View listings with map view</div> </Link>
       </div>
       <LoginForm />
