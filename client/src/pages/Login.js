@@ -4,10 +4,11 @@ import LoginForm from '../components/Forms/LoginForm';
 const Login = () => {
   return (
     <>
-      <div className='flex flex-col'>
+      <div className='flex flex-col p-5'>
         <div className='text-lg'>Temporary Navigation Tree... Add your page here...</div>
-        <Link to="parking/create"><div className='hover:underline'>Create a new parking space listing</div></Link>
-        <Link to="map"><div className='hover:underline'>View listings with map view</div> </Link>
+        <br/>
+        <Link to="parking/create"><div className='hover:underline'>/parking/create - Create a new parking space listing</div></Link>
+        <Link to="map"><div className='hover:underline'>/map - View listings with map view</div> </Link>
       </div>
       <LoginForm />
     </>

@@ -33,7 +33,6 @@ module.exports = {
   async listParkingSpaces(req, res) {
     try {
       const { formattedAddress, basePrice, dayPrice, radius } = req.query;
-      console.log(req.query)
       // build query from filter configurations...
       let mongoQuery = {};
 
@@ -62,7 +61,6 @@ module.exports = {
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });
-      console.log(allParkingSpaces.length);
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);
