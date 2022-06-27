@@ -3,6 +3,7 @@ const { getLatLngByString } = require('../services/location');
 module.exports = {
   async createParkingSpace(req, res) {
     try {
+      console.log(req.body)
       const parkingSpace = await ParkingSpace.create(req.body);
       return res.send(parkingSpace.toJSON());
     } catch (error) {
@@ -31,29 +32,33 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      console.log('req', req.query);
-      const { location, basePrice, dayPrice, radius } = req.query;
+      const { formattedAddress, basePrice, dayPrice, radius } = req.query;
+      console.log(req.query)
       // build query from filter configurations...
       let mongoQuery = {};
-      if (location) {
-        mongoQuery.location = { $regex: new RegExp(location, 'i') };
-      }
-      if (radius && location) {
-        const locationGeoCoded = await getLatLngByString(location);
-        const lat = locationGeoCoded[0].geometry.location.lat;
-        const lng = locationGeoCoded[0].geometry.location.lng;
 
-        console.log('locationGeoCoded', locationGeoCoded);
-        mongoQuery.lat = { $geoWithin: { $centerSphere: [[lat, lng], radius / 6378.1] } };
+      if (formattedAddress) {
+        const locationGeoCoded = await getLatLngByString(formattedAddress);
+        if(locationGeoCoded[0]){
+          const lat = locationGeoCoded[0].geometry.location.lat;
+          const lng = locationGeoCoded[0].geometry.location.lng;
+  
+          mongoQuery.location = {
+            $near: {
+              $geometry: { type: 'Point', coordinates: [lat, lng] },
+              $maxDistance: radius ? radius * 1000: 10000, // search within a readius of 5 km, else within specified radius
+            },
+          };
+        } else {
+          throw 'Not a valid location string'
+        }       
       }
-
       if (basePrice) {
         mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
       }
       if (dayPrice) {
         mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
       }
-      console.log(mongoQuery);
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });

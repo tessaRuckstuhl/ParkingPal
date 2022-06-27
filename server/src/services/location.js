@@ -6,10 +6,10 @@ module.exports = {
   async getLatLngByString(locationString) {
     try {
       const res = await axios.get(url,{ params: {address: locationString, key: process.env.GOOGLE_MAPS_API_KEY}});
-      if (res.data.status == 'OK') {
+      if (res.data.results) {
         return res.data.results;
-      }
-      return res;
+      } 
+      throw 'something went wrong...'
     } catch (error) {
       console.error(error);
     }

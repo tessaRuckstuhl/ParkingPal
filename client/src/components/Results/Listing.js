@@ -1,4 +1,4 @@
-import { FavoriteBorderOutlined, StarBorder } from '@mui/icons-material';
+import { FavoriteBorderOutlined, StarBorder, LocationOn } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,6 @@ const Listing = (props) => {
       id={listing._id}
       className="flex space-x-5 p-5 bg-white  "
       onMouseEnter={() => recenter(listing)}
-
     >
       {/* Listing image */}
       <img className="rounded" src="/temp/garage.jpg" width={250} height={150}></img>
@@ -27,6 +26,10 @@ const Listing = (props) => {
             <Link to={'/404'}>
               <div className="text-lg hover:underline hover:cursor-pointer">{listing.name}</div>
             </Link>
+            <div className="text-[.75rem] flex items-center ">
+              <LocationOn className="mr-1" sx={{ fontSize: '.75rem' }} />
+              {listing.formattedAddress}
+            </div>
           </div>
           <FavoriteBorderOutlined />
         </div>

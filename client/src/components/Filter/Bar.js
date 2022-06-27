@@ -49,8 +49,8 @@ const Bar = () => {
           inputProps={{ 'aria-label': 'search parking places' }}
           aria-describedby="component-helper-text"
           onChange={handleFilterChange}
-          value={filters?.location || ''}
-          name="location"
+          value={filters?.formattedAddress || ''}
+          name="formattedAddress"
         />
         <MyFormHelperText text="Where?" />
       </FormControl>
