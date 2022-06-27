@@ -29,7 +29,7 @@ const Dash = () => {
   return (
     <div>
       <div>
-        <pre>"You are logged in</pre>
+        <pre>You are logged in</pre>
       </div>
       <Button onClick={() => logout()} fullWidth variant="contained" color="secondary">
         Logout
