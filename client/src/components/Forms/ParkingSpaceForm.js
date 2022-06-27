@@ -107,7 +107,7 @@ const ParkingSpaceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      let address = street + houseNumber + postalCode + city;
+      let address = street + houseNumber + " " + postalCode + city;
       const response = await ParkingSpaceService.getCoordinates(address)
       //you can also take it out of the main context
       const user = parseJwt(localStorage.getItem('token'))
