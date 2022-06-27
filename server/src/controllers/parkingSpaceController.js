@@ -1,5 +1,5 @@
 const { ParkingSpace } = require('../models');
-const {getLatLngByString} = require('../services/location')
+const { getLatLngByString } = require('../services/location');
 module.exports = {
   async createParkingSpace(req, res) {
     try {
@@ -32,26 +32,32 @@ module.exports = {
   async listParkingSpaces(req, res) {
     try {
       console.log('req', req.query);
-      const { location, basePrice, dayPrice } = req.query;
+      const { location, basePrice, dayPrice, radius } = req.query;
       // build query from filter configurations...
-      let mongoQuery = {}
-      if (location){
-        mongoQuery.location = { $regex: new RegExp(location, 'i') }
+      let mongoQuery = {};
+      if (location) {
+        mongoQuery.location = { $regex: new RegExp(location, 'i') };
+      }
+      if (radius && location) {
         const locationGeoCoded = await getLatLngByString(location);
-        console.log('locationGeoCoded',locationGeoCoded)
+        const lat = locationGeoCoded[0].geometry.location.lat;
+        const lng = locationGeoCoded[0].geometry.location.lng;
+
+        console.log('locationGeoCoded', locationGeoCoded);
+        mongoQuery.lat = { $geoWithin: { $centerSphere: [[lat, lng], radius / 6378.1] } };
       }
 
-      if (basePrice){
-        mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) }
+      if (basePrice) {
+        mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
       }
-      if (dayPrice){
-        mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) }
+      if (dayPrice) {
+        mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
       }
-      console.log(mongoQuery)
+      console.log(mongoQuery);
       const allParkingSpaces = await ParkingSpace.find({
-       ...mongoQuery
+        ...mongoQuery,
       });
-      console.log(allParkingSpaces.length)
+      console.log(allParkingSpaces.length);
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);
