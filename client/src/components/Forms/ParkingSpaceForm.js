@@ -14,12 +14,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import {ImageContext} from '../../contexts/ImageContext';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [images, setImages] = useState([]);
+  const {imageIDs,setImageIDs} = useContext(ImageContext)
 
   const [description, setDescription] = useState('');
 
@@ -48,14 +47,17 @@ const ParkingSpaceForm = () => {
   }));
   const clearAll = () => {
     setParkingSpaceName("")
-    setStreet("")
-    setHouseNumber("")
-    setPostalCode("")
-    setCity("")
+    setImageIDs([]) 
+    setDescription("")
     setSize("")
     setBasePrice("")
     setDayPrice("")
     setLongTermStayPrice("")
+    setAvailability([])
+    setStreet("")
+    setHouseNumber("")
+    setPostalCode("")
+    setCity("")
   }
 
   const handleChange = (event) => {
@@ -99,7 +101,6 @@ const ParkingSpaceForm = () => {
       case 'description':
         setDescription(event.target.value);
         break;
-
       default:
         break;
     }
@@ -124,7 +125,22 @@ const ParkingSpaceForm = () => {
         basePrice: basePrice,
         dayPrice: dayPrice,
         longTermStayPrice: longTermStayPrice,
-
+        images: imageIDs,
+        description: description,
+        properties: {
+          parking:{
+            streetside: false,
+            illuminated: false,
+            e_charging: false,
+            illuminated: false
+          }, 
+          cancellation_and_access: {
+            free_24h_before: false,
+            no_meetup: false,
+            pin: false,
+            securityGate: false
+          }
+        },
       };
       console.log(parkingSpace)
       await ParkingSpaceService.create(parkingSpace);

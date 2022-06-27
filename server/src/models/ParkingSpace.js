@@ -20,6 +20,44 @@ const ParkingSpaceSchema = new Schema({
     type: String,
     required : false
   },
+  properties: {
+    parking:{
+      streetside: {
+        type: Boolean,
+        default: false
+      },
+      illuminated: {
+        type: Boolean,
+        default: false
+      },
+      e_charging: {
+        type: Boolean,
+        default: false
+      },
+      illuminated: {
+        type: Boolean,
+        default: false
+      }
+    }, 
+    cancellation_and_access: {
+      free_24h_before: {
+        type: Boolean,
+        default: false
+      },
+      no_meetup: {
+        type: Boolean,
+        default: false
+      },
+      pin: {
+        type: Boolean,
+        default: false
+      },
+      securityGate: {
+        type: Boolean,
+        default: false
+      }
+    }
+  },
   formattedAddress: {
     type: String,
     required: true

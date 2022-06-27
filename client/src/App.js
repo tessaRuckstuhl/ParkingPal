@@ -1,6 +1,7 @@
 import React from 'react';
 import { MainContextProvider } from './contexts/MainContext';
 import { FilterContextProvider } from './contexts/FilterContext';
+import { ImageContextProvider } from './contexts/ImageContext';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -25,6 +26,10 @@ const App = () => {
         <MainContextProvider>
           {/* filter context */}
           <FilterContextProvider>
+            {/* image context */}
+            <ImageContextProvider>
+
+            
             {/* Default Layout, includes header and footer */}
             <Default>
               {/* Routes */}
@@ -47,6 +52,7 @@ const App = () => {
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </Default>
+            </ImageContextProvider>
           </FilterContextProvider>
         </MainContextProvider>
       </ThemeProvider>
