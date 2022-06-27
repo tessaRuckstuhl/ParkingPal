@@ -37,7 +37,7 @@ const ImageUploaderForm = () => {
     return (
         <div className="my-4">
             <div >
-                <input type="file" name="file" id="file" onChange={handleFile} ></input>
+                <input type="file" name="file" id="file" onChange={handleFile}></input>
                 {file ? <Button variant="contained" color="primary" onClick={() => {
                     if (inputContainsFile) {
                         fileUploadHandler()
@@ -45,22 +45,19 @@ const ImageUploaderForm = () => {
                 }}>Upload</Button> : null}
             </div>
             <div>
-                {imageIDs.length > 0 ? (
-                    <>
-                        <ImageList sx={{ width: 600, height: 400 }} cols={2} rowHeight={300}>
+                {imageIDs.length > 0 ? ( 
+                    <>{console.log(imageIDs)}
+                        <ImageList sx={{ width: 1000, height: 400 }} cols={3} rowHeight={300}>
                             {imageIDs.map((id) => (
                                 <ImageListItem key={id}>
                                     <img
-                                        src={`http://localhost:3001/api/images/${imageId}?w=164&h=164&fit=crop&auto=format`}
+                                        src={`http://localhost:3001/api/images/${id}?w=164&h=164&fit=crop&auto=format`}
                                         alt="image"
                                         loading="lazy"
                                     />
                                 </ImageListItem>
                             ))}
                         </ImageList>
-                        {
-                            <img src={`http://localhost:3001/api/images/${imageId}`} alt="image"></img>
-                        }
                     </>
                 ) :
                     (<></>)}
