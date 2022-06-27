@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
 
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+
 const api = require('./routes');
 const { isAuthenticated } = require('./middlewares');
 
@@ -21,6 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
 
+//for images 2: Middleware 
+app.use(bodyParser.json())
+//enables us to use a query string when we make a delete request to form
+app.use(methodOverride('_method'))
+
 // connect to mongodb
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -35,6 +43,7 @@ mongoose
   .catch((err) => {
     console.log('err :>> ', err);
   });
+
 
 app.get('/ping', (req, res) => {
   res.send('pong');

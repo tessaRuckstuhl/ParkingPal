@@ -16,6 +16,11 @@ const PSService = {
     },
     listAllParkingSpaces(filters) {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters});
+    },
+    getCoordinates(address) {
+        let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + `&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+        console.log(url);
+        return axios.get(url)
     }
 };
 
