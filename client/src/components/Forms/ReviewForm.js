@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper, Divider, Rating } from '@mui/material/';
 import { styled } from '@mui/material/styles';
+import BookingService from '../../services/booking.service';
+import ParkingSpaceService from '../../services/parkingSpace.service';
 
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
@@ -15,8 +17,11 @@ const ReviewForm = () => {
   const [communicationRating, setCommunicationRating] = useState(2.5);
   const [accuracyRating, setAccuracyRating] = useState(2.5);
   const [valueRating, setValueRating] = useState(2.5);
-  const [booking, setBooking] = useState([""]) // FRAGE Setz ich hier dann [""] rein
-  const [parkingSpace, setParkingSpace] = useState([""]) // FRAGE Setz ich hier dann [""] rein
+  const [booking, setBooking] = useState([""]) 
+  const [parkingSpace, setParkingSpace] = useState([""]) 
+  // const [reviewer, setParkingSpace] = useState([""]) 
+  // const [reviewed, setParkingSpace] = useState([""]) 
+
   // use state null setzen
 
   //const navigate = useNavigate();
@@ -58,11 +63,13 @@ const ReviewForm = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    try {
-      //const { id } = this.props.match.params // read id from url params
 
-     // const user = parseJwt(localStorage.getItem('token'))
+    try {
+      const { id } = this.props.match.params // read id from url params  req.params id auslesen
+
+      // location.pathname gibt dir die url zurück. 
+
+      const user = parseJwt(localStorage.getItem('token'))
       const review = {
         description: reviewDescription,
         rating: 4,
@@ -73,13 +80,15 @@ const ReviewForm = () => {
         // accuracyRating: accuracyRating,
         // valueRating: valueRating,
 
+        // booking id 62bb4e3cc3a4de101c620263
+        
         reviewer_id: "629f5ef16d7fec1d5cfc2b9b",        // Ich schreib hier gerade den kompletten user object rein, reicht hier ein String?
         parkingSpace_id: "62b43fe8ea081c71fe2f8ebe" // nur die id als string, muss eine valid id sein, sonst klappt es nicht. 
       };
       console.log("nice")
       console.log(review)
       const response = await ReviewService.create(review);
-      
+
     } catch (error) {
     }
   };
@@ -95,48 +104,41 @@ const ReviewForm = () => {
 
 
 
+
+  useEffect(async () => {
+
  
+    const bookingId = new URL(location.href).searchParams.get('bookingId')
+    console.log(bookingId)
 
-  useEffect(() => {     
-    
-    // Mock Booking
-    const booking = {
-      username: "username-mock",
-      owner: "owner-mock",
-      terms: "terms-mock",
-      issueDate: Date('December 17, 1995 03:24:00'),
-      startDate: Date('December 20, 1995 03:24:00'),
-      endDate: new Date('December 23, 1995 03:24:00'),
-    };
+    const resultBooking = await BookingService.getBooking(bookingId);
+    console.log(resultBooking.data)
+    setBooking(resultBooking.data);
 
-    // Mock ParkingSpace
-    const parkingSpace = {
-      name: "parkingSpaceName-mock",
-      location: "location-mock",
-      size: "size-mock",
-      basePrice: "basePrice-mock",
-      owner: "user-mock"
-    };
-    
-    // Frage: Wenn ich die Seite neu lade, dann wird das Objekt mit den Dates nicht gesetzt - warum?
 
-    setBooking(booking)
-    setParkingSpace(parkingSpace)
+    const resultParkingSpace = await ParkingSpaceService.getParkingSpace("62bac21772fa1c20a4e88a14") // resultBooking.data.parkingSpace_id
+    console.log(resultParkingSpace.data)
+
+
+    // TODO get username of owner and guest
 
 
 
+    // // Mock ParkingSpace
+    // const mock_parkingSpace = {
+    //   name: "parkingSpaceName-mock",
+    //   location: "location-mock",
+    //   size: "size-mock",
+    //   basePrice: "basePrice-mock",
+    //   owner: "user-mock"
+    // };
 
-    //const [searchParams, setSearchParams] = useSearchParams();
-    //const bookingId = searchParams.get("id")
-
-    //const booking = await bookingService.get(bookingId)
-    //setBooking(booking)
-
-
+    // setBooking(booking)
+    // setParkingSpace(parkingSpace)
 
   }, []);
   return (
-    
+
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="mb-6 text-xl">
@@ -144,11 +146,11 @@ const ReviewForm = () => {
         </div>
 
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-          <div className="mb-6 text-xl">
+          <div className="mb-6 text-m">
             <p>Your parking space booking came just to an end.<br />Now take a minute to reflect on the parking place and leave a quick review. </p>
           </div>
           <div>
-            <p>You booked this parking place provides by {booking.username}, from     to  </p>
+            <p>You booked this parking place provides by {booking.guest_id}, from {booking.startDate}  to {booking.endDate} </p>
 
             <p>Here is a short summary of what was promised and expected</p>
           </div>
@@ -159,76 +161,76 @@ const ReviewForm = () => {
             <Grid item xs={6}>
               <Item style={{ height: 300 }}>Photo Placeholder</Item>
             </Grid>
-        </Grid>   
-        <br></br>
-        <Grid container spacing={2}>
+          </Grid>
+          <br></br>
+          <Grid container spacing={2}>
             <Grid item xs={8}>
-              <Item style={{ height: 300, justifyContent:'begin', textAlign: 'justify' }}>
+              <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
                 Information on Parkingspace from Backend
-              <Divider />
-              <div
-                style={{
-                  justifyContent: 'begin',
-                  textAlign: 'justify',
+                <Divider />
+                <div
+                  style={{
+                    justifyContent: 'begin',
+                    textAlign: 'justify',
 
-                }}
-              >
-              <br></br>
-              <p>- bullet 1</p> 
-              <p>- bullet 2</p> 
-              <p>- bullet 3</p> 
-              <br></br>
-              <Divider />
-              <br></br>
-              <b>Description</b>
-              <br></br>
-              <p>Come check out this cool information which I have to retrieve from BackEnd first.</p>
-              </div> 
+                  }}
+                >
+                  <br></br>
+                  <p>- bullet 1</p>
+                  <p>- bullet 2</p>
+                  <p>- bullet 3</p>
+                  <br></br>
+                  <Divider />
+                  <br></br>
+                  <b>Description</b>
+                  <br></br>
+                  <p>Come check out this cool information which I have to retrieve from BackEnd first.</p>
+                </div>
               </Item>
             </Grid>
             <Grid item xs={4}>
               <Item style={{ height: 300 }}>
-              
-              <div className=" font-regular  text-s">
 
-                    <a>Provided by {booking.username}</a>
+                <div className=" font-regular  text-s">
 
-                <br></br>              
-              </div>
-              <div className="mb-6 font-regular  text-s">
+                  <a>Provided by {booking.username}</a>
 
-              </div>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                12 reviews
-                </Grid>
-                <Grid item xs={6}>
-                
-                Identity verified
-                </Grid> 
-                </Grid>
-              <br></br>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"                
-                    fullWidth
-                  >
-                    Contact Host
-                  </Button>
-                  <div className="mt-6 font-light text-s">      
-            
+                  <br></br>
                 </div>
-                
-            </Item>
-            
+                <div className="mb-6 font-regular  text-s">
+
+                </div>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    12 reviews
+                  </Grid>
+                  <Grid item xs={6}>
+
+                    Identity verified
+                  </Grid>
+                </Grid>
+                <br></br>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Contact Host
+                </Button>
+                <div className="mt-6 font-light text-s">
+
+                </div>
+
+              </Item>
+
             </Grid>
-            
-        </Grid> 
+
+          </Grid>
           <Divider>
 
           </Divider>
-          
+
           <Divider>
 
           </Divider>

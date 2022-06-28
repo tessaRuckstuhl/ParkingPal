@@ -11,7 +11,7 @@ const PSService = {
     delete(id) {
         return axios.delete(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
-    listParkingSpace(id) {
+    getParkingSpace(id) {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
     listAllParkingSpaces() {
