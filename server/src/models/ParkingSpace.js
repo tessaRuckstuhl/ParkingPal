@@ -34,7 +34,7 @@ const ParkingSpaceSchema = new Schema({
         type: Boolean,
         default: false
       },
-      illuminated: {
+      garage: {
         type: Boolean,
         default: false
       }
@@ -74,7 +74,7 @@ const ParkingSpaceSchema = new Schema({
     },
   },
   availability: {
-    type: [String,String],
+    type: [Object],
     required: true
   },
   size: {

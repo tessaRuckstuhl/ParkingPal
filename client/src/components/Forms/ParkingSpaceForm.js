@@ -27,8 +27,8 @@ const ParkingSpaceForm = () => {
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
 
-  const [fromValue, setFromValue] = React.useState(null);
-  const [toValue, setToValue] = React.useState(null);
+  const [fromValue, setFromValue] = React.useState("");
+  const [toValue, setToValue] = React.useState("");
   const [availability, setAvailability] = useState([]);
 
   const [street, setStreet] = useState('');
@@ -44,11 +44,6 @@ const ParkingSpaceForm = () => {
   const [no_meetup, setNo_Meetup] = useState(false)
   const [pin, setPin] = useState(false)
   const [securityGate, setSecurityGate] = useState(false)
-
-  const [s,setS] = useState(false)
-  const [m,setM] = useState(false)
-  const [l,setL] = useState(false)
-  const [xl,setXL] = useState(false)
 
   const navigate = useNavigate();
 
@@ -72,12 +67,24 @@ const ParkingSpaceForm = () => {
     setHouseNumber("")
     setPostalCode("")
     setCity("")
+    setE_Charging(false)
+    setStreetside(false)
+    setIlluminated(false)
+    setGarage(false)
+    setFree_24h_before(false)
+    setNo_Meetup(false)
+    setPin(false)
+    setSecurityGate(false)
+
   }
 
   const handleChange = (event) => {
     switch (event.target.name) {
       case 'parkingspacename':
         setParkingSpaceName(event.target.value);
+        break;
+      case 'size':
+        setSize(event.target.value);
         break;
       case 'street':
         setStreet(event.target.value);
@@ -90,30 +97,6 @@ const ParkingSpaceForm = () => {
         break;
       case 'city':
         setCity(event.target.value);
-        break;
-      case 'size-S':
-        setSize(1);
-        setM(false)
-        setL(false)
-        setXL(false)
-        break;
-      case 'size-M':
-        setS(false)
-        setL(false)
-        setXL(false)
-        setSize(2);
-        break;
-      case 'size-L':
-        setS(false)
-        setM(false)
-        setXL(false)
-        setSize(3);
-        break;
-      case 'size-XL':
-        setS(false)
-        setM(false)
-        setL(false)
-        setSize(4);
         break;
       case 'dayPrice':
         setDayPrice(event.target.value);
@@ -128,28 +111,28 @@ const ParkingSpaceForm = () => {
         setDescription(event.target.value);
         break;
       case 'streetside':
-        setStreetside(event.target.value);
+        setStreetside(!streetside);
         break;
       case 'e_charging':
-        setE_Charging(event.target.value);
+        setE_Charging(!e_charging);
         break;
       case 'illuminated':
-        setIlluminated(event.target.value);
+        setIlluminated(!illuminated);
         break;
       case 'garage':
-        setGarage(event.target.value);
+        setGarage(!garage);
         break;
       case 'free_24h_before':
-        setFree_24h_before(event.target.value);
+        setFree_24h_before(!free_24h_before);
         break;
       case 'no_meetup':
-        setNo_Meetup(event.target.value);
+        setNo_Meetup(!no_meetup);
         break;
       case 'pin':
-        setPin(event.target.value);
+        setPin(!pin);
         break;
       case 'securityGate':
-        setSecurityGate(event.target.value);
+        setSecurityGate(!securityGate);
         break;
       default:
         break;
@@ -243,28 +226,33 @@ const ParkingSpaceForm = () => {
             <Grid item xs={4}>
               <Item>Parking Properties</Item>
               <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Streetside" name="streetSide" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox defaultChecked />} label="Garage" name="garage" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="E-Charging" name="e-charging" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="Illuminated" name="illuminated" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Streetside" name="streetside" checked={streetside} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Garage" name="garage" checked={garage} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="E-Charging" name="e_charging" checked={e_charging} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Illuminated" name="illuminated" checked={illuminated} onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
             <Grid item xs={4}>
               <Item>Size</Item>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="S" checked={s} name="size-S" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="M" name="size-M" checked={m} onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="L" name="size-L" checked={l} onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="XL" name="size-XL" checked={xl} onChange={(e) => handleChange(e)} />
-              </FormGroup>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                required
+                name="size"
+                label="Size"
+                id="size"
+                value={size}
+                onChange={(e) => handleChange(e)}
+              />
             </Grid>
             <Grid item xs={4}>
               <Item>Cancellation and Access</Item>
               <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="Free cancellation 24 hours before booking" name="size-S" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="No meetup required" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="Access via pin" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Free cancellation 24 hours before booking" name="free_24h_before" checked={free_24h_before} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="No meetup required" name="no_meetup" checked={no_meetup} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Access via pin" name="pin" checked={pin} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" checked={securityGate} onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
           </Grid>
@@ -276,7 +264,7 @@ const ParkingSpaceForm = () => {
             name="description"
             label="Description"
             id="description"
-            value={null}
+            value={description}
             onChange={(e) => handleChange(e)}
           />
           <p>Step 5: When is your parking place available?</p>
@@ -299,10 +287,9 @@ const ParkingSpaceForm = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
               {availability.length > 0 ? availability.map((slot) => {
-                return <div>{slot.from} until {slot.to}</div>
+                return <div key={slot}>{slot.from} until {slot.to}</div>
               }) : null}
               <Button variant="contained" color="primary" onClick={() => {
-                console.log(availability)
                 let available = {
                   from: fromValue.format("DD-MM-YYYY HH:MM"),
                   to: toValue.format("DD-MM-YYYY HH:MM")

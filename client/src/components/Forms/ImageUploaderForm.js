@@ -46,7 +46,7 @@ const ImageUploaderForm = () => {
             </div>
             <div>
                 {imageIDs.length > 0 ? ( 
-                    <>{console.log(imageIDs)}
+                    <>
                         <ImageList sx={{ width: 1000, height: 400 }} cols={3} rowHeight={300}>
                             {imageIDs.map((id) => (
                                 <ImageListItem key={id}>
