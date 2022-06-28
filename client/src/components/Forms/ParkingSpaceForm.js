@@ -14,11 +14,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
-import {ImageContext} from '../../contexts/ImageContext';
+import { ImageContext } from '../../contexts/ImageContext';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const {imageIDs,setImageIDs} = useContext(ImageContext)
+  const { imageIDs, setImageIDs } = useContext(ImageContext)
 
   const [description, setDescription] = useState('');
 
@@ -30,11 +30,25 @@ const ParkingSpaceForm = () => {
   const [fromValue, setFromValue] = React.useState(null);
   const [toValue, setToValue] = React.useState(null);
   const [availability, setAvailability] = useState([]);
+
   const [street, setStreet] = useState('');
   const [houseNumber, setHouseNumber] = useState('');
   const [postalCode, setPostalCode] = useState('')
   const [city, setCity] = useState('')
 
+  const [e_charging, setE_Charging] = useState(false)
+  const [streetside, setStreetside] = useState(false)
+  const [illuminated, setIlluminated] = useState(false)
+  const [garage, setGarage] = useState(false)
+  const [free_24h_before, setFree_24h_before] = useState(false)
+  const [no_meetup, setNo_Meetup] = useState(false)
+  const [pin, setPin] = useState(false)
+  const [securityGate, setSecurityGate] = useState(false)
+
+  const [s,setS] = useState(false)
+  const [m,setM] = useState(false)
+  const [l,setL] = useState(false)
+  const [xl,setXL] = useState(false)
 
   const navigate = useNavigate();
 
@@ -47,7 +61,7 @@ const ParkingSpaceForm = () => {
   }));
   const clearAll = () => {
     setParkingSpaceName("")
-    setImageIDs([]) 
+    setImageIDs([])
     setDescription("")
     setSize("")
     setBasePrice("")
@@ -79,14 +93,26 @@ const ParkingSpaceForm = () => {
         break;
       case 'size-S':
         setSize(1);
+        setM(false)
+        setL(false)
+        setXL(false)
         break;
       case 'size-M':
+        setS(false)
+        setL(false)
+        setXL(false)
         setSize(2);
         break;
       case 'size-L':
+        setS(false)
+        setM(false)
+        setXL(false)
         setSize(3);
         break;
       case 'size-XL':
+        setS(false)
+        setM(false)
+        setL(false)
         setSize(4);
         break;
       case 'dayPrice':
@@ -100,6 +126,30 @@ const ParkingSpaceForm = () => {
         break;
       case 'description':
         setDescription(event.target.value);
+        break;
+      case 'streetside':
+        setStreetside(event.target.value);
+        break;
+      case 'e_charging':
+        setE_Charging(event.target.value);
+        break;
+      case 'illuminated':
+        setIlluminated(event.target.value);
+        break;
+      case 'garage':
+        setGarage(event.target.value);
+        break;
+      case 'free_24h_before':
+        setFree_24h_before(event.target.value);
+        break;
+      case 'no_meetup':
+        setNo_Meetup(event.target.value);
+        break;
+      case 'pin':
+        setPin(event.target.value);
+        break;
+      case 'securityGate':
+        setSecurityGate(event.target.value);
         break;
       default:
         break;
@@ -128,17 +178,17 @@ const ParkingSpaceForm = () => {
         images: imageIDs,
         description: description,
         properties: {
-          parking:{
-            streetside: false,
-            illuminated: false,
-            e_charging: false,
-            illuminated: false
-          }, 
+          parking: {
+            streetside: streetside,
+            garage: garage,
+            e_charging: e_charging,
+            illuminated: illuminated
+          },
           cancellation_and_access: {
-            free_24h_before: false,
-            no_meetup: false,
-            pin: false,
-            securityGate: false
+            free_24h_before: free_24h_before,
+            no_meetup: no_meetup,
+            pin: pin,
+            securityGate: securityGate
           }
         },
       };
@@ -202,10 +252,10 @@ const ParkingSpaceForm = () => {
             <Grid item xs={4}>
               <Item>Size</Item>
               <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="S" name="size-S" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="M" name="size-M" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="L" name="size-L" onChange={(e) => handleChange(e)} />
-                <FormControlLabel control={<Checkbox />} label="XL" name="size-XL" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox defaultChecked />} label="S" checked={s} name="size-S" onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="M" name="size-M" checked={m} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="L" name="size-L" checked={l} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="XL" name="size-XL" checked={xl} onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
             <Grid item xs={4}>
@@ -248,15 +298,18 @@ const ParkingSpaceForm = () => {
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
-                {availability.length > 0 ? availability.map((from) => {
-                  return <div>{from}</div>
-                }): null}
+              {availability.length > 0 ? availability.map((slot) => {
+                return <div>{slot.from} until {slot.to}</div>
+              }) : null}
               <Button variant="contained" color="primary" onClick={() => {
                 console.log(availability)
-                let available = [fromValue.format("DD-MM-YYYY HH:MM"), toValue.format("DD-MM-YYYY HH:MM")]
+                let available = {
+                  from: fromValue.format("DD-MM-YYYY HH:MM"),
+                  to: toValue.format("DD-MM-YYYY HH:MM")
+                }
                 setToValue(null);
                 setFromValue(null);
-                setAvailability(state => [...state, available[0], available[1]]);
+                setAvailability(state => [...state, available]);
               }}>Add Availability</Button>
             </LocalizationProvider>
           </div>
