@@ -9,9 +9,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
 import CreateParkingSpace from './pages/CreateParkingSpace'
+import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import Booking from './pages/Booking'
 import CreateReview from './pages/CreateReview'
-import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
+
 
 import PageNotFound from './pages/404';
 const App = () => {
@@ -29,8 +30,8 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Login />}></Route>
                 <Route path="parking/create" element={<CreateParkingSpace />}></Route>
-                <Route path="parking/booking" element={<Booking />}></Route>
                 <Route path="all" element={<ListViewParkingSpaces/>}></Route>
+                <Route path="parking/booking" element={<Booking />}></Route>
                 <Route path="review/create" element={<CreateReview/>}></Route> // Jakob
                 <Route path="signup" element={<Signup />}></Route>
                 <Route

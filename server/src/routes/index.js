@@ -12,6 +12,8 @@ const router = express.Router();
 router.use('/user', user);
 // /api/booking
 router.use('/booking', booking);
+// /api/images
+router.use('/images', images)
 // /api/parkingspace
 router.use('/parkingspace', parkingSpace);
 // /api/user-review

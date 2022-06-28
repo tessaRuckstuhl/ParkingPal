@@ -3,31 +3,22 @@ const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const BookingSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    index: {
-      unique: true
-    }
+  parkingSpace_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'ParkingSpace',
+    //required: true,
   },
-  owner: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    index: {
-      unique: true
-    }
+  guest_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  owner_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   terms: {
     type: String,
-    required: true,
     trim: true
-
   },
   issueDate: {
     type: Date,
@@ -39,16 +30,16 @@ const BookingSchema = new Schema({
     required: true,
     trim: true
   },
-  endDate:{
+  endDate: {
     type: Date,
     required: true,
     trim: true
   }
 },
 
-{
-  timestamps: true
-});
+  {
+    timestamps: true
+  });
 
 
 const Booking = mongoose.model('Booking', BookingSchema);
