@@ -21,6 +21,7 @@ const ImageUploaderForm = () => {
         fd.append('file', file, file.name)
         axios.post("http://localhost:3001/api/images/upload",fd).then(({data}) => {
             setImageId(data)
+            console.log(data)
             //setImageId(state=> [...state,data])
             setFile(null)
             setInputContainsFile(false)

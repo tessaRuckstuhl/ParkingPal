@@ -9,20 +9,18 @@ import { styled } from '@mui/material/styles';
 import BookingService from '../../services/booking.service';
 import ParkingSpaceService from '../../services/parkingSpace.service';
 
+
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
+  const [overallRating, setoverallRating] = useState(2.5);
   const [neighborhoodRating, setNeighborhoodRating] = useState(2.5);
   const [accessRating, setAccessRating] = useState(2.5);
   const [locationRating, setLocationRating] = useState(2.5);
   const [communicationRating, setCommunicationRating] = useState(2.5);
   const [accuracyRating, setAccuracyRating] = useState(2.5);
   const [valueRating, setValueRating] = useState(2.5);
-  const [booking, setBooking] = useState([""]) 
-  const [parkingSpace, setParkingSpace] = useState([""]) 
-  // const [reviewer, setParkingSpace] = useState([""]) 
-  // const [reviewed, setParkingSpace] = useState([""]) 
-
-  // use state null setzen
+  const [booking, setBooking] = useState([""])
+  const [parkingSpace, setParkingSpace] = useState({})
 
   //const navigate = useNavigate();
 
@@ -81,7 +79,7 @@ const ReviewForm = () => {
         // valueRating: valueRating,
 
         // booking id 62bb4e3cc3a4de101c620263
-        
+
         reviewer_id: "629f5ef16d7fec1d5cfc2b9b",        // Ich schreib hier gerade den kompletten user object rein, reicht hier ein String?
         parkingSpace_id: "62b43fe8ea081c71fe2f8ebe" // nur die id als string, muss eine valid id sein, sonst klappt es nicht. 
       };
@@ -107,17 +105,23 @@ const ReviewForm = () => {
 
   useEffect(async () => {
 
- 
+
     const bookingId = new URL(location.href).searchParams.get('bookingId')
     console.log(bookingId)
 
     const resultBooking = await BookingService.getBooking(bookingId);
-    console.log(resultBooking.data)
+    console.log(resultBooking.data.stringify)
     setBooking(resultBooking.data);
 
 
-    const resultParkingSpace = await ParkingSpaceService.getParkingSpace("62bac21772fa1c20a4e88a14") // resultBooking.data.parkingSpace_id
-    console.log(resultParkingSpace.data)
+    const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bac21772fa1c20a4e88a14") // resultBooking.data.parkingSpace_id
+    console.log(resultParkingSpace.data.properties.parking)
+    setParkingSpace(resultParkingSpace.data.properties.parking)
+
+    // geht das nicht? - müssen die childs primitiv sein? 
+    // Ich würde gerne den kompletten parkingspace in die Komponente schreiben. 
+
+
 
 
     // TODO get username of owner and guest
@@ -156,10 +160,10 @@ const ReviewForm = () => {
           </div>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Item style={{ height: 300 }}>Photo Placeholder</Item>
+              <Item style={{ height: 300, width: 500 }}><img src={`http://localhost:3001/api/images/62bac169a26b1eb4c425b606`}alt="image"></img></Item>
             </Grid>
             <Grid item xs={6}>
-              <Item style={{ height: 300 }}>Photo Placeholder</Item>
+              <Item style={{ height: 300, width: 500 }}><img src={`http://localhost:3001/api/images/62bb62fac2918754d8697071`} alt="image"></img></Item>
             </Grid>
           </Grid>
           <br></br>
@@ -176,9 +180,10 @@ const ReviewForm = () => {
                   }}
                 >
                   <br></br>
-                  <p>- bullet 1</p>
-                  <p>- bullet 2</p>
-                  <p>- bullet 3</p>
+                  
+                  <p>- Streeside Parking: {parkingSpace.streetside.toString()}</p>
+                  <p>- Illuminated: {parkingSpace.illuminated.toString()}</p>
+                  <p>- E-Charging: {parkingSpace.e_charging.toString()}</p>
                   <br></br>
                   <Divider />
                   <br></br>
@@ -240,6 +245,18 @@ const ReviewForm = () => {
               <b>Rate your experience</b> <br />
               <p> Please rate your parking place experience in overall satisfaction, accesability, service by the host and location</p>
             </div>
+            <Rating
+                  defaultValue={2.5}
+                  precision={0.5}
+                  variant="outlined"
+                  required
+                  id="overallrating"
+                  label="Overall Rating"
+                  name="overallrating"
+                  value={overallRating}
+                  autoFocus
+                  onChange={(e) => handleChange(e)}
+                />
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Item>Neighborhood</Item>
