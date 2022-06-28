@@ -67,4 +67,7 @@ module.exports = {
       return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });
     }
   },
+  async getFilterConstraints(req, res) {
+    // find max day price, base price, ... for filters
+  }
 };
