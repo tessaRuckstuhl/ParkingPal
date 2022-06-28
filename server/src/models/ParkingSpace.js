@@ -12,8 +12,31 @@ const ParkingSpaceSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  location: {
+  images: {
+    type: [String],
+    required: false,
+  },
+  description: {
     type: String,
+    required : false
+  },
+  formattedAddress: {
+    type: String,
+    required: true
+  },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    // coordinates[0] = lat, coordinates[1]=lng
+    coordinates: {
+      type: [Number], 
+      required: true
+    },
+  },
+  availability: {
+    type: [String,String],
     required: true
   },
   size: {
@@ -35,7 +58,9 @@ const ParkingSpaceSchema = new Schema({
 }, {
   timestamps: true
 });
+ParkingSpaceSchema.index({location: '2dsphere'});
 
 const ParkingSpace = mongoose.model('ParkingSpace', ParkingSpaceSchema);
+ParkingSpace.createIndexes()
 
 module.exports = ParkingSpace;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MainContextProvider } from './contexts/MainContext';
+import { FilterContextProvider } from './contexts/FilterContext';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -13,17 +14,20 @@ import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import Booking from './pages/Booking'
 import CreateReview from './pages/CreateReview'
 
-
 import PageNotFound from './pages/404';
+import Results from './pages/Results';
+import Bar from './components/Filter/Bar';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
   return (
-    <div className='h-full'>
+    <div className="h-full">
       {/* mui theme */}
       <ThemeProvider theme={theme}>
         {/* token context  */}
         <MainContextProvider>
+          {/* filter context */}
+          <FilterContextProvider>
             {/* Default Layout, includes header and footer */}
             <Default>
               {/* Routes */}
@@ -32,7 +36,7 @@ const App = () => {
                 <Route path="parking/create" element={<CreateParkingSpace />}></Route>
                 <Route path="all" element={<ListViewParkingSpaces/>}></Route>
                 <Route path="parking/booking" element={<Booking />}></Route>
-                <Route path="review/create" element={<CreateReview/>}></Route> // Jakob
+                <Route path="review/create" element={<CreateReview/>}></Route>
                 <Route path="signup" element={<Signup />}></Route>
                 <Route
                   path="dashboard"
@@ -42,10 +46,13 @@ const App = () => {
                     </AuthComponent>
                   }
                 ></Route>
+                <Route path="map" element={<Results />}></Route>
+
                 {/* matches anything except the above */}
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </Default>
+          </FilterContextProvider>
         </MainContextProvider>
       </ThemeProvider>
     </div>

@@ -36,8 +36,8 @@ const Footer = () => {
     },
   ];
   return (
-    <div className="bg-offWhite flex flex-col justify-center px-10 h-[220px] bottom-0">
-      <div className="flex py-5 justify-between">
+    <div className="bg-offWhite flex flex-col justify-center px-10 h-[180px] bottom-0">
+      <div className="flex py-2 justify-between">
         {/* links by sections */}
         {sections.map((section, idx) => (
           <div key={idx}>
@@ -55,7 +55,7 @@ const Footer = () => {
         ))}
       </div>
       <Divider />
-      <div className="py-5 text-xs flex justify-between ">
+      <div className="py-2 text-xs flex justify-between ">
         <div className="flex items-center space-x-2">
           <div>&copy; 2022 ParkingPal</div>
         </div>

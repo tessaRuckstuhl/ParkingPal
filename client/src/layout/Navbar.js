@@ -1,15 +1,35 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import FaceIcon from '@mui/icons-material/Face';
 import MenuIcon from '@mui/icons-material/Menu';
 import LanguageIcon from '@mui/icons-material/Language';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
+import Bar from '../components/Filter/Bar';
+import { useLocation } from 'react-router-dom';
+
 const Navbar = () => {
+  const location = useLocation();
+
+  const [showFilters, setShowFilters] = useState(false)
+  useEffect(() => {
+    console.log(location)
+    if(location.pathname == "/map"){
+      setShowFilters(true)
+    } else {
+      setShowFilters(false)
+    }
+  
+
+  }, [location])
+  
   return (
-    <div className="flex justify-between items-center px-5 h-[50px]">
+    <div className="flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
         <Link to="dashboard">
           <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
+        {/* Filter and Search */}
+        {showFilters && <Bar/>}
+        {/* Language, Profile, .. */}
       <div className="flex space-x-4 items-center">
         <Link to="404">
           <div className="text-xs">Become a host</div>
