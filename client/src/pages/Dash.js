@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/auth.service';
 import Button from '@mui/material/Button';
 import {Buffer} from 'buffer';
+import { Link } from 'react-router-dom';
 
 
 
@@ -30,6 +31,10 @@ const Dash = () => {
     <div>
       <div>
         <pre>You are logged in</pre>
+        <div className='text-lg'>Temporary Navigation Tree... Add your page here...</div>
+        <br/>
+        <Link to="parking/create"><div className='hover:underline'>/parking/create - Create a new parking space listing</div></Link>
+        <Link to="map"><div className='hover:underline'>/map - View listings with map view</div> </Link>
       </div>
       <Button onClick={() => logout()} fullWidth variant="contained" color="secondary">
         Logout
