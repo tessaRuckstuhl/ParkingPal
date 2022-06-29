@@ -9,6 +9,9 @@ import {
   IconButton,
   Slider,
   Badge,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { Divider } from '@mui/material';
 import { Close } from '@mui/icons-material';
@@ -53,7 +56,6 @@ const MoreFilters = (props) => {
     setFilterCount(count);
   }, [filters]);
 
-
   return (
     <>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -65,10 +67,9 @@ const MoreFilters = (props) => {
           Add more filters
         </div>
       </Badge>
-
       {/* Popup dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>
+        <DialogTitle sx={{textAlign:'center', fontWeight:'bold'}}>
           Filters
           <IconButton
             aria-label="close"
@@ -82,9 +83,10 @@ const MoreFilters = (props) => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent >
+          <div className=" text-2xl font-extrabold pl-6">Price Ranges</div>
           <DialogContent>
-            <DialogContentText>Hourly Price Range</DialogContentText>
+            <div className="font-bold">Hour Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price by hour</div>
             <Slider
               onChange={handleFilterChange}
@@ -99,8 +101,8 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
-          <DialogContent dividers>
-            <DialogContentText>Daily Price Range</DialogContentText>
+          <DialogContent >
+            <div className="font-bold">Day Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price per day</div>
             <Slider
               onChange={handleFilterChange}
@@ -118,7 +120,7 @@ const MoreFilters = (props) => {
             />
           </DialogContent>
           <DialogContent>
-            <DialogContentText>Longterm Stay Price Range</DialogContentText>
+            <div className="font-bold">Longterm Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">
               Set a price for a longterm stay (&gt; 5 hours){' '}
             </div>
@@ -139,8 +141,78 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
+          <Divider sx={{mb:3}}/>
+          {/* Parking Space Features */}
+          <div className="text-2xl font-extrabold pl-6">Parking Space Features</div>
           <DialogContent>
-            <DialogContentText>Garage Type</DialogContentText>
+            <div className="font-bold">Parking space size</div>
+            <div className="text-xs font-darkGray mb-5">
+              Park a smart, a family car or a truck - we offer a parking place for every car
+            </div>
+            <Slider
+              onChange={handleFilterChange}
+              name="size"
+              value={filters?.size || [0, 2]}
+              valueLabelDisplay="auto"
+              min={0}
+              max={2}
+              getAriaLabel={(index) => (index === 0 ? 'Size S' : 'Size L')}
+              getAriaValueText={(value) => `${value} €`}
+              marks={[
+                { value: 0, label: 'S' },
+                { value: 1, label: 'M' },
+                { value: 2, label: 'L' },
+              ]}
+            />
+          </DialogContent>
+          <DialogContent >
+            <div className="font-bold">Parking space Features</div>
+            <div className="text-xs font-darkGray mb-5">
+              This info was provided by the parking space owner and reviewed by ParkingPal.
+            </div>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox name="streetside" />}
+                label="Streetside parking"
+                onChange={handleFilterChange}
+              />
+              <FormControlLabel
+                control={<Checkbox name="illuminated" />}
+                label="Illuminated parking place"
+                onChange={handleFilterChange}
+              />
+              <FormControlLabel
+                control={<Checkbox name="e-charging" />}
+                label="E-Charging possible"
+                onChange={handleFilterChange}
+              />
+            </FormGroup>
+          </DialogContent>
+          <DialogContent>
+            <div className="font-bold">Cancellation &amp; Access</div>
+            <div className="text-xs font-darkGray mb-5">
+              This info was provided by the parking space owner and reviewed by ParkingPal.
+            </div>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox name="streetside" />}
+                label="Free 24 hours before"
+                onChange={handleFilterChange}
+              />
+              <FormControlLabel
+                control={<Checkbox name="no_meetup" />}
+                label="No meetup required"
+                onChange={handleFilterChange}
+              />
+              <FormControlLabel
+                control={<Checkbox name="pin" onChange={handleFilterChange} />}
+                label="Access via Pin"
+              />
+              <FormControlLabel
+                control={<Checkbox name="security_gate" onChange={handleFilterChange} />}
+                label="Security Gate"
+              />
+            </FormGroup>
           </DialogContent>
         </DialogContent>
         <DialogActions>

@@ -27,7 +27,13 @@ const Bar = () => {
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
+    // 
+    if(e.target.checked !== undefined){
+      // TODO
+      setFilters({ ...filters, [e.target.name]: e.target.checked });
+    } else {
+      setFilters({ ...filters, [e.target.name]: e.target.value });
+    }
   };
 
   const searchWithFilters = async () => {
