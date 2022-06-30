@@ -13,7 +13,8 @@ import CreateParkingSpace from './pages/CreateParkingSpace';
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces';
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
-import Bar from './components/Filter/Bar';
+import Paypal from './components/Payment/Paypal';
+import PaymentSuccess from './pages/PaymentSuccess';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
@@ -42,6 +43,9 @@ const App = () => {
                   }
                 ></Route>
                 <Route path="map" element={<Results />}></Route>
+                <Route path="paypal" element={<Paypal />}></Route>
+                <Route path="pay/success" element={<PaymentSuccess />}></Route>
+
 
                 {/* matches anything except the above */}
                 <Route path="*" element={<PageNotFound />} />
