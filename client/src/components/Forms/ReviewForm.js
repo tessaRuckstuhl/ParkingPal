@@ -20,7 +20,7 @@ const ReviewForm = () => {
   const [accuracyRating, setAccuracyRating] = useState(2.5);
   const [valueRating, setValueRating] = useState(2.5);
   const [booking, setBooking] = useState([""])
-  const [parkingSpace, setParkingSpace] = useState({})
+  const [parkingSpace, setParkingSpace] = useState({});
 
   //const navigate = useNavigate();
 
@@ -110,13 +110,13 @@ const ReviewForm = () => {
     console.log(bookingId)
 
     const resultBooking = await BookingService.getBooking(bookingId);
-    console.log(resultBooking.data.stringify)
     setBooking(resultBooking.data);
 
 
     const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bac21772fa1c20a4e88a14") // resultBooking.data.parkingSpace_id
-    console.log(resultParkingSpace.data.properties.parking)
-    setParkingSpace(resultParkingSpace.data.properties.parking)
+    console.log("nice")
+    setParkingSpace({data: resultParkingSpace.data})
+    console.log(parkingSpace.data.properties.parking.streetside)
 
     // geht das nicht? - müssen die childs primitiv sein? 
     // Ich würde gerne den kompletten parkingspace in die Komponente schreiben. 
@@ -181,9 +181,9 @@ const ReviewForm = () => {
                 >
                   <br></br>
                   
-                  <p>- Streeside Parking: {parkingSpace.streetside.toString()}</p>
-                  <p>- Illuminated: {parkingSpace.illuminated.toString()}</p>
-                  <p>- E-Charging: {parkingSpace.e_charging.toString()}</p>
+                  <p>- Streeside Parking: {parkingSpace.data.properties.parking.streetside.toString()}</p>
+                  <p>- Illuminated: {parkingSpace.data.properties.parking.illuminated.toString()}</p>
+                  <p>- E-Charging: {parkingSpace.data.properties.parking.e_charging.toString()}</p>
                   <br></br>
                   <Divider />
                   <br></br>

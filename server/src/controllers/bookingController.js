@@ -12,7 +12,6 @@ function jwtSignUser(user) {
 module.exports = {
   async createBooking(req, res) {
     try {
-      console.log(req.body)
       const booking = await Booking.create(req.body);
       return res.send(booking.toJSON());
     } catch (error) {
