@@ -4,15 +4,18 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   Slider,
   Badge,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { Divider } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { FilterContext } from '../../contexts/FilterContext';
+import _ from 'lodash';
 const MoreFilters = (props) => {
   const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
 
@@ -21,7 +24,22 @@ const MoreFilters = (props) => {
   const [open, setOpen] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
 
-  const enhancedFilterKeys = ['dayPrice', 'longTermStayPrice', 'basePrice'];
+  // workaround for counting active filters...
+  const enhancedFilterKeys = [
+    'dayPrice',
+    'longTermStayPrice',
+    'basePrice',
+    'size',
+    'properties.parking.streetside',
+    'properties.parking.illuminated',
+    'properties.parking.e_charging',
+    'properties.parking.garage',
+    'properties.cancellation_and_access.free_24h_before',
+    'properties.cancellation_and_access.no_meetup',
+    'properties.cancellation_and_access.pin',
+    'properties.cancellation_and_access.security_gate',
+  ];
+
   const handleClick = () => {
     setOpen(true);
   };
@@ -43,6 +61,18 @@ const MoreFilters = (props) => {
     setFilters({ ...tempFilters });
   };
 
+  const handleCheckboxChange = (e) => {
+    // set nested key by path string, delete if set to false for correct filter count
+    if(e.target.checked){
+      setFilters({ ...filters, [e.target.name]: e.target.checked });
+    } else {
+      const copy = {...filters}
+      delete copy[e.target.name]
+      setFilters({ ...copy});
+
+    }
+  };
+
   useEffect(() => {
     let count = 0;
     enhancedFilterKeys.map((key) => {
@@ -52,7 +82,6 @@ const MoreFilters = (props) => {
     });
     setFilterCount(count);
   }, [filters]);
-
 
   return (
     <>
@@ -65,10 +94,9 @@ const MoreFilters = (props) => {
           Add more filters
         </div>
       </Badge>
-
       {/* Popup dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>
+        <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold' }}>
           Filters
           <IconButton
             aria-label="close"
@@ -82,11 +110,13 @@ const MoreFilters = (props) => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent>
+          <div className=" text-2xl font-extrabold pl-6">Price Ranges</div>
           <DialogContent>
-            <DialogContentText>Hourly Price Range</DialogContentText>
+            <div className="font-bold">Hour Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price by hour</div>
             <Slider
+              class="more-filter-option"
               onChange={handleFilterChange}
               name="basePrice"
               value={filters?.basePrice || [0, 100]}
@@ -99,8 +129,8 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
-          <DialogContent dividers>
-            <DialogContentText>Daily Price Range</DialogContentText>
+          <DialogContent>
+            <div className="font-bold">Day Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price per day</div>
             <Slider
               onChange={handleFilterChange}
@@ -118,7 +148,7 @@ const MoreFilters = (props) => {
             />
           </DialogContent>
           <DialogContent>
-            <DialogContentText>Longterm Stay Price Range</DialogContentText>
+            <div className="font-bold">Longterm Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">
               Set a price for a longterm stay (&gt; 5 hours){' '}
             </div>
@@ -139,8 +169,128 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
+          <Divider sx={{ mb: 3 }} />
+          {/* Parking Space Features */}
+          <div className="text-2xl font-extrabold pl-6">Parking Space Features</div>
           <DialogContent>
-            <DialogContentText>Garage Type</DialogContentText>
+            <div className="font-bold">Parking space size</div>
+            <div className="text-xs font-darkGray mb-5">
+              Park a smart, a family car or a truck - we offer a parking place for every car
+            </div>
+            <Slider
+              onChange={handleFilterChange}
+              name="size"
+              value={filters?.size || [0, 2]}
+              valueLabelDisplay="auto"
+              min={0}
+              max={2}
+              getAriaLabel={(index) => (index === 0 ? 'Size S' : 'Size L')}
+              getAriaValueText={(value) => `${value} €`}
+              marks={[
+                { value: 0, label: 'S' },
+                { value: 1, label: 'M' },
+                { value: 2, label: 'L' },
+              ]}
+            />
+          </DialogContent>
+          {/* CHECKBOXES */}
+          <DialogContent>
+            <div className="font-bold">Parking space Features</div>
+            <div className="text-xs font-darkGray mb-5">
+              This info was provided by the parking space owner and reviewed by ParkingPal.
+            </div>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.streetside'] || false}
+                    name="properties.parking.streetside"
+                  />
+                }
+                label="Streetside parking"
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.illuminated'] || false}
+                    name="properties.parking.illuminated"
+                  />
+                }
+                label="Illuminated parking place"
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.e_charging'] || false}
+                    name="properties.parking.e_charging"
+                  />
+                }
+                label="E-Charging possible"
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.garage'] || false}
+                    name="properties.parking.garage"
+                  />
+                }
+                label="E-Charging possible"
+                onChange={handleCheckboxChange}
+              />
+            </FormGroup>
+          </DialogContent>
+          <DialogContent>
+            <div className="font-bold">Cancellation &amp; Access</div>
+            <div className="text-xs font-darkGray mb-5">
+              This info was provided by the parking space owner and reviewed by ParkingPal.
+            </div>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={
+                      filters?.['properties.cancellation_and_access.free_24h_before'] || false
+                    }
+                    name="properties.cancellation_and_access.free_24h_before"
+                  />
+                }
+                label="Free 24 hours before"
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.no_meetup'] || false}
+                    name="properties.cancellation_and_access.no_meetup"
+                  />
+                }
+                label="No meetup required"
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.pin'] || false}
+                    name="properties.cancellation_and_access.pin"
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label="Access via Pin"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.security_gate'] || false}
+                    name="properties.cancellation_and_access.security_gate"
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label="Security Gate"
+              />
+            </FormGroup>
           </DialogContent>
         </DialogContent>
         <DialogActions>
