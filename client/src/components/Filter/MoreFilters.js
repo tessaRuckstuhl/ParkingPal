@@ -62,7 +62,6 @@ const MoreFilters = (props) => {
   };
 
   const handleCheckboxChange = (e) => {
-    console.log('e.target.name', e.target.name, 'e.target.value', e.target.checked);
     // set nested key by path string, delete if set to false for correct filter count
     if(e.target.checked){
       setFilters({ ...filters, [e.target.name]: e.target.checked });
@@ -75,7 +74,6 @@ const MoreFilters = (props) => {
   };
 
   useEffect(() => {
-    console.log('filter changed:', filters);
     let count = 0;
     enhancedFilterKeys.map((key) => {
       if (filters?.hasOwnProperty(key)) {

@@ -32,12 +32,12 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, properties } =
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, availability } =
         req.query;
       // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
       // deleting object so properties can be filtered in final step
       const query = Object.assign({}, req.query);
-      console.log('FILTER CONFIG FROM USER: ', req.query);
+      // console.log('FILTER CONFIG FROM USER: ', req.query);
       // build query from filter configurations...
       let mongoQuery = {};
 
@@ -77,6 +77,8 @@ module.exports = {
         };
         delete query.longTermStayPrice;
       }
+      // build availability filter
+      // ...TODO
       // build parking space features filter
       Object.keys(query).map((key, index) => {
         // convert to boolean, omit false values...
@@ -85,9 +87,9 @@ module.exports = {
 
         }
       });
-      console.log('MODIFIED QUERY', query);
+      // console.log('MODIFIED QUERY', query);
 
-      console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery));
+      // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery));
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });
