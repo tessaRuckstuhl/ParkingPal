@@ -171,7 +171,7 @@ const ParkingSpaceForm = () => {
             free_24h_before: free_24h_before,
             no_meetup: no_meetup,
             pin: pin,
-            securityGate: securityGate
+            security_gate: securityGate
           }
         },
       };

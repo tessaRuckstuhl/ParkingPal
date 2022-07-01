@@ -52,7 +52,7 @@ const ParkingSpaceSchema = new Schema({
         type: Boolean,
         default: false
       },
-      securityGate: {
+      security_gate: {
         type: Boolean,
         default: false
       }
