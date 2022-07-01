@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import FaceIcon from '@mui/icons-material/Face';
 import MenuIcon from '@mui/icons-material/Menu';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -9,18 +9,25 @@ import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const location = useLocation();
-
   const [showFilters, setShowFilters] = useState(false)
+  const links = 
+  [{ name: "HOME", link: "/dashboard" },
+  { name: "Login", link: "/login" },
+  { name: "About", link: "/about" },
+  { name: "Review", link: "/parking/review" },
+  { name: "Create Parking", link: "/parking/create" },
+  ];
+
+
   useEffect(() => {
     if(location.pathname == "/map"){
       setShowFilters(true)
     } else {
       setShowFilters(false)
     }
-  
-
   }, [location])
-  
+
+
   return (
     <div className="relative flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
         <Link to="dashboard">
@@ -42,6 +49,15 @@ const Navbar = () => {
             <FaceIcon sx={{ fontSize: 20 }} color="secondary" />
           </IconButton>
         </div>
+      <ul className="md:flex md:items-center">
+        {links.map(link =>(
+          <li key= {link.name} className="md:ml-8 text">
+            {/* this doesnt work for some reason  */}
+            <a href={link.link} className="text-blue-800 hover:text-gray-400 duration-500">{link.name}</a>
+          </li>
+        ))}
+      </ul>
+
       </div>
     </div>
   );

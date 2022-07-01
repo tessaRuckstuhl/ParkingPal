@@ -1,6 +1,7 @@
 import React from 'react';
 import { MainContextProvider } from './contexts/MainContext';
 import { FilterContextProvider } from './contexts/FilterContext';
+import { ImageContextProvider } from './contexts/ImageContext';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -25,28 +26,33 @@ const App = () => {
         <MainContextProvider>
           {/* filter context */}
           <FilterContextProvider>
-            {/* Default Layout, includes header and footer */}
-            <Default>
-              {/* Routes */}
-              <Routes>
-                <Route path="/" element={<Login />}></Route>
-                <Route path="parking/create" element={<CreateParkingSpace />}></Route>
-                <Route path="all" element={<ListViewParkingSpaces />}></Route>
-                <Route path="signup" element={<Signup />}></Route>
-                <Route
-                  path="dashboard"
-                  element={
-                    <AuthComponent>
-                      <Dash />
-                    </AuthComponent>
-                  }
-                ></Route>
-                <Route path="map" element={<Results />}></Route>
+            {/* image context */}
+            <ImageContextProvider>
 
-                {/* matches anything except the above */}
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </Default>
+
+              {/* Default Layout, includes header and footer */}
+              <Default>
+                {/* Routes */}
+                <Routes>
+                  <Route path="/" element={<Login />}></Route>
+                  <Route path="parking/create" element={<CreateParkingSpace />}></Route>
+                  <Route path="all" element={<ListViewParkingSpaces />}></Route>
+                  <Route path="signup" element={<Signup />}></Route>
+                  <Route
+                    path="dashboard"
+                    element={
+                      <AuthComponent>
+                        <Dash />
+                      </AuthComponent>
+                    }
+                  ></Route>
+                  <Route path="map" element={<Results />}></Route>
+
+                  {/* matches anything except the above */}
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+              </Default>
+            </ImageContextProvider>
           </FilterContextProvider>
         </MainContextProvider>
       </ThemeProvider>
