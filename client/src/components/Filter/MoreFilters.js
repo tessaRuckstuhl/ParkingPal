@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   Slider,
@@ -16,6 +15,7 @@ import {
 import { Divider } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { FilterContext } from '../../contexts/FilterContext';
+import _ from 'lodash';
 const MoreFilters = (props) => {
   const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
 
@@ -24,7 +24,22 @@ const MoreFilters = (props) => {
   const [open, setOpen] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
 
-  const enhancedFilterKeys = ['dayPrice', 'longTermStayPrice', 'basePrice'];
+  // workaround for counting active filters...
+  const enhancedFilterKeys = [
+    'dayPrice',
+    'longTermStayPrice',
+    'basePrice',
+    'size',
+    'properties.parking.streetside',
+    'properties.parking.illuminated',
+    'properties.parking.e_charging',
+    'properties.parking.garage',
+    'properties.cancellation_and_access.free_24h_before',
+    'properties.cancellation_and_access.no_meetup',
+    'properties.cancellation_and_access.pin',
+    'properties.cancellation_and_access.security_gate',
+  ];
+
   const handleClick = () => {
     setOpen(true);
   };
@@ -46,7 +61,21 @@ const MoreFilters = (props) => {
     setFilters({ ...tempFilters });
   };
 
+  const handleCheckboxChange = (e) => {
+    console.log('e.target.name', e.target.name, 'e.target.value', e.target.checked);
+    // set nested key by path string, delete if set to false for correct filter count
+    if(e.target.checked){
+      setFilters({ ...filters, [e.target.name]: e.target.checked });
+    } else {
+      const copy = {...filters}
+      delete copy[e.target.name]
+      setFilters({ ...copy});
+
+    }
+  };
+
   useEffect(() => {
+    console.log('filter changed:', filters);
     let count = 0;
     enhancedFilterKeys.map((key) => {
       if (filters?.hasOwnProperty(key)) {
@@ -69,7 +98,7 @@ const MoreFilters = (props) => {
       </Badge>
       {/* Popup dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle sx={{textAlign:'center', fontWeight:'bold'}}>
+        <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold' }}>
           Filters
           <IconButton
             aria-label="close"
@@ -83,12 +112,13 @@ const MoreFilters = (props) => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent >
+        <DialogContent>
           <div className=" text-2xl font-extrabold pl-6">Price Ranges</div>
           <DialogContent>
             <div className="font-bold">Hour Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price by hour</div>
             <Slider
+              class="more-filter-option"
               onChange={handleFilterChange}
               name="basePrice"
               value={filters?.basePrice || [0, 100]}
@@ -101,7 +131,7 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
-          <DialogContent >
+          <DialogContent>
             <div className="font-bold">Day Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price per day</div>
             <Slider
@@ -141,7 +171,7 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
-          <Divider sx={{mb:3}}/>
+          <Divider sx={{ mb: 3 }} />
           {/* Parking Space Features */}
           <div className="text-2xl font-extrabold pl-6">Parking Space Features</div>
           <DialogContent>
@@ -165,26 +195,52 @@ const MoreFilters = (props) => {
               ]}
             />
           </DialogContent>
-          <DialogContent >
+          {/* CHECKBOXES */}
+          <DialogContent>
             <div className="font-bold">Parking space Features</div>
             <div className="text-xs font-darkGray mb-5">
               This info was provided by the parking space owner and reviewed by ParkingPal.
             </div>
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox name="streetside" />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.streetside'] || false}
+                    name="properties.parking.streetside"
+                  />
+                }
                 label="Streetside parking"
-                onChange={handleFilterChange}
+                onChange={handleCheckboxChange}
               />
               <FormControlLabel
-                control={<Checkbox name="illuminated" />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.illuminated'] || false}
+                    name="properties.parking.illuminated"
+                  />
+                }
                 label="Illuminated parking place"
-                onChange={handleFilterChange}
+                onChange={handleCheckboxChange}
               />
               <FormControlLabel
-                control={<Checkbox name="e-charging" />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.e_charging'] || false}
+                    name="properties.parking.e_charging"
+                  />
+                }
                 label="E-Charging possible"
-                onChange={handleFilterChange}
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.parking.garage'] || false}
+                    name="properties.parking.garage"
+                  />
+                }
+                label="E-Charging possible"
+                onChange={handleCheckboxChange}
               />
             </FormGroup>
           </DialogContent>
@@ -195,21 +251,45 @@ const MoreFilters = (props) => {
             </div>
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox name="streetside" />}
+                control={
+                  <Checkbox
+                    checked={
+                      filters?.['properties.cancellation_and_access.free_24h_before'] || false
+                    }
+                    name="properties.cancellation_and_access.free_24h_before"
+                  />
+                }
                 label="Free 24 hours before"
-                onChange={handleFilterChange}
+                onChange={handleCheckboxChange}
               />
               <FormControlLabel
-                control={<Checkbox name="no_meetup" />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.no_meetup'] || false}
+                    name="properties.cancellation_and_access.no_meetup"
+                  />
+                }
                 label="No meetup required"
-                onChange={handleFilterChange}
+                onChange={handleCheckboxChange}
               />
               <FormControlLabel
-                control={<Checkbox name="pin" onChange={handleFilterChange} />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.pin'] || false}
+                    name="properties.cancellation_and_access.pin"
+                    onChange={handleCheckboxChange}
+                  />
+                }
                 label="Access via Pin"
               />
               <FormControlLabel
-                control={<Checkbox name="security_gate" onChange={handleFilterChange} />}
+                control={
+                  <Checkbox
+                    checked={filters?.['properties.cancellation_and_access.security_gate'] || false}
+                    name="properties.cancellation_and_access.security_gate"
+                    onChange={handleCheckboxChange}
+                  />
+                }
                 label="Security Gate"
               />
             </FormGroup>

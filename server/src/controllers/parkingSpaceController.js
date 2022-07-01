@@ -3,7 +3,7 @@ const { getLatLngByString } = require('../services/location');
 module.exports = {
   async createParkingSpace(req, res) {
     try {
-      console.log(req.body)
+      console.log(req.body);
       const parkingSpace = await ParkingSpace.create(req.body);
       return res.send(parkingSpace.toJSON());
     } catch (error) {
@@ -32,35 +32,66 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, radius } = req.query;
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, properties } =
+        req.query;
+      // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
+      // deleting object so properties can be filtered in final step
+      const query = Object.assign({}, req.query);
+      console.log('FILTER CONFIG FROM USER: ', req.query);
       // build query from filter configurations...
       let mongoQuery = {};
 
+      // build address + radius filter
       if (formattedAddress) {
         const locationGeoCoded = await getLatLngByString(formattedAddress);
-        if(locationGeoCoded[0]){
+        if (locationGeoCoded[0]) {
           const lat = locationGeoCoded[0].geometry.location.lat;
           const lng = locationGeoCoded[0].geometry.location.lng;
-  
+
           mongoQuery.location = {
             $near: {
               $geometry: { type: 'Point', coordinates: [lat, lng] },
-              $maxDistance: radius ? radius * 1000: 10000, // search within a readius of 5 km, else within specified radius
+              $maxDistance: radius ? radius * 1000 : 10000, // search within a readius of 10 km, else within specified radius
             },
           };
+          delete query.formattedAddress;
+          delete query.radius;
         } else {
-          throw 'Not a valid location string'
-        }       
+          throw 'Not a valid location string';
+        }
       }
+      // build price filter
       if (basePrice) {
         mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
+        delete query.basePrice;
+        console.log(query, '*** passed one:', req.query);
       }
       if (dayPrice) {
         mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
+        delete query.dayPrice;
       }
+      if (longTermStayPrice) {
+        mongoQuery.longTermStayPrice = {
+          $gt: parseInt(longTermStayPrice[0]),
+          $lt: parseInt(longTermStayPrice[1]),
+        };
+        delete query.longTermStayPrice;
+      }
+      // build parking space features filter
+      Object.keys(query).map((key, index) => {
+        // convert to boolean, omit false values...
+        if(query[key] === 'true'){
+          return (mongoQuery[key] = true);
+
+        }
+      });
+      console.log('MODIFIED QUERY', query);
+
+      console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery));
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });
+      console.log('Found ', allParkingSpaces.length, ' matching results...');
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);
@@ -69,5 +100,5 @@ module.exports = {
   },
   async getFilterConstraints(req, res) {
     // find max day price, base price, ... for filters
-  }
+  },
 };

@@ -1,5 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { FormControl, FormHelperText, IconButton, InputBase, useFormControl } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  useFormControl,
+} from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import moment from 'moment';
@@ -27,22 +34,18 @@ const Bar = () => {
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
-    // 
-    if(e.target.checked !== undefined){
-      // TODO
-      setFilters({ ...filters, [e.target.name]: e.target.checked });
-    } else {
-      setFilters({ ...filters, [e.target.name]: e.target.value });
-    }
+    console.log('e.target.name', e.target.name, 'e.target.value', e.target.value);
+
+    setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
   const searchWithFilters = async () => {
     getAllParkingSpaces(filters);
   };
   return (
-    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[700px] ">
+    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[750px] ">
       {/* Search Location */}
-      <FormControl className="w-[70%]">
+      <FormControl className="w-[60%]">
         <InputBase
           sx={{
             flex: 1,
@@ -62,7 +65,7 @@ const Bar = () => {
       </FormControl>
       {/* Input Radius */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <FormControl className="w-[60%]">
+      <FormControl className="w-[70%]">
         <InputBase
           sx={{
             ml: '10px',
@@ -71,11 +74,16 @@ const Bar = () => {
             fontWeight: 'bold',
             input: { padding: 0 },
           }}
-          placeholder="Radius"
+          placeholder="Within 10"
           name="radius"
           type="number"
           onChange={handleFilterChange}
           value={filters?.radius || ''}
+          endAdornment={
+            <InputAdornment position="end">
+              <span className="text-[.75rem]">km</span>
+            </InputAdornment>
+          }
           inputProps={{ 'aria-label': 'search parking places' }}
         />
         <MyFormHelperText text="Flexible?" />
