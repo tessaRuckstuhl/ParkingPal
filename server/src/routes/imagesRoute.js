@@ -110,5 +110,9 @@ router.get('/:id', ({ params: { id } }, res) => {
     })
 })
 
+router.delete('/:id', ({ params: { id } }, res) => {
+   deleteImage(id)
+})
+
 
 module.exports = router;

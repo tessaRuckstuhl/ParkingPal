@@ -20,6 +20,9 @@ const PSService = {
     getCoordinates(address) {
         let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + `&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
         return axios.get(url)
+    },
+    deleteImage(id) {
+        return axios.delete(`${process.env.REACT_APP_API_URL}images/${id}`);
     }
 };
 
