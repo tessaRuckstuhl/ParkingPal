@@ -43,7 +43,7 @@ const Bar = () => {
     getAllParkingSpaces(filters);
   };
   return (
-    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px] md:w-[600px] ">
+    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px]">
       {/* Search Location */}
       <FormControl className="w-[60%]">
         <InputBase
