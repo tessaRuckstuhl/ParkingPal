@@ -97,6 +97,7 @@ const ParkingSpaceSchema = new Schema({
   timestamps: true
 });
 ParkingSpaceSchema.index({location: '2dsphere'});
+ParkingSpaceSchema.index({'location.coordinates': '2dsphere'});
 
 const ParkingSpace = mongoose.model('ParkingSpace', ParkingSpaceSchema);
 ParkingSpace.createIndexes()
