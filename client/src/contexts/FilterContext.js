@@ -4,7 +4,7 @@ import PSService from '../services/parkingSpace.service';
 const FilterContext = React.createContext();
 
 const FilterContextProvider = (props) => {
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState();
   const [results, setResults] = useState([]);
 
   const getAllParkingSpaces = async (query) => {

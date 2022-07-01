@@ -10,7 +10,7 @@ const AuthComponent = (props) => {
     if (!jwt || jwt === '') {
       return navigate('/');
     }
-  }, [jwt, history]);
+  }, [jwt]);
   return (
     <div>
       {props.children}

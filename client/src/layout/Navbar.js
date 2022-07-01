@@ -20,7 +20,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    if (location.pathname == "/map") {
+    if(location.pathname == "/map"){
       setShowFilters(true)
     } else {
       setShowFilters(false)
@@ -29,13 +29,13 @@ const Navbar = () => {
 
 
   return (
-    <div className="flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
-      <Link to="dashboard">
-        <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
-      </Link>
-      {/* Filter and Search */}
-      {showFilters && <Bar />}
-      {/* Language, Profile, .. */}
+    <div className="relative flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
+        <Link to="dashboard">
+          <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
+        </Link>
+        {/* Filter and Search */}
+        {showFilters && <Bar/>}
+        {/* Language, Profile, .. */}
       <div className="flex space-x-4 items-center">
         <Link to="404">
           <div className="text-xs">Become a host</div>
