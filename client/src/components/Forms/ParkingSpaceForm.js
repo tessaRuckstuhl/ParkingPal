@@ -27,8 +27,8 @@ const ParkingSpaceForm = () => {
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
 
-  const [fromValue, setFromValue] = React.useState("");
-  const [toValue, setToValue] = React.useState("");
+  const [fromValue, setFromValue] = React.useState('');
+  const [toValue, setToValue] = React.useState('');
   const [availability, setAvailability] = useState([]);
 
   const [street, setStreet] = useState('');
@@ -54,6 +54,18 @@ const ParkingSpaceForm = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+  //TODO:
+  /*
+  radioButton für Size 
+  diable button if required fields empty and optionally show what is missing
+  delete photos on no submit
+  fullwidth textfields
+  availability check if from < to
+  item weg
+  subtitles -> mockup
+  update parkimg space
+  */
   const clearAll = () => {
     setParkingSpaceName("")
     setImageIDs([])
@@ -221,7 +233,7 @@ const ParkingSpaceForm = () => {
             <Grid item xs={6}>
             </Grid>
           </Grid>
-          <p>Step 3: Provide additional information to help</p>
+          <p className="text-[#983535]">Step 3: Provide additional information to help</p>
           <Grid container spacing={3}>
             <Grid item xs={4}>
               <Item>Parking Properties</Item>
@@ -270,9 +282,9 @@ const ParkingSpaceForm = () => {
           <p>Step 5: When is your parking place available?</p>
           <div className="my-4 space-x-4">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker className=""
+              <DateTimePicker 
                 label="From"
-                value={fromValue}
+                value={fromValue||null}
                 onChange={(newValue) => {
                   setFromValue(newValue);
                 }}
@@ -280,7 +292,7 @@ const ParkingSpaceForm = () => {
               />
               <DateTimePicker
                 label="To"
-                value={toValue}
+                value={toValue||null}
                 onChange={(newValue) => {
                   setToValue(newValue);
                 }}
