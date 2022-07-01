@@ -12,7 +12,6 @@ const Navbar = () => {
 
   const [showFilters, setShowFilters] = useState(false)
   useEffect(() => {
-    console.log(location)
     if(location.pathname == "/map"){
       setShowFilters(true)
     } else {

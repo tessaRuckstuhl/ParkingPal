@@ -8,35 +8,31 @@ const Listing = (props) => {
   const recenter = (e) => {
     setCenter({ lat: listing.lat, lng: listing.lng });
   };
-  console.log(listing)
   const buildFormattedPropertiesString = (properties) => {
-    if(properties){
-    let str = ''
-    Object.keys(properties).map((key, index)=> {
-      if(properties[key]){
-        let subStr = key.replaceAll('_', ' ')
-        console.log(subStr)
-        subStr = subStr.charAt(0).toUpperCase() + subStr.slice(1)
-        if(index == 0){
-          str+= subStr
-        } else {
-          str+=' · '+subStr
-
+    if (properties) {
+      let str = '';
+      Object.keys(properties).map((key, index) => {
+        if (properties[key]) {
+          let subStr = key.replaceAll('_', ' ');
+          subStr = subStr.charAt(0).toUpperCase() + subStr.slice(1);
+          if (index == 0) {
+            str += subStr;
+          } else {
+            str += ' · ' + subStr;
+          }
         }
+      });
+      if (str.length > 0) {
+        return str;
+      } else {
+        return 'No additional information to display...';
       }
-    })
-    if(str.length > 0){
-      return str;
-
     } else {
-      return 'No additional information to display...'
+      return 'No additional information to display...';
     }
-  } else {
-    return 'No additional information to display...'
-  }
-  }
+  };
 
-  buildFormattedPropertiesString(listing.properties?.parking)
+  buildFormattedPropertiesString(listing.properties?.parking);
   return (
     <div
       id={listing._id}
@@ -64,7 +60,9 @@ const Listing = (props) => {
         {/* Listing Title */}
         <div className="flex justify-between ">
           <div>
-            <div className="text-lightGray">{buildFormattedPropertiesString(listing.properties?.cancellation_and_access)}</div>
+            <div className="text-lightGray">
+              {buildFormattedPropertiesString(listing.properties?.cancellation_and_access)}
+            </div>
             <Link to={'/404'}>
               <div className="text-xl hover:underline hover:cursor-pointer">{listing.name}</div>
             </Link>
@@ -79,7 +77,9 @@ const Listing = (props) => {
         </div>
         <Divider sx={{ width: '30%' }} />
         {/* Listing Properties */}
-        <div className="text-lightGray w-2/3">{buildFormattedPropertiesString(listing.properties?.parking)}</div>
+        <div className="text-lightGray w-2/3">
+          {buildFormattedPropertiesString(listing.properties?.parking)}
+        </div>
         <Divider sx={{ width: '30%' }} />
 
         {/* Review */}
