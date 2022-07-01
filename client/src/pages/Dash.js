@@ -33,8 +33,8 @@ const Dash = () => {
         <pre>You are logged in</pre>
         <div className='text-lg'>Temporary Navigation Tree... Add your page here...</div>
         <br/>
-        <Link to="parking/create"><div className='hover:underline'>/parking/create - Create a new parking space listing</div></Link>
-        <Link to="map"><div className='hover:underline'>/map - View listings with map view</div> </Link>
+        <Link to="/parking/create"><div className='hover:underline'>/parking/create - Create a new parking space listing</div></Link>
+        <Link to="/map"><div className='hover:underline'>/map - View listings with map view</div> </Link>
       </div>
       <Button onClick={() => logout()} fullWidth variant="contained" color="secondary">
         Logout
