@@ -25,7 +25,7 @@ const Listing = (props) => {
       ) : (
         <img
           className="rounded object-contain"
-          src={`/temp/garage.jpg`}
+          src={`/img/image-not-available.jpg`}
           width={200}
           height={150}
         ></img>
