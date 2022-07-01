@@ -15,7 +15,7 @@ const Listing = (props) => {
         if (properties[key]) {
           let subStr = key.replaceAll('_', ' ');
           subStr = subStr.charAt(0).toUpperCase() + subStr.slice(1);
-          if (index == 0) {
+          if (str == '') {
             str += subStr;
           } else {
             str += ' · ' + subStr;
