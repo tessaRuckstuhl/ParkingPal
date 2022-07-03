@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { ParkingSpaceReview } = require('../models');
 
-
 module.exports = {
     async findByID(req, res) {
         const { id } = req.params;

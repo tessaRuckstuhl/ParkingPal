@@ -20,6 +20,44 @@ const ParkingSpaceSchema = new Schema({
     type: String,
     required : false
   },
+  properties: {
+    parking:{
+      streetside: {
+        type: Boolean,
+        default: false
+      },
+      illuminated: {
+        type: Boolean,
+        default: false
+      },
+      e_charging: {
+        type: Boolean,
+        default: false
+      },
+      garage: {
+        type: Boolean,
+        default: false
+      }
+    }, 
+    cancellation_and_access: {
+      free_24h_before: {
+        type: Boolean,
+        default: false
+      },
+      no_meetup: {
+        type: Boolean,
+        default: false
+      },
+      pin: {
+        type: Boolean,
+        default: false
+      },
+      security_gate: {
+        type: Boolean,
+        default: false
+      }
+    }
+  },
   formattedAddress: {
     type: String,
     required: true
@@ -36,7 +74,7 @@ const ParkingSpaceSchema = new Schema({
     },
   },
   availability: {
-    type: [String,String],
+    type: [Object],
     required: true
   },
   size: {
@@ -59,6 +97,7 @@ const ParkingSpaceSchema = new Schema({
   timestamps: true
 });
 ParkingSpaceSchema.index({location: '2dsphere'});
+ParkingSpaceSchema.index({'location.coordinates': '2dsphere'});
 
 const ParkingSpace = mongoose.model('ParkingSpace', ParkingSpaceSchema);
 ParkingSpace.createIndexes()

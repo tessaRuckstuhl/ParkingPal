@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 const Marker = (options) => {
   const [marker, setMarker] = useState();
   const regIcon = {
-    url: '/temp/custom-marker.svg',
+    url: '/svg/custom-marker.svg',
     scaledSize: new google.maps.Size(48, 48),
   };
 
   const largeIcon = {
-    url: '/temp/custom-marker.svg',
+    url: '/svg/custom-marker.svg',
     scaledSize: new google.maps.Size(64, 64),
   };
   //  '<div id="content">' + options.name +'</div>'
