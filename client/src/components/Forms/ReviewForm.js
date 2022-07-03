@@ -168,7 +168,7 @@ const ReviewForm = () => {
                   <br></br>
                   
                   <p>- Streeside Parking: {parkingSpace.name}</p>
-                  <p>- Streeside Parking: {parkingSpace.basePrice}</p>
+                  <p>- Streeside Parking: {parkingSpace.}</p>
 
                   {/* <p>- Illuminated: {parkingSpace.data.properties.parking.illuminated.toString()}</p>
                   <p>- E-Charging: {parkingSpace.data.properties.parking.e_charging.toString()}</p> */}
