@@ -20,7 +20,9 @@ const ReviewForm = () => {
   const [accuracyRating, setAccuracyRating] = useState(2.5);
   const [valueRating, setValueRating] = useState(2.5);
   const [booking, setBooking] = useState([""])
-  const [parkingSpace, setParkingSpace] = useState({});
+  const [parkingSpace, setParkingSpace] = useState("test");
+  const [parkingSpaceDescription, setParkingSpaceDescription] = useState({});
+
 
   //const navigate = useNavigate();
 
@@ -102,45 +104,29 @@ const ReviewForm = () => {
 
 
 
-
   useEffect(async () => {
-
 
     const bookingId = new URL(location.href).searchParams.get('bookingId')
     console.log(bookingId)
 
     const resultBooking = await BookingService.getBooking(bookingId);
     setBooking(resultBooking.data);
+    console.log(booking)
 
 
-    const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bac21772fa1c20a4e88a14") // resultBooking.data.parkingSpace_id
+    const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bf11471e9e744d16826538") // resultBooking.data.parkingSpace_id
     console.log("nice")
-    setParkingSpace({data: resultParkingSpace.data})
-    console.log(parkingSpace.data.properties.parking.streetside)
-
-    // geht das nicht? - müssen die childs primitiv sein? 
-    // Ich würde gerne den kompletten parkingspace in die Komponente schreiben. 
-
-
-
-
-    // TODO get username of owner and guest
-
-
-
-    // // Mock ParkingSpace
-    // const mock_parkingSpace = {
-    //   name: "parkingSpaceName-mock",
-    //   location: "location-mock",
-    //   size: "size-mock",
-    //   basePrice: "basePrice-mock",
-    //   owner: "user-mock"
-    // };
-
-    // setBooking(booking)
-    // setParkingSpace(parkingSpace)
+    console.log(resultParkingSpace.data)
+    setParkingSpace(resultParkingSpace.data)
+    
+    console.log("done")
+    
 
   }, []);
+
+
+
+  
   return (
 
     <div className="flex flex-col items-center ">
@@ -181,9 +167,11 @@ const ReviewForm = () => {
                 >
                   <br></br>
                   
-                  <p>- Streeside Parking: {parkingSpace.data.properties.parking.streetside.toString()}</p>
-                  <p>- Illuminated: {parkingSpace.data.properties.parking.illuminated.toString()}</p>
-                  <p>- E-Charging: {parkingSpace.data.properties.parking.e_charging.toString()}</p>
+                  <p>- Streeside Parking: {parkingSpace.name}</p>
+                  <p>- Streeside Parking: {parkingSpace.basePrice}</p>
+
+                  {/* <p>- Illuminated: {parkingSpace.data.properties.parking.illuminated.toString()}</p>
+                  <p>- E-Charging: {parkingSpace.data.properties.parking.e_charging.toString()}</p> */}
                   <br></br>
                   <Divider />
                   <br></br>
