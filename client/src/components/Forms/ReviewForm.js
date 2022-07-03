@@ -8,11 +8,13 @@ import { Grid, Paper, Divider, Rating } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import BookingService from '../../services/booking.service';
 import ParkingSpaceService from '../../services/parkingSpace.service';
+import UserService from '../../services/user.service';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 
 const ReviewForm = () => {
   const [reviewDescription, setReviewDescription] = useState('');
-  const [overallRating, setoverallRating] = useState(2.5);
   const [neighborhoodRating, setNeighborhoodRating] = useState(2.5);
   const [accessRating, setAccessRating] = useState(2.5);
   const [locationRating, setLocationRating] = useState(2.5);
@@ -21,7 +23,9 @@ const ReviewForm = () => {
   const [valueRating, setValueRating] = useState(2.5);
   const [booking, setBooking] = useState([""])
   const [parkingSpace, setParkingSpace] = useState("test");
-  const [parkingSpaceDescription, setParkingSpaceDescription] = useState({});
+  const [guest, setGuest] = useState({});
+  const [owner, setOwner] = useState({});
+
 
 
   //const navigate = useNavigate();
@@ -113,20 +117,33 @@ const ReviewForm = () => {
     setBooking(resultBooking.data);
     console.log(booking)
 
-
-    const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bf11471e9e744d16826538") // resultBooking.data.parkingSpace_id
-    console.log("nice")
+    const resultParkingSpace = await ParkingSpaceService.listParkingSpace("62bf11c10fb3d62f64c897c2") // resultBooking.data.parkingSpace_id
     console.log(resultParkingSpace.data)
     setParkingSpace(resultParkingSpace.data)
-    
-    console.log("done")
-    
+
+    console.log("output")
+    console.log(resultBooking.data)
+
+    // const resultGuest = await UserService.getUserDash() // I need the user information here! 
+    const guest_data = {
+      "username": "Charlotte"
+
+    }
+
+    const owner_data = {
+      "username": "Stefan",
+      "email": "jakobkempter@gmail.com"
+    }
+
+    setGuest(guest_data)
+    setOwner(owner_data)
+
 
   }, []);
 
 
 
-  
+
   return (
 
     <div className="flex flex-col items-center ">
@@ -141,17 +158,29 @@ const ReviewForm = () => {
           </div>
           <div>
             <p>You booked this parking place provides by {booking.guest_id}, from {booking.startDate}  to {booking.endDate} </p>
+            {/* momentan sind die dates als string gespeichert - das wird sich noch ändern --> dann nehme ich die toDateString()  */}
 
             <p>Here is a short summary of what was promised and expected</p>
           </div>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Item style={{ height: 300, width: 500 }}><img src={`http://localhost:3001/api/images/62bac169a26b1eb4c425b606`}alt="image"></img></Item>
-            </Grid>
-            <Grid item xs={6}>
-              <Item style={{ height: 300, width: 500 }}><img src={`http://localhost:3001/api/images/62bb62fac2918754d8697071`} alt="image"></img></Item>
-            </Grid>
-          </Grid>
+          <div>
+                {parkingSpace.images?.length > 0 ? ( 
+                    <>
+                        <ImageList sx={{ width: 1000, height: 300 }} cols={3} rowHeight={300}>
+                            {parkingSpace.images?.map((id) => (
+                                <ImageListItem key={id}>
+                                    <img
+                                        src={`http://localhost:3001/api/images/${id}?w=164&h=164&fit=crop&auto=format`}
+                                        alt="image"
+                                        loading="lazy"
+                                    />
+                                </ImageListItem>
+                            ))}
+                        </ImageList>
+                    </>
+                ) :
+                    (<></>)}
+
+            </div>
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={8}>
@@ -166,18 +195,16 @@ const ReviewForm = () => {
                   }}
                 >
                   <br></br>
-                  
-                  <p>- Streeside Parking: {parkingSpace.name}</p>
-                  <p>- Streeside Parking: {parkingSpace.}</p>
-
-                  {/* <p>- Illuminated: {parkingSpace.data.properties.parking.illuminated.toString()}</p>
-                  <p>- E-Charging: {parkingSpace.data.properties.parking.e_charging.toString()}</p> */}
+                  <p>- Streetside:{parkingSpace.properties?.parking?.streetside.toString()}</p>
+                  <p>- Garage: {parkingSpace.properties?.parking?.garage.toString()}</p>
+                  <p>- Illuminated: {parkingSpace.properties?.parking?.illuminated.toString()}</p>
+                  <p>- E-Charging: {parkingSpace.properties?.parking?.e_charging.toString()}</p>
                   <br></br>
                   <Divider />
                   <br></br>
                   <b>Description</b>
                   <br></br>
-                  <p>Come check out this cool information which I have to retrieve from BackEnd first.</p>
+                  <p>{parkingSpace.description}</p>
                 </div>
               </Item>
             </Grid>
@@ -186,7 +213,7 @@ const ReviewForm = () => {
 
                 <div className=" font-regular  text-s">
 
-                  <a>Provided by {booking.username}</a>
+                  <a>Provided by {owner.username}</a>
 
                   <br></br>
                 </div>
@@ -208,6 +235,7 @@ const ReviewForm = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  onClick={() => { window.location = "mailto:jakobkempter@gmail.com"; }}
                 >
                   Contact Host
                 </Button>
@@ -233,18 +261,6 @@ const ReviewForm = () => {
               <b>Rate your experience</b> <br />
               <p> Please rate your parking place experience in overall satisfaction, accesability, service by the host and location</p>
             </div>
-            <Rating
-                  defaultValue={2.5}
-                  precision={0.5}
-                  variant="outlined"
-                  required
-                  id="overallrating"
-                  label="Overall Rating"
-                  name="overallrating"
-                  value={overallRating}
-                  autoFocus
-                  onChange={(e) => handleChange(e)}
-                />
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Item>Neighborhood</Item>
@@ -357,7 +373,6 @@ const ReviewForm = () => {
               name="reviewdescription"
               style={{ height: 100 }}
               value={reviewDescription}
-              autoFocus
               onChange={(e) => handleChange(e)}
             />
           </div>
