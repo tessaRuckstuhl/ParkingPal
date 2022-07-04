@@ -35,7 +35,7 @@ module.exports = {
     try {
       const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
         req.query;
-      console.log('REQUEST QUERY', req.query);
+      // console.log('REQUEST QUERY', req.query);
       // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
       // deleting object so properties can be filtered in final step
       const query = Object.assign({}, req.query);
@@ -105,7 +105,7 @@ module.exports = {
       });
       // console.log('MODIFIED QUERY', query);
 
-      console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
+      // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });
