@@ -15,6 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
 import { ImageContext } from '../../contexts/ImageContext';
+import moment from 'moment';
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
@@ -287,12 +288,12 @@ const ParkingSpaceForm = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
               {availability.length > 0 ? availability.map((slot) => {
-                return <div key={slot}>{slot.from} until {slot.to}</div>
+                return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
               }) : null}
               <Button variant="contained" color="primary" onClick={() => {
                 let available = {
-                  from: fromValue.format("DD-MM-YYYY HH:MM"),
-                  to: toValue.format("DD-MM-YYYY HH:MM")
+                  from: fromValue.toISOString(),
+                  to: toValue.toISOString()
                 }
                 setToValue(null);
                 setFromValue(null);

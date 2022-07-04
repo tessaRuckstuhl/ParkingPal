@@ -1,5 +1,6 @@
 const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
+const { toIsoString } = require('../services/toIsoString');
 module.exports = {
   async createParkingSpace(req, res) {
     try {
@@ -32,8 +33,9 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, availability } =
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
         req.query;
+      console.log('REQUEST QUERY', req.query);
       // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
       // deleting object so properties can be filtered in final step
       const query = Object.assign({}, req.query);
@@ -78,22 +80,35 @@ module.exports = {
         delete query.longTermStayPrice;
       }
       // build availability filter
-      // ...TODO
+      if (from && to) {
+        mongoQuery.availability = {
+          $elemMatch: {
+            from: { $lte: toIsoString(new Date(from)) },
+            to: { $gte: toIsoString(new Date(to)) },
+          },
+        };
+      } else if (from) {
+        mongoQuery.availability = {
+          $elemMatch: { from: { $lte: toIsoString(new Date(from)) } },
+        };
+      } else if (to) {
+        mongoQuery.availability = {
+          $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
+        };
+      }
       // build parking space features filter
       Object.keys(query).map((key, index) => {
         // convert to boolean, omit false values...
-        if(query[key] === 'true'){
+        if (query[key] === 'true') {
           return (mongoQuery[key] = true);
-
         }
       });
       // console.log('MODIFIED QUERY', query);
 
-      // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery));
+      console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
       });
-      console.log('Found ', allParkingSpaces.length, ' matching results...');
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);

@@ -93,7 +93,9 @@ const Bar = () => {
       <FormControl fullWidth>
         <InputBase
           type="datetime-local"
-          defaultValue={today}
+          name="from"
+          onChange={handleFilterChange}
+          value={filters?.from || ''}
           sx={{
             ml: '10px',
             flex: 1,
@@ -111,7 +113,9 @@ const Bar = () => {
       <FormControl fullWidth>
         <InputBase
           type="datetime-local"
-          defaultValue="?"
+          onChange={handleFilterChange}
+          name="to"
+          value={filters?.to || ''}
           sx={{
             ml: '10px',
             flex: 1,

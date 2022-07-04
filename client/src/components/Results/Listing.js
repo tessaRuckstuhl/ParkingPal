@@ -32,7 +32,7 @@ const Listing = (props) => {
     }
   };
 
-  buildFormattedPropertiesString(listing.properties?.parking);
+
   return (
     <div
       id={listing._id}
