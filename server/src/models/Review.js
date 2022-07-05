@@ -1,15 +1,22 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const ParkingSpaceReviewSchema = new Schema({
-    reviewer_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    parkingSpace_id: {
+const ReviewSchema = new Schema({
+
+    parkingSpace: {
         type: Schema.Types.ObjectId,
         ref: 'ParkingSpace',
-        //required: true,
+        required: true,
+    },
+    reviewer: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    booking: {
+        type: Schema.Types.ObjectId,
+        ref: 'Booking',
+        required: true,
     },
     rating: {
         type: Number,
@@ -42,6 +49,6 @@ const ParkingSpaceReviewSchema = new Schema({
 
 
 
-const ParkingSpaceReview = mongoose.model('ParkingSpaceReview', ParkingSpaceReviewSchema);
+const Review = mongoose.model('Review', ReviewSchema);
 
-module.exports = ParkingSpaceReview;
+module.exports = Review;
