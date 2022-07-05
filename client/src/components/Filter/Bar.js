@@ -1,5 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { FormControl, FormHelperText, IconButton, InputBase, useFormControl } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  useFormControl,
+} from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import moment from 'moment';
@@ -27,6 +34,8 @@ const Bar = () => {
   const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
+    console.log('e.target.name', e.target.name, 'e.target.value', e.target.value);
+
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
@@ -34,9 +43,9 @@ const Bar = () => {
     getAllParkingSpaces(filters);
   };
   return (
-    <div className="ml-5 px-4 py-[0.1rem]  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[700px] ">
+    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px]">
       {/* Search Location */}
-      <FormControl className="w-[70%]">
+      <FormControl className="w-[60%]">
         <InputBase
           sx={{
             flex: 1,
@@ -56,7 +65,7 @@ const Bar = () => {
       </FormControl>
       {/* Input Radius */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <FormControl className="w-[60%]">
+      <FormControl className="w-[70%]">
         <InputBase
           sx={{
             ml: '10px',
@@ -65,11 +74,16 @@ const Bar = () => {
             fontWeight: 'bold',
             input: { padding: 0 },
           }}
-          placeholder="Radius"
+          placeholder="Within 10"
           name="radius"
           type="number"
           onChange={handleFilterChange}
           value={filters?.radius || ''}
+          endAdornment={
+            <InputAdornment position="end">
+              <span className="text-[.75rem]">km</span>
+            </InputAdornment>
+          }
           inputProps={{ 'aria-label': 'search parking places' }}
         />
         <MyFormHelperText text="Flexible?" />
@@ -79,7 +93,9 @@ const Bar = () => {
       <FormControl fullWidth>
         <InputBase
           type="datetime-local"
-          defaultValue={today}
+          name="from"
+          onChange={handleFilterChange}
+          value={filters?.from || ''}
           sx={{
             ml: '10px',
             flex: 1,
@@ -97,7 +113,9 @@ const Bar = () => {
       <FormControl fullWidth>
         <InputBase
           type="datetime-local"
-          defaultValue="?"
+          onChange={handleFilterChange}
+          name="to"
+          value={filters?.to || ''}
           sx={{
             ml: '10px',
             flex: 1,

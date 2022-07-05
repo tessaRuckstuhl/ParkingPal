@@ -4,11 +4,8 @@ const userController = require('../controllers/userController');
 const { isAuthenticated, signup } = require('../middlewares');
 
 // api/user
-router.get('/', (req, res) => {
-  res.send({
-    message: '💻'
-  });
-});
+router.get('/:id', userController.findByID);
+
 router.delete('/:id', userController.deleteById);
 
 router.patch('/:id', userController.updateById);

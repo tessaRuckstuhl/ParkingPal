@@ -103,9 +103,7 @@ const deleteImage = (id) => {
 router.get('/:id', ({ params: { id } }, res) => {
     if (!id || id === 'undefined') return res.status(400).send('no image id');
     const _id = new mongoose.Types.ObjectId(id);
-    console.log(gfs.find({_id}))
     gfs.find({_id}).toArray((err, files) => {
-        console.log(files)
         if (!files || files.length === 0) 
             return res.status(400).send('no files exist')
         gfs.openDownloadStream(_id).pipe(res);
