@@ -62,7 +62,7 @@ module.exports = {
 
             if (reviews.length == 0) {
                 return res.send({
-                    averageRating: "-",
+                    averageRating: "",
                     amount: reviews.length
                 });
             }
