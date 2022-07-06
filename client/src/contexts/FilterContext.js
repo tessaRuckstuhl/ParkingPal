@@ -19,7 +19,6 @@ const FilterContextProvider = (props) => {
         const review = await RService.getReviewStats(formattedParkingSpaces[i]._id);
         formattedParkingSpaces[i] = { ...formattedParkingSpaces[i], reviewStats: review.data };
       }
-      console.log(formattedParkingSpaces)
       setResults(formattedParkingSpaces);
     } catch (error) {
       console.log(error);
