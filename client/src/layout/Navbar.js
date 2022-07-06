@@ -10,13 +10,13 @@ import { useLocation } from 'react-router-dom';
 const Navbar = () => {
   const location = useLocation();
   const [showFilters, setShowFilters] = useState(false)
-  const links = 
-  [{ name: "HOME", link: "/dashboard" },
-  { name: "Login", link: "/login" },
-  { name: "About", link: "/about" },
-  { name: "Review", link: "/parking/review" },
-  { name: "Create Parking", link: "/parking/create" },
-  ];
+   const links = []
+  // [{ name: "HOME", link: "/dashboard" },
+  // { name: "Login", link: "/login" },
+  // { name: "About", link: "/about" },
+  // { name: "Review", link: "/parking/review" },
+  // { name: "Create Parking", link: "/parking/create" },
+  // ];
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Navbar = () => {
         {/* Filter and Search */}
         {showFilters && <Bar/>}
         {/* Language, Profile, .. */}
-      <div className="flex space-x-4 items-center">
+      <div className="flex space-x-2 items-center">
         <Link to="404">
           <div className="text-xs">Become a host</div>
         </Link>
