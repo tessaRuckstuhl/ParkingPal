@@ -73,8 +73,7 @@ const ReviewForm = () => {
     try {
       const review = {
         description: reviewDescription,
-        reviewer_id: user,
-        rating: 4,
+        reviewer: user,
         neighborhoodRating: neighborhoodRating,
         accessRating: accessRating,
         locationRating: locationRating,

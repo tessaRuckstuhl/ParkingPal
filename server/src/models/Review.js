@@ -18,10 +18,6 @@ const ReviewSchema = new Schema({
         ref: 'Booking',
         required: true,
     },
-    rating: {
-        type: Number,
-        required: true
-    },
     description: {
         type: String,
     },
