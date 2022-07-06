@@ -29,14 +29,14 @@ import MapWrapper from '../Map/MapWrapper';
 const BookingForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [locationValue, setLocation] = useState('');
-  const [basePrice, setBasePrice] = useState('');
+  const [basePrice, setBasePrice] = useState('1');
+  const [dayPrice,setDayPrice] = useState('1');
   const [startTime,setStartTime] = useState('');
   const [endTime,setEndTime] = useState('');
   const [address,setParkingAddress] = useState('');
   const [pics,setParkingPics1] = useState('');
   const [pics2,setParkingPics2] = useState('');
   const [desc,setParkingDesc] = useState('');
-  const [dayPrice,setDayPrice] = useState('');
   const [review,setReviewRating] = useState('');
   const [reviewlist, setReviewList] = useState('');
   const [owner, setParkingOwner] = useState('');
@@ -50,6 +50,7 @@ const BookingForm = () => {
   const [untilTime,setUntilTime] = useState ('');
   const [timeDif,setTimeDif] = useState('');
   const [totalTime,setTotalTime] = useState('');
+  const [totalPrice,setTotalPrice] = useState('');
   
   
   const navigate = useNavigate();
@@ -126,13 +127,16 @@ const BookingForm = () => {
     const parkingResult = await ParkingSpaceService.listParkingSpace(bookingId)
     //const reviewResult = await ReviewService.getReview(bookingId)
     //const reviewResultlist = await ReviewService.getAllReviews()
-    // const tdif= new Date(timeDif).toISOString().substr(11, 8);
-    // console.log(tdif)
+    const tdif= new Date(timeDif).toISOString().substr(11, 8);
+    console.log(Math.abs(timeDif))
+    console.log("timediff: " + tdif)
+    console.log("totalTime: "+ totalTime)
     
     
 
     // console.log(parkingResult.data.formattedAddress)
     // console.log(parkingResult.data.images[1])
+    
     console.log("This is the desc:")
     console.log(parkingResult.data.description)
     console.log("Test")
@@ -277,7 +281,7 @@ const BookingForm = () => {
                     Total Price
                     </Grid>
                     <Grid item xs={6}>
-                      {totalTime}
+                      {totalPrice.toString()}
                     </Grid>
                   </Grid>
                 </div>
@@ -330,7 +334,8 @@ const BookingForm = () => {
                       setStartValue(start);
                       setFromTime(start);
                       setTimeDif(fromTime-end)
-                      setTotalTime (new Date(timeDif).toISOString().substr(11, 8))
+                      setTotalTime ((new Date(timeDif)).toISOString().substr(11, 8))
+                      setTotalPrice((parseFloat(Math.abs(timeDif))/86400) > 0 ? parseInt((parseFloat(Math.abs(timeDif))/86400))*{dayPrice}+{basePrice}*(parseInt(Math.abs(timeDif))- 86400 * parseInt((parseFloat(Math.abs(timeDif))/86400))): {basePrice}*(parseInt(Math.abs(timeDif))))
                     }}
                   />
                 </LocalizationProvider>
@@ -352,7 +357,8 @@ const BookingForm = () => {
                       setEndValue(end);
                       setUntilTime(end)
                       setTimeDif(fromTime-end)
-                      setTotalTime (new Date(timeDif).toISOString().substr(11, 8))
+                      setTotalTime ((new Date(timeDif)).toISOString().substr(11, 8))
+                      setTotalPrice((parseFloat(Math.abs(timeDif))/86400) > 0 ? parseInt((parseFloat(Math.abs(timeDif))/86400))*{dayPrice}+{basePrice}*(parseInt(Math.abs(timeDif))- 86400 * parseInt((parseFloat(Math.abs(timeDif))/86400))): {basePrice}*(parseInt(Math.abs(timeDif))))
                     }}
                   />
                 </LocalizationProvider> 
@@ -559,5 +565,4 @@ const BookingForm = () => {
     </div>
   );
 };
-
 export default BookingForm;
