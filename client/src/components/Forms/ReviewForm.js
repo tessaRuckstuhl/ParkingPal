@@ -12,8 +12,6 @@ import UserService from '../../services/user.service';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import StarIcon from '@mui/icons-material/Star';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 const ReviewForm = () => {
@@ -29,8 +27,6 @@ const ReviewForm = () => {
   const [guest, setGuest] = useState({});
   const [owner, setOwner] = useState({});
   const [amountParkingSpaceReviews, setAmountParkingSpaceReviews] = useState();
-  const [amountOwnerReviews, setAmountOwnerReviews] = useState();
-  const [averageOwnerReview, setAverageOwnerReview] = useState();
   const [averageParkingSpaceReview, setAverageParkingSpaceReview] = useState();
 
 
@@ -69,11 +65,13 @@ const ReviewForm = () => {
 
     const user = parseJwt(localStorage.getItem('token'))
     
+    const overallRating = ((neighborhoodRating + accessRating + locationRating + communicationRating + accuracyRating + valueRating) / 6).toFixed(2);
 
     try {
       const review = {
         description: reviewDescription,
         reviewer: user,
+        overallRating: overallRating,
         neighborhoodRating: neighborhoodRating,
         accessRating: accessRating,
         locationRating: locationRating,
@@ -83,28 +81,18 @@ const ReviewForm = () => {
         booking: booking,
         parkingSpace: parkingSpace 
       };
-      console.log(review)
       const response = await ReviewService.create(review);
 
     } catch (error) {
     }
   };
 
-  const setAmountofReviewsForParkingSpace = async (id) => {
-    setAmountParkingSpaceReviews(120)
+  const setReviewStats = async (id) => {
+    const resultReview = await ReviewService.getReviewStats(id) 
+    setAmountParkingSpaceReviews(resultReview.data.amount)
+    setAverageParkingSpaceReview(resultReview.data.averageRating)
   }
 
-  const setAmountofReviewsForOwner = async (id) => {
-    setAmountOwnerReviews(4)
-  }
-
-  const setAverageOwnerVoting = async (id) => {
-    setAverageOwnerReview(4)
-  }
-
-  const setAverageParkingSpaceVoting = async (id) => {
-    setAverageParkingSpaceReview(4)
-  }
 
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
@@ -140,6 +128,11 @@ const ReviewForm = () => {
     // console.log(response)
 
 
+    
+
+
+
+
     const bookingId = new URL(location.href).searchParams.get('bookingId')
 
     const resultBooking = await BookingService.getBooking(bookingId);
@@ -155,10 +148,7 @@ const ReviewForm = () => {
     const resultOwner = await UserService.getUser(resultBooking.data.owner)
     setOwner(resultGuest.data)
 
-    setAmountofReviewsForOwner()
-    setAmountofReviewsForParkingSpace()
-    setAverageOwnerVoting()
-    setAverageParkingSpaceVoting()
+    setReviewStats(resultBooking.data.parkingSpace)
 
   }, []);
 
@@ -186,7 +176,7 @@ const ReviewForm = () => {
 
           <div className="mb-5 font-medium  text-xs">
             <StarIcon color="primary" fontSize="small"></StarIcon>
-            {averageOwnerReview} &emsp; {amountParkingSpaceReviews} reviews &emsp; {parkingSpace.formattedAddress}
+            {averageParkingSpaceReview} &emsp; {amountParkingSpaceReviews} reviews &emsp; {parkingSpace.formattedAddress}
           </div>
           <div>
             {parkingSpace.images?.length > 0 ? (

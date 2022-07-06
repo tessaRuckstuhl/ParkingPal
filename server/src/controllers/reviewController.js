@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose')
 const { Review } = require('../models');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
             return res.status(400).send({ error: 'server is having an issue please try again later' });
         }
         return res.json(review);
-    }, 
+    },
     async getReviewList(req, res) {
         try {
             const allReviews = await Review.find();
@@ -53,6 +54,36 @@ module.exports = {
             return res.status(400).send({ error: 'something is wrong' });
         }
     },
+    async getReviewStats(req, res) {
+        const { id } = req.params
+        try {
+            // get all reviews with correct parkingSpace Id
+            const reviews = await Review.find({ parkingSpace: mongoose.Types.ObjectId(id) });
+
+            if (reviews.length == 0) {
+                return res.send({
+                    averageRating: "-",
+                    amount: reviews.length
+                });
+            }
+            let sum = 0
+            reviews.map(review => {
+                sum += review.overallRating
+            })
+
+            sum /= reviews.length
+            return res.send({
+                averageRating: sum,
+                amount: reviews.length
+            });
+
+        } catch (error) {
+            console.log(error)
+            return res.status(400).send({ error: 'something is wrong' });
+
+        }
+
+    }
 };
 
 
