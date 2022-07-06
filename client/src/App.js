@@ -13,6 +13,7 @@ import Default from './layout/Default';
 import CreateParkingSpace from './pages/CreateParkingSpace'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import CreateReview from './pages/CreateReview'
+import About from './pages/About'
 
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
@@ -41,6 +42,7 @@ const App = () => {
                   <Route path="all" element={<ListViewParkingSpaces />}></Route>
                   <Route path="signup" element={<Signup />}></Route>
                   <Route path="review/create" element={<CreateReview />}></Route>
+                  <Route path="about" element={<About />}></Route>
                   <Route
                     path="dashboard"
                     element={
