@@ -98,9 +98,10 @@ module.exports = {
         }
       });
       // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
+      // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
-      });
+      }).sort({ _id: -1 });
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);
