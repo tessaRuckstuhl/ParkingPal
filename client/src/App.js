@@ -10,13 +10,15 @@ import AuthComponent from './services/AuthComponent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
-import CreateParkingSpace from './pages/CreateParkingSpace'
-import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
-import CreateReview from './pages/CreateReview'
+import CreateParkingSpace from './pages/CreateParkingSpace';
+import ListViewParkingSpaces from './pages/ListViewParkingSpaces';
+import CreateReview from './pages/CreateReview';
 
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
-import Bar from './components/Filter/Bar';
+import Dashboard from './pages/UserDashboard/Dashboard';
+import Bookings from './pages/UserDashboard/Bookings';
+import Listings from './pages/UserDashboard/Listings';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
@@ -28,10 +30,7 @@ const App = () => {
         <MainContextProvider>
           {/* filter context */}
           <FilterContextProvider>
-
             <ImageContextProvider>
-
-
               {/* Default Layout, includes header and footer */}
               <Default>
                 {/* Routes */}
@@ -50,6 +49,10 @@ const App = () => {
                     }
                   ></Route>
                   <Route path="map" element={<Results />}></Route>
+                  {/* User Dashboard */}
+                  <Route path="personal" element={<Dashboard />}></Route>
+                  <Route path="personal/bookings" element={<Bookings />}></Route>
+                  <Route path="personal/listings" element={<Listings />}></Route>
 
                   {/* matches anything except the above */}
                   <Route path="*" element={<PageNotFound />} />

@@ -1,6 +1,8 @@
 const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
 const { toIsoString } = require('../services/toIsoString');
+const mongoose = require('mongoose')
+
 module.exports = {
   async createParkingSpace(req, res) {
     try {
@@ -16,9 +18,10 @@ module.exports = {
   async deleteParkingSpace(req, res) {
     try {
       const { id } = req.params;
-      await ParkingSpace.deleteOne(id);
+      await ParkingSpace.deleteOne({_id: mongoose.Types.ObjectId(id)} );
       return res.status(200).send({ success: 'ParkingSpace was deleted' });
     } catch (error) {
+      console.log(error)
       return res.status(500).send({ error: 'Could not remove this ParkingSpace' }); // 'we have an error we don\'t know what to do' })
     }
   },
@@ -33,8 +36,23 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
-        req.query;
+      const {
+        formattedAddress,
+        basePrice,
+        dayPrice,
+        longTermStayPrice,
+        radius,
+        from,
+        to,
+        ownerId,
+      } = req.query;
+      console.log(req.query)
+      if (ownerId) {
+        const allParkingSpaces = await ParkingSpace.find({
+          owner: mongoose.Types.ObjectId(ownerId) 
+        }).sort({ _id: -1 });
+        return res.send(allParkingSpaces);
+      }
       // console.log('REQUEST QUERY', req.query);
       // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
       // deleting object so properties can be filtered in final step
