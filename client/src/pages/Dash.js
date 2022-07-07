@@ -35,6 +35,8 @@ const Dash = () => {
         <br/>
         <Link to="/parking/create"><div className='hover:underline'>/parking/create - Create a new parking space listing</div></Link>
         <Link to="/map"><div className='hover:underline'>/map - View listings with map view</div> </Link>
+        <Link to="/personal"><div className='hover:underline'>/personal - User Dashboard</div> </Link>
+
       </div>
       <Button onClick={() => logout()} fullWidth variant="contained" color="secondary">
         Logout

@@ -9,7 +9,6 @@ const Listings = () => {
   const [ownerParkingSpaces, setOwnerParkingSpaces] = useState([]);
   const {showSnack} = useErrorSnack()
   const location = useLocation();
-  console.log(location);
   const { ownerId } = location.state;
   useEffect(() => {
     getOwnersParkingSpaces(ownerId);
