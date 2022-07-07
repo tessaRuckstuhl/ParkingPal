@@ -46,7 +46,6 @@ module.exports = {
         to,
         ownerId,
       } = req.query;
-      console.log(req.query)
       if (ownerId) {
         const allParkingSpaces = await ParkingSpace.find({
           owner: mongoose.Types.ObjectId(ownerId) 
