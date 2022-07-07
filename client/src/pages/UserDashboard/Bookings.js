@@ -12,7 +12,7 @@ const Bookings = () => {
       </Link>
       <Divider sx={{ mb: 3, mt: 2 }} />
 
-      <div className="text-xl">My listings</div>
+      <div className="text-xl">My bookings</div>
       <div>
         TODO...
       </div>

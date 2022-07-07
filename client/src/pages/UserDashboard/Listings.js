@@ -51,7 +51,7 @@ const Listings = () => {
       </div>
 
       {ownerParkingSpaces.map((parking) => (
-        <div className="border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
+        <div className="border-lighterGray rounded-l shadow-bar p-2 flex justify-between items-center">
           {`${parking.name} in ${parking.formattedAddress}`}{' '}
           <IconButton onClick={() => deleteParkingSpace(parking._id)}>
             <DeleteOutline  />
