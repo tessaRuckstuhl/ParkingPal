@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PSService from '../../services/parkingSpace.service';
 import { ArrowBackIos, DeleteOutline } from '@mui/icons-material';
+import { useErrorSnack } from '../../contexts/ErrorContext';
 
 const Listings = () => {
   const [ownerParkingSpaces, setOwnerParkingSpaces] = useState([]);
+  const {showSnack} = useErrorSnack()
   const location = useLocation();
   console.log(location);
   const { ownerId } = location.state;
@@ -26,8 +28,9 @@ const Listings = () => {
     try {
       const deleted =  await PSService.delete(id);
       getOwnersParkingSpaces()
-      console.log(deleted);
+      showSnack('Parking space deleted.', 'success')
     } catch (error) {
+      showSnack('Something went wrong.', 'error')
       console.log(error);
     }
   };
@@ -39,7 +42,7 @@ const Listings = () => {
       </Link>
       <Divider sx={{ mb: 3, mt: 2 }} />
       <div className="flex justify-between">
-        <div className="m-3 text-xl">My listings</div>
+        <div className="text-xl">My listings</div>
 
         <Link to="/parking/create">
           <Button variant="contained" color="primary">
