@@ -1,21 +1,29 @@
 const express = require('express');
 const user = require('./userRoute');
-const userReview = require('./userReviewRoute');
-const parkingSpaceReview = require('./parkingSpaceReviewRoute');
+const booking = require('./bookingRoute');
+const review = require('./reviewRoute');
+const helperReview = require('./helperReviewRoute')
 const parkingSpace = require('./parkingSpaceRoute')
 const images = require('./imagesRoute')
+
 
 const router = express.Router();
 
 // /api/user
 router.use('/user', user);
-// /api/parkingspace
-router.use('/parkingspace', parkingSpace)
+// /api/booking
+router.use('/booking', booking);
 // /api/images
 router.use('/images', images)
-// /api/user-review
-router.use('/user-review', userReview);
-// /api/parkingspace-review
-router.use('/parkingspace-review', parkingSpaceReview);
+// /api/parkingspace
+router.use('/parkingspace', parkingSpace);
+// /api/images
+router.use('/images', images)
+// /api/review
+router.use('/review', review);
+// /api/review/average
+router.use('/helperReview', helperReview);
+
+
 
 module.exports = router;

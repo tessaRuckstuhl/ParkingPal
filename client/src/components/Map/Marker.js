@@ -11,7 +11,7 @@ const Marker = (options) => {
     url: '/svg/custom-marker.svg',
     scaledSize: new google.maps.Size(64, 64),
   };
-  //  '<div id="content">' + options.name +'</div>'
+  
   const infowindow = new google.maps.InfoWindow({
     content: '<div id="content">' + options.name + '</div>',
   });
