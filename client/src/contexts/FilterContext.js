@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PSService from '../services/parkingSpace.service';
 import RService from '../services/review.service';
+import { useErrorSnack } from './ErrorContext';
 
 const FilterContext = React.createContext();
 
 const FilterContextProvider = (props) => {
   const [filters, setFilters] = useState();
   const [results, setResults] = useState([]);
-
+  const {showSnack} = useErrorSnack()
   const getAllParkingSpaces = async (query) => {
     try {
       const parkingSpaces = await PSService.listAllParkingSpaces(query);
@@ -21,7 +22,7 @@ const FilterContextProvider = (props) => {
       }
       setResults(formattedParkingSpaces);
     } catch (error) {
-      console.log(error);
+      showSnack('An error ocurred.', 'error')
     }
   };
 
