@@ -12,6 +12,28 @@ import UserService from '../../services/user.service';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import StarIcon from '@mui/icons-material/Star';
+import GarageIcon from '@mui/icons-material/Garage';
+import AddRoadIcon from '@mui/icons-material/AddRoad';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import ElectricCarIcon from '@mui/icons-material/ElectricCar';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NoMeetingRoomIcon from '@mui/icons-material/NoMeetingRoom';
+import PinIcon from '@mui/icons-material/Pin';
+import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
+import LooksOneIcon from '@mui/icons-material/LooksOne';
+import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+import Looks3Icon from '@mui/icons-material/Looks3';
+import Looks4Icon from '@mui/icons-material/Looks4';
+import Looks5Icon from '@mui/icons-material/Looks5';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import moment from 'moment';
+import { useErrorSnack } from '../../contexts/ErrorContext';
+import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+
+
+
 
 
 const ReviewForm = () => {
@@ -28,16 +50,18 @@ const ReviewForm = () => {
   const [owner, setOwner] = useState({});
   const [amountParkingSpaceReviews, setAmountParkingSpaceReviews] = useState();
   const [averageParkingSpaceReview, setAverageParkingSpaceReview] = useState();
+  const [parkingSpaceSize, setParkingSpaceSize] = useState();
+  const {showSnack} = useErrorSnack()
+  const navigate = useNavigate();
 
 
-
-  //const navigate = useNavigate();
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: 'center',
+    boxShadow: "none",
     color: theme.palette.text.secondary,
   }));
 
@@ -64,9 +88,8 @@ const ReviewForm = () => {
     event.preventDefault();
 
     const user = parseJwt(localStorage.getItem('token'))
-    
-    const overallRating = ((neighborhoodRating + accessRating + locationRating + communicationRating + accuracyRating + valueRating) / 6).toFixed(2);
 
+    const overallRating = ((neighborhoodRating + accessRating + locationRating + communicationRating + accuracyRating + valueRating) / 6).toFixed(2);
     try {
       const review = {
         description: reviewDescription,
@@ -79,18 +102,22 @@ const ReviewForm = () => {
         accuracyRating: accuracyRating,
         valueRating: valueRating,
         booking: booking,
-        parkingSpace: parkingSpace 
+        parkingSpace: parkingSpace
       };
       const response = await ReviewService.create(review);
+      showSnack('Review created.', 'success')
+      setTimeout(() => {  navigate("/personal"); }, 1500);
 
     } catch (error) {
+      showSnack('Parking space deleted.', 'success')
     }
   };
 
   const setReviewStats = async (id) => {
-    const resultReview = await ReviewService.getReviewStats(id) 
+    const resultReview = await ReviewService.getReviewStats(id)
+    console.log(resultReview.data)
     setAmountParkingSpaceReviews(resultReview.data.amount)
-    setAverageParkingSpaceReview(resultReview.data.averageRating)
+    setAverageParkingSpaceReview(resultReview.data.averageOverallRating)
   }
 
 
@@ -105,41 +132,15 @@ const ReviewForm = () => {
 
 
   useEffect(async () => {
-
-    // const user = parseJwt(localStorage.getItem('token'))
-
-    
-    // const resultParkingSpaceNew = await ParkingSpaceService.listParkingSpace("62bf11471e9e744d16826538") 
-
-
-    // const bookingNew = {
-    //   parkingSpace: resultParkingSpaceNew.data,
-    //   guest: user,
-    //   owner: user,
-    //   terms: "cheap",
-    //   issueDate: new Date('2022-07-03T03:24:00'),
-    //   startDate: new Date('2022-07-04T12:00:00'),
-    //   endDate: new Date('2022-07-05T12:00:00')
-    // }
-
-    // console.log(bookingNew)
-
-    // const response = await BookingService.create(bookingNew)
-    // console.log(response)
-
-
-    
-
-
-
-
     const bookingId = new URL(location.href).searchParams.get('bookingId')
 
     const resultBooking = await BookingService.getBooking(bookingId);
     setBooking(resultBooking.data);
 
-    const resultParkingSpace = await ParkingSpaceService.listParkingSpace(resultBooking.data.parkingSpace) 
+    const resultParkingSpace = await ParkingSpaceService.listParkingSpace(resultBooking.data.parkingSpace)
+    console.log(resultParkingSpace.data)
     setParkingSpace(resultParkingSpace.data)
+    setParkingSpaceSize(resultParkingSpace.data.size)
 
 
     const resultGuest = await UserService.getUser(resultBooking.data.guest)
@@ -168,7 +169,7 @@ const ReviewForm = () => {
           <Divider />
           <br />
           <div className="text-3x2 font-bold mb-1">
-            <p>You booked this parking place provides by {guest.firstName}, from {booking.startDate}  to {booking.endDate} </p>
+            <p>You booked this parking place provides by {guest.firstName}, from {moment(booking.startDate).format('Do MMMM YYYY, h:mm:ss')}  to {moment(booking.endDate).format('Do MMMM YYYY, h:mm:ss')} </p>
             {/* momentan sind die dates als string gespeichert - das wird sich noch ändern --> dann nehme ich die toDateString()  */}
           </div>
 
@@ -200,10 +201,11 @@ const ReviewForm = () => {
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={8}>
+
+
+
               <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
 
-                <b>Information</b>
-                <Divider />
                 <div
                   style={{
                     justifyContent: 'begin',
@@ -211,12 +213,74 @@ const ReviewForm = () => {
 
                   }}
                 >
-                  <br />
-                  <p>- Streetside: {parkingSpace.properties?.parking?.streetside.toString()}</p>
-                  <p>- Garage: {parkingSpace.properties?.parking?.garage.toString()}</p>
-                  <p>- Illuminated: {parkingSpace.properties?.parking?.illuminated.toString()}</p>
-                  <p>- E-Charging: {parkingSpace.properties?.parking?.e_charging.toString()}</p>
-                  <br></br>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <br />
+
+                      {parkingSpace.properties?.parking?.streetside &&
+                        <h2>
+                          <AddRoadIcon color="primary" fontSize="large"></AddRoadIcon> Steetside Parking
+                        </h2>
+                      }
+
+                      {parkingSpace.properties?.parking?.garage &&
+                        <h2>
+                          <GarageIcon color="primary" fontSize="large"></GarageIcon> Entire Garage
+                        </h2>
+                      }
+
+                      {parkingSpace.properties?.parking?.illuminated &&
+                        <h2>
+                          <LightModeIcon color="primary" fontSize="large"></LightModeIcon> Fully Illuminated
+                        </h2>
+                      }
+                      {parkingSpace.properties?.parking?.illuminated &&
+                        <h2>
+                          <ElectricCarIcon color="primary" fontSize="large"></ElectricCarIcon> E-Charging
+                        </h2>
+                      }
+                      <br></br>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <br />
+                      <h2>
+                        {
+                          {
+                            '1': <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
+                            '2': <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
+                            '3': <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
+                            '4': <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
+                            '5': <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
+                          }[parkingSpaceSize]
+                        } Size
+                      </h2>
+
+                      {parkingSpace.properties?.cancellation_and_access?.free_24h_before &&
+                        <h2>
+                          <NavigateBeforeIcon color="primary" fontSize="large"></NavigateBeforeIcon> 24 h before free
+                        </h2>
+                      }
+                      {parkingSpace.properties?.cancellation_and_access?.no_meetup &&
+                        <h2>
+                          <NoMeetingRoomIcon color="primary" fontSize="large"></NoMeetingRoomIcon> No meetup required
+                        </h2>
+                      }
+                      {parkingSpace.properties?.cancellation_and_access?.pin &&
+                        <h2>
+                          <PinIcon color="primary" fontSize="large"></PinIcon> Pin Access
+                        </h2>
+                      }
+                      {parkingSpace.properties?.cancellation_and_access?.security_gate &&
+                        <h2>
+                          <DoorSlidingIcon color="primary" fontSize="large"></DoorSlidingIcon> Security gate for access
+                        </h2>
+                      }
+
+                      <br></br>
+                    </Grid>
+                  </Grid>
+
 
                   <br></br>
                   <b>Description</b>
@@ -229,8 +293,8 @@ const ReviewForm = () => {
             <Grid item xs={4}>
               <Item style={{ height: 300 }}>
 
-                <div className=" font-regular  text-s">
-
+                <div className=" font-regular  text-s text-left">
+                  <AccountCircleIcon color="primary" fontSize="large"></AccountCircleIcon>
                   <a>Provided by {owner.firstName}</a>
 
                   <br></br>
@@ -396,13 +460,16 @@ const ReviewForm = () => {
           <br />
           <br />
           <br />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Submit Review
-          </Button>
+          
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!reviewDescription}>
+              Submit Review
+            </Button>
+          
+
         </form>
 
 

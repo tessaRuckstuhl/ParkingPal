@@ -35,7 +35,7 @@ export function ErrorContextProvider({ children }) {
         open={snack.open}
         autoHideDuration={4000}
         onClose={handleClose}
-      ><Alert severity={snack.severity}>{snack.message}</Alert></Snackbar>
+      ><Alert severity={snack.severity || "success"}>{snack.message}</Alert></Snackbar>
     </ErrorContext.Provider>
   );
 }
