@@ -134,7 +134,7 @@ const ReviewForm = () => {
 
 
     const bookingId = new URL(location.href).searchParams.get('bookingId')
-
+    console.log(bookingId)
     const resultBooking = await BookingService.getBooking(bookingId);
     setBooking(resultBooking.data);
 

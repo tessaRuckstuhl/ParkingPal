@@ -14,8 +14,8 @@ const BService = {
     getBooking(id) {
         return axios.get(`${process.env.REACT_APP_API_URL}booking/${id}`);
     },
-    getAllBooking() {
-        return axios.get(`${process.env.REACT_APP_API_URL}booking`);
+    getAllBooking(params) {
+        return axios.get(`${process.env.REACT_APP_API_URL}booking`,{params: params});
     }
 };
 

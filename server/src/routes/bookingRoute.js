@@ -9,6 +9,9 @@ router.post('/', bookingController.createBooking);
 // api/booking/:id
 router.get('/:id',bookingController.getBookingById);
 
+// api/booking
+router.get('/',bookingController.listBookings);
+
 // api/booking/:id
 router.delete('/:id',bookingController.deleteBooking);
 
