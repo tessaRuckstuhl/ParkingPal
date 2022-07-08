@@ -20,7 +20,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    if(location.pathname == "/map"){
+    if(location.pathname == "/"){
       setShowFilters(true)
     } else {
       setShowFilters(false)
@@ -37,6 +37,12 @@ const Navbar = () => {
         {showFilters && <Bar/>}
         {/* Language, Profile, .. */}
       <div className="flex space-x-2 items-center">
+      <Link to="/login">
+          <div className="text-xs">LOGIN</div>
+        </Link>
+        <Link to="/dashboard">
+          <div className="text-xs">DASH/LOGOUT</div>
+        </Link>
         <Link to="404">
           <div className="text-xs">Become a host</div>
         </Link>

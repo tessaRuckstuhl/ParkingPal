@@ -90,7 +90,7 @@ const Listing = (props) => {
                 <Rating
                   sx={{ color: '#6F11F2' }}
                   size="small"
-                  defaultValue={listing.reviewStats.averageRating}
+                  defaultValue={listing.reviewStats.averageOverallRating}
                   readOnly
                   precision={0.1}
                 />
