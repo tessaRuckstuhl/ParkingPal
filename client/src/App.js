@@ -38,7 +38,7 @@ const App = () => {
                 <Default>
                   {/* Routes */}
                   <Routes>
-                    <Route path="/" element={<Login />}></Route>
+                    <Route path="/login" element={<Login />}></Route>
                     <Route path="parking/create" element={<CreateParkingSpace />}></Route>
                     <Route path="all" element={<ListViewParkingSpaces />}></Route>
                     <Route path="signup" element={<Signup />}></Route>
@@ -51,7 +51,7 @@ const App = () => {
                         </AuthComponent>
                       }
                     ></Route>
-                    <Route path="map" element={<Results />}></Route>
+                    <Route path="/" element={<Results />}></Route>
                     {/* User Dashboard */}
                     <Route path="personal" element={<Dashboard />}></Route>
                     <Route path="personal/bookings" element={<Bookings />}></Route>

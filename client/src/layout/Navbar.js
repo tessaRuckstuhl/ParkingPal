@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <div className="relative flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
-        <Link to="dashboard">
+        <Link to="/">
           <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
         {/* Filter and Search */}

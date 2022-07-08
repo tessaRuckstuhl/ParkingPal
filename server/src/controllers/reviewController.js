@@ -73,7 +73,7 @@ module.exports = {
 
             sum /= reviews.length
             return res.send({
-                averageRating: sum,
+                averageRating: Math.round(sum*100)/100,
                 amount: reviews.length
             });
 
