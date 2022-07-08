@@ -66,14 +66,33 @@ module.exports = {
                     amount: reviews.length
                 });
             }
-            let sum = 0
+            let sumOverallRating = 0
+            let sumNeighborhoodRating = 0
+            let sumAccessRating = 0
+            let sumLocationRating = 0
+            let sumCommunicationRating = 0
+            let sumAccuracyRating = 0
+            let sumValueRating = 0
+
             reviews.map(review => {
-                sum += review.overallRating
+                sumOverallRating += review.overallRating
+                sumNeighborhoodRating += review.neighborhoodRating
+                sumAccessRating += review.accessRating
+                sumLocationRating += review.locationRating
+                sumCommunicationRating += review.communicationRating
+                sumAccuracyRating += review.accuracyRating
+                sumValueRating += review.valueRating
             })
 
-            sum /= reviews.length
+            
             return res.send({
-                averageRating: sum,
+                averageOverallRating: (sumOverallRating/reviews.length).toFixed(2),
+                averageNeighborhoodRating: (sumNeighborhoodRating/reviews.length).toFixed(2),
+                averageAccessRating: (sumAccessRating/reviews.length).toFixed(2),
+                averageLocationRating: (sumLocationRating/reviews.length).toFixed(2),
+                averageCommunicationRating: (sumCommunicationRating/reviews.length).toFixed(2),
+                averageAccuracyRating: (sumAccuracyRating/reviews.length).toFixed(2),
+                averageValueRating: (sumValueRating/reviews.length).toFixed(2),
                 amount: reviews.length
             });
 
