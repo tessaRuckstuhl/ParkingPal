@@ -9,12 +9,17 @@ function jwtSignUser(user) {
 }
 
 module.exports = {
-  findByID: (req, res) => {
-    const { user } = req;
-    if (!user) {
-      return res.status(400).send({ error: 'server is having an issue please try again later' });
+  async findByID (req, res) {
+    const { id } = req.params;
+    try {
+      const user = await User.findById(id)
+      const userObjJson = user.toJSON();
+      return res.send({
+       ...userObjJson,
+      });
+    } catch (error) {
+      return res.status(400).send({ error: 'user does not exist or something else is wrong' });
     }
-    return res.json(user);
   },
 
   async deleteById(req, res) {

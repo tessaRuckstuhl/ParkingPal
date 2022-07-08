@@ -1,6 +1,6 @@
 import React from 'react';
 import { FavoriteBorderOutlined, StarBorder, LocationOn } from '@mui/icons-material';
-import { Divider } from '@mui/material';
+import { Divider, Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const Listing = (props) => {
@@ -15,7 +15,7 @@ const Listing = (props) => {
         if (properties[key]) {
           let subStr = key.replaceAll('_', ' ');
           subStr = subStr.charAt(0).toUpperCase() + subStr.slice(1);
-          if (index == 0) {
+          if (str == '') {
             str += subStr;
           } else {
             str += ' · ' + subStr;
@@ -32,7 +32,6 @@ const Listing = (props) => {
     }
   };
 
-  buildFormattedPropertiesString(listing.properties?.parking);
   return (
     <div
       id={listing._id}
@@ -85,11 +84,19 @@ const Listing = (props) => {
         {/* Review */}
         <div className="flex justify-between">
           <div className="flex space-x-1 ">
-            <span>5.0</span>
-            <span>
-              <StarBorder sx={{ fontSize: '1rem', color: '#F59E0B' }} />
-            </span>
-            <span>(318 reviews) - TODO</span>
+            {listing.reviewStats.amount > 0 && <span>{listing.reviewStats.averageRating}</span>}
+            {listing.reviewStats.amount > 0 && (
+              <span>
+                <Rating
+                  sx={{ color: '#6F11F2' }}
+                  size="small"
+                  defaultValue={listing.reviewStats.averageOverallRating}
+                  readOnly
+                  precision={0.1}
+                />
+              </span>
+            )}
+            <span>({listing.reviewStats.amount} reviews)</span>
           </div>
           <div>
             <span className="font-bold">{listing.basePrice}€ </span>
