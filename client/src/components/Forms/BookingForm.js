@@ -16,11 +16,12 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import { fromUnixTime } from 'date-fns';
+import { fromUnixTime, setHours } from 'date-fns';
 import Map from '../Map/Map';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Marker from '../Map/Marker';
 import MapWrapper from '../Map/MapWrapper';
+import { setDayWithOptions } from 'date-fns/fp';
 
 
 
@@ -29,8 +30,8 @@ import MapWrapper from '../Map/MapWrapper';
 const BookingForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [locationValue, setLocation] = useState('');
-  const [basePrice, setBasePrice] = useState('1');
-  const [dayPrice,setDayPrice] = useState('1');
+  const [basePrice, setBasePrice] = useState('2');
+  const [dayPrice,setDayPrice] = useState('10');
   const [startTime,setStartTime] = useState('');
   const [endTime,setEndTime] = useState('');
   const [address,setParkingAddress] = useState('');
@@ -46,11 +47,13 @@ const BookingForm = () => {
   const [acr, setACR] = useState(4);
   const [lr, setLR] = useState(5);
   const [vr, setVR] = useState(1);
-  const [fromTime,setFromTime] = useState ('');
-  const [untilTime,setUntilTime] = useState ('');
+  const [fromTime,setFromTime] = useState (new Date(1));
+  const [untilTime,setUntilTime] = useState (new Date(1));
   const [timeDif,setTimeDif] = useState('');
-  const [totalTime,setTotalTime] = useState('');
-  const [totalPrice,setTotalPrice] = useState('');
+  const [totalTime,setTotalTime] = useState(0);
+  const [totalPrice,setTotalPrice] = useState(2);
+  const [days,setDays] = useState(0);
+  const [hours,setHours] = useState(0);
   
   
   const navigate = useNavigate();
@@ -127,10 +130,14 @@ const BookingForm = () => {
     const parkingResult = await ParkingSpaceService.listParkingSpace(bookingId)
     //const reviewResult = await ReviewService.getReview(bookingId)
     //const reviewResultlist = await ReviewService.getAllReviews()
-    const tdif= new Date(timeDif).toISOString().substr(11, 8);
-    console.log(Math.abs(timeDif))
-    console.log("timediff: " + tdif)
+    
+    console.log("unformatted time dif: "+timeDif)
+    
     console.log("totalTime: "+ totalTime)
+    console.log("fromTimeEx: " + fromTime)
+    console.log("fromTimeEx: " + fromTime)
+    console.log("day:Price: " + dayPrice)
+    console.log("hourPrice:" + basePrice)
     
     
 
@@ -152,6 +159,13 @@ const BookingForm = () => {
     // console.log (review.rating)
     console.log("DayPrice:")
     console.log(parkingResult.data.dayPrice)
+    console.log("hourPrice:")
+    console.log(parkingResult.data.basePrice)
+    console.log("Days :")
+    console.log(days)
+    console.log("this is hours: " + hours)
+    console.log ("total day price: "+days*dayPrice)
+    console.log ("total base price: "+hours*basePrice)
 
 
     setParkingAddress(parkingResult.data.formattedAddress)
@@ -161,14 +175,14 @@ const BookingForm = () => {
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
-    setReviewRating(reviewResult.data.rating)
-    setReviewList(reviewResultlist.data)
-    setNR(reviewResultlist.data.neighborhoodRating)
-    setCR(reviewResultlist.data.communicationRating)
-    setAR(reviewResultlist.data.accessRating)
-    setACR(reviewResultlist.data.accuracyRating)
-    setLR(reviewResultlist.data.locationRating)
-    setVR(reviewResultlist.data.valueRating)
+    // setReviewRating(reviewResult.data.rating)
+    // setReviewList(reviewResultlist.data)
+    // setNR(reviewResultlist.data.neighborhoodRating)
+    // setCR(reviewResultlist.data.communicationRating)
+    // setAR(reviewResultlist.data.accessRating)
+    // setACR(reviewResultlist.data.accuracyRating)
+    // setLR(reviewResultlist.data.locationRating)
+    // setVR(reviewResultlist.data.valueRating)
     
   
   }, []);
@@ -271,7 +285,7 @@ const BookingForm = () => {
                     Total Time
                     </Grid>
                     <Grid item xs={6}>
-                      {totalTime}
+                      {days} day(s) and {hours} hour(s)
                     </Grid>
                   </Grid>
                 </div>
@@ -281,7 +295,7 @@ const BookingForm = () => {
                     Total Price
                     </Grid>
                     <Grid item xs={6}>
-                      {totalPrice.toString()}
+                      {totalPrice} €
                     </Grid>
                   </Grid>
                 </div>
@@ -330,12 +344,10 @@ const BookingForm = () => {
                     label="From"
                     disablePast = {true} 
                     value={startValue}
-                    onChange={(start) => {
+                    onChange={(start) => {  
                       setStartValue(start);
                       setFromTime(start);
-                      setTimeDif(fromTime-end)
-                      setTotalTime ((new Date(timeDif)).toISOString().substr(11, 8))
-                      setTotalPrice((parseFloat(Math.abs(timeDif))/86400) > 0 ? parseInt((parseFloat(Math.abs(timeDif))/86400))*{dayPrice}+{basePrice}*(parseInt(Math.abs(timeDif))- 86400 * parseInt((parseFloat(Math.abs(timeDif))/86400))): {basePrice}*(parseInt(Math.abs(timeDif))))
+                      
                     }}
                   />
                 </LocalizationProvider>
@@ -351,14 +363,15 @@ const BookingForm = () => {
                     label="Until"
                     value={endValue}
                     disablePast = {true}
-                    minDate = {fromTime}
-                    minTime = {fromTime}
+                    minDateTime = {fromTime}
                     onChange={(end) => {
                       setEndValue(end);
                       setUntilTime(end)
-                      setTimeDif(fromTime-end)
-                      setTotalTime ((new Date(timeDif)).toISOString().substr(11, 8))
-                      setTotalPrice((parseFloat(Math.abs(timeDif))/86400) > 0 ? parseInt((parseFloat(Math.abs(timeDif))/86400))*{dayPrice}+{basePrice}*(parseInt(Math.abs(timeDif))- 86400 * parseInt((parseFloat(Math.abs(timeDif))/86400))): {basePrice}*(parseInt(Math.abs(timeDif))))
+                      setTimeDif(end-fromTime)
+                      setDays ((timeDif/(1000*86400)) > 0 ? parseInt((timeDif/(1000*86400))) : 0 )
+                      setHours(days > 0 ? ((parseInt(timeDif/(1000*3600)) - days *24 )) : parseInt(timeDif/(1000*3600)))
+                      
+                      setTotalPrice((days*dayPrice + hours*basePrice))
                     }}
                   />
                 </LocalizationProvider> 
