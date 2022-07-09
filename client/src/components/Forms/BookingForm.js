@@ -29,11 +29,10 @@ import { setDayWithOptions } from 'date-fns/fp';
 
 const BookingForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [locationValue, setLocation] = useState('');
   const [basePrice, setBasePrice] = useState('2');
   const [dayPrice,setDayPrice] = useState('10');
-  const [startTime,setStartTime] = useState('');
-  const [endTime,setEndTime] = useState('');
+  const [todayDate,setTodayDate] = useState('');
+  const [parkingProp, setParkingProp] = useState('');
   const [address,setParkingAddress] = useState('');
   const [pics,setParkingPics1] = useState('');
   const [pics2,setParkingPics2] = useState('');
@@ -73,46 +72,24 @@ const BookingForm = () => {
 
   const ary = ["hi ","this ","is a","Review showcase","dont show me"];
   const len = ary.length  
-
-  const handleChange = (event) => {
-    switch (event.target.name) {
-      case 'parkingspacename':
-        setParkingSpaceName(event.target.value);
-        break;
-      case 'locationValue':
-        setLocation(event.target.value);
-        break;
-      case 'size':
-        setSize(event.target.value);
-        break;
-      case 'basePrice':
-        setBasePrice(event.target.value);
-        break;
-      case 'setStartTime':
-        setStartTime(event.target.value);
-        break;
-      case 'setEndTime':
-        setEndTime(event.target.value);
-        break;
-      default:
-        break;
-    }
-  };
+  const today = new Date()
 
 
-  // erstellen der booking
-  // booking noch anpassen an das was im Backend für booking erwartet wird
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const user = parseJwt(localStorage.getItem('token'))
       const booking = {
-        name: parkingSpaceName,
-        location: locationValue,
-        basePrice: basePrice,
-        timeStart: startTime,
-        timeEnd: endTime, 
-        owner: user
+        parkingSpace: parkingSpaceName,
+        // guest ist der, der ein Parkplatz bucht
+        guest: user, 
+        // owner ist der Besitzer den ich über Parkplatz ID hole
+        owner: owner,
+        // Was ist mit terms: gemeint?
+        issueDate: todayDate,
+        startDate: startValue,
+        endDate: endValue, 
+        price: totalPrice,
       };
       await BookingService.create(booking);
     } catch (error) {
@@ -123,7 +100,6 @@ const BookingForm = () => {
 
 
 
-  //im useEffect infos aus backend holen
   useEffect(async () => {
     const bookingId = new URL(location.href).searchParams.get('bookingId')
     console.log(bookingId)
@@ -166,8 +142,9 @@ const BookingForm = () => {
     console.log("this is hours: " + hours)
     console.log ("total day price: "+days*dayPrice)
     console.log ("total base price: "+hours*basePrice)
-
-
+    setTodayDate(today)
+    setParkingSpaceName(parkingResult.data.name)
+    setParkingProp(parkingResult.data.properties.parking)
     setParkingAddress(parkingResult.data.formattedAddress)
     setParkingPics1(parkingResult.data.images[0])
     setParkingPics2(parkingResult.data.images[1])
@@ -200,12 +177,26 @@ const BookingForm = () => {
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              {/* <Item style={{ height: 300 }}>Photo Placeholder</Item> */}
-              <Item style={{ height: 300 }}>{pics}</Item>
+              {/* <Item style={{ height: 300 }}>{pics}</Item> */}
+              <Item style={{ height: 300 }}>
+                <img
+                  className="rounded object-contain"
+                  src={`http://localhost:3001/api/images/${pics}`}
+                  width={200}
+                  height={300}
+                ></img>
+              </Item>
             </Grid>
             <Grid item xs={6}>
-              <Item style={{ height: 300 }}>{pics2}</Item>
-                {/* <Item style={{ height: 300 }}>Photo Placeholder</Item> */}
+              {/* <Item style={{ height: 300 }}>{pics2}</Item> */}
+              <Item style={{ height: 300 }}>
+                <img
+                  className="rounded object-contain"
+                  src={`http://localhost:3001/api/images/${pics2}`}
+                  width={200}
+                  height={300}
+                ></img>
+              </Item>
             </Grid>
           </Grid>
           <br></br>
@@ -222,9 +213,10 @@ const BookingForm = () => {
                   }}
                 >
                   <br></br>
-                  <p>- bullet 1</p>
-                  <p>- bullet 2</p>
-                  <p>- bullet 3</p>
+                  <p>- Streetside: {parkingProp.streetside.toString()}</p>
+                  <p>- Garage: {parkingProp.garage.toString()}</p>
+                  <p>- Illuminated: {parkingProp.illuminated.toString()}</p>
+                  <p>- E-Charging: {parkingProp.e_charging.toString()}</p>
                   <br></br>
                   <Divider />
                   <br></br>
