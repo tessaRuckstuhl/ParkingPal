@@ -167,7 +167,7 @@ const About = () => {
                             <b>Studies:</b> &emsp; M.Sc. Computer Science<br />
 
                             <br />
-                            "eat code sleep repeat"
+                            "Coding is my warmup - debugging is my cardio"
                             <br />
                             <br />
 
