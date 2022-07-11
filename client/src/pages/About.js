@@ -1,7 +1,7 @@
 import { Divider, Grid, Paper } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { styled } from '@mui/material/styles';
-
+import Image from 'mui-image'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 
@@ -28,15 +28,24 @@ const About = () => {
                 <br />
 
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
-                            <br />
-                            <b>Image Placeholder</b>
+                    <Grid item xs={4} >
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
+                            <Image
+                                src={require('../images/markus.png')} 
+                                height="100%"
+                                width="100%"
+                                fit="cover"
+                                duration={
+                                    3000
+                                }
+                                shift={null}
+                                distance="100px"
+                            />
 
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
 
                             <br />
                             <b>Markus Gruber</b>
@@ -53,15 +62,24 @@ const About = () => {
                 </Grid>
                 <br />
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
-                            <br />
-                            <b>Image Placeholder</b>
+                    <Grid item xs={4}>
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
+                            <Image
+                                src={require('../images/jakob.png')} 
+                                height="100%"
+                                width="100%"
+                                fit="cover"
+                                duration={
+                                    3000
+                                }
+                                shift={null}
+                                distance="100px"
+                            />
 
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
 
                             <br />
                             <b>Jakob Kempter</b>
@@ -78,15 +96,24 @@ const About = () => {
                 </Grid>
                 <br />
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
-                            <br />
-                            <b>Image Placeholder</b>
+                    <Grid item xs={4}>
+                        <Item style={{  justifyContent: 'begin', textAlign: 'justify' }}>
+                            <Image
+                                src={require('../images/tessa.png')}
+                                height="100%"
+                                width="100%"
+                                fit="cover"
+                                duration={
+                                    3000
+                                }
+                                shift={null}
+                                distance="100px"
+                            />
 
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
 
                             <br />
                             <b>Alexander Karpf</b>
@@ -103,15 +130,24 @@ const About = () => {
                 </Grid>
                 <br />
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
-                            <br />
-                            <b>Image Placeholder</b>
+                    <Grid item xs={4}>
+                        <Item style={{ justifyContent: 'begin', textAlign: 'justify' }}>
+                            <Image
+                                src={require('../images/tessa.png')}
+                                height="100%"
+                                width="100%"
+                                fit="cover"
+                                duration={
+                                    3000
+                                }
+                                shift={null}
+                                distance="100px"
+                            />
 
                         </Item>
                     </Grid>
                     <Grid item xs={6}>
-                        <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
+                        <Item style={{  justifyContent: 'begin', textAlign: 'justify' }}>
 
                             <br />
                             <b>Tessa Ruckstuhl</b>
