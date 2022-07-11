@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose')
 const { Review } = require('../models');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
             return res.status(400).send({ error: 'server is having an issue please try again later' });
         }
         return res.json(review);
-    }, 
+    },
     async getReviewList(req, res) {
         try {
             const allReviews = await Review.find();
@@ -53,6 +54,55 @@ module.exports = {
             return res.status(400).send({ error: 'something is wrong' });
         }
     },
+    async getReviewStats(req, res) {
+        const { id } = req.params
+        try {
+            // get all reviews with correct parkingSpace Id
+            const reviews = await Review.find({ parkingSpace: mongoose.Types.ObjectId(id) });
+
+            if (reviews.length == 0) {
+                return res.send({
+                    averageRating: "",
+                    amount: reviews.length
+                });
+            }
+            let sumOverallRating = 0
+            let sumNeighborhoodRating = 0
+            let sumAccessRating = 0
+            let sumLocationRating = 0
+            let sumCommunicationRating = 0
+            let sumAccuracyRating = 0
+            let sumValueRating = 0
+
+            reviews.map(review => {
+                sumOverallRating += review.overallRating
+                sumNeighborhoodRating += review.neighborhoodRating
+                sumAccessRating += review.accessRating
+                sumLocationRating += review.locationRating
+                sumCommunicationRating += review.communicationRating
+                sumAccuracyRating += review.accuracyRating
+                sumValueRating += review.valueRating
+            })
+
+            
+            return res.send({
+                averageOverallRating: (sumOverallRating/reviews.length).toFixed(2),
+                averageNeighborhoodRating: (sumNeighborhoodRating/reviews.length).toFixed(2),
+                averageAccessRating: (sumAccessRating/reviews.length).toFixed(2),
+                averageLocationRating: (sumLocationRating/reviews.length).toFixed(2),
+                averageCommunicationRating: (sumCommunicationRating/reviews.length).toFixed(2),
+                averageAccuracyRating: (sumAccuracyRating/reviews.length).toFixed(2),
+                averageValueRating: (sumValueRating/reviews.length).toFixed(2),
+                amount: reviews.length
+            });
+
+        } catch (error) {
+            console.log(error)
+            return res.status(400).send({ error: 'something is wrong' });
+
+        }
+
+    }
 };
 
 

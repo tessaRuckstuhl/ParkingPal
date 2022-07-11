@@ -51,7 +51,7 @@ const LoginForm = () => {
       const { token } = response.data;
       localStorage.setItem('token', token);
       setJwt(token);
-      navigate('/dashboard');
+      navigate('/personal');
     } catch (error) {
       console.log(error)
       alertToggle(error?.response?.data?.error || error.message);
@@ -60,7 +60,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (jwt || jwt !== '') {
-      return navigate('/dashboard');
+      return navigate('/personal');
     }
   }, [jwt, navigate]);
   return (

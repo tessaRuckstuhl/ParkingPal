@@ -2,6 +2,7 @@ const express = require('express');
 const user = require('./userRoute');
 const booking = require('./bookingRoute');
 const review = require('./reviewRoute');
+const helperReview = require('./helperReviewRoute')
 const parkingSpace = require('./parkingSpaceRoute')
 const images = require('./imagesRoute')
 
@@ -20,5 +21,9 @@ router.use('/parkingspace', parkingSpace);
 router.use('/images', images)
 // /api/review
 router.use('/review', review);
+// /api/review/average
+router.use('/helperReview', helperReview);
+
+
 
 module.exports = router;

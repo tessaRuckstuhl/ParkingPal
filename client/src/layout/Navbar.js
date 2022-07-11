@@ -10,17 +10,17 @@ import { useLocation } from 'react-router-dom';
 const Navbar = () => {
   const location = useLocation();
   const [showFilters, setShowFilters] = useState(false)
-  const links = 
-  [{ name: "HOME", link: "/dashboard" },
-  { name: "Login", link: "/login" },
-  { name: "About", link: "/about" },
-  { name: "Review", link: "/parking/review" },
-  { name: "Create Parking", link: "/parking/create" },
-  ];
+   const links = []
+  // [{ name: "HOME", link: "/dashboard" },
+  // { name: "Login", link: "/login" },
+  // { name: "About", link: "/about" },
+  // { name: "Review", link: "/parking/review" },
+  // { name: "Create Parking", link: "/parking/create" },
+  // ];
 
 
   useEffect(() => {
-    if(location.pathname == "/map"){
+    if(location.pathname == "/"){
       setShowFilters(true)
     } else {
       setShowFilters(false)
@@ -30,13 +30,19 @@ const Navbar = () => {
 
   return (
     <div className="relative flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
-        <Link to="dashboard">
+        <Link to="/">
           <img src="/parkingpal-logo.png" width={30} height={30} alt="Parkingpal logo"></img>
         </Link>
         {/* Filter and Search */}
         {showFilters && <Bar/>}
         {/* Language, Profile, .. */}
-      <div className="flex space-x-4 items-center">
+      <div className="flex space-x-2 items-center">
+      <Link to="/login">
+          <div className="text-xs">LOGIN</div>
+        </Link>
+        <Link to="/dashboard">
+          <div className="text-xs">DASH/LOGOUT</div>
+        </Link>
         <Link to="404">
           <div className="text-xs">Become a host</div>
         </Link>

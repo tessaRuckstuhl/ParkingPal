@@ -21,6 +21,10 @@ const ReviewSchema = new Schema({
     description: {
         type: String,
     },
+    overallRating: {
+        type: Number,
+        required: true,
+    },
     neighborhoodRating: {
         type: Number,
     },

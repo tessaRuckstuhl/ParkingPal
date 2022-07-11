@@ -1,6 +1,8 @@
 const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
 const { toIsoString } = require('../services/toIsoString');
+const mongoose = require('mongoose')
+
 module.exports = {
   async createParkingSpace(req, res) {
     try {
@@ -16,9 +18,10 @@ module.exports = {
   async deleteParkingSpace(req, res) {
     try {
       const { id } = req.params;
-      await ParkingSpace.deleteOne(id);
+      await ParkingSpace.deleteOne({_id: mongoose.Types.ObjectId(id)} );
       return res.status(200).send({ success: 'ParkingSpace was deleted' });
     } catch (error) {
+      console.log(error)
       return res.status(500).send({ error: 'Could not remove this ParkingSpace' }); // 'we have an error we don\'t know what to do' })
     }
   },
@@ -33,23 +36,33 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
-        req.query;
+      const {
+        formattedAddress,
+        basePrice,
+        dayPrice,
+        longTermStayPrice,
+        radius,
+        from,
+        to,
+        ownerId,
+      } = req.query;
+      if (ownerId) {
+        const allParkingSpaces = await ParkingSpace.find({
+          owner: mongoose.Types.ObjectId(ownerId) 
+        }).sort({ _id: -1 });
+        return res.send(allParkingSpaces);
+      }
       // console.log('REQUEST QUERY', req.query);
       // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
       // deleting object so properties can be filtered in final step
       const query = Object.assign({}, req.query);
-      // console.log('FILTER CONFIG FROM USER: ', req.query);
-      // build query from filter configurations...
       let mongoQuery = {};
-
       // build address + radius filter
       if (formattedAddress) {
         const locationGeoCoded = await getLatLngByString(formattedAddress);
         if (locationGeoCoded[0]) {
           const lat = locationGeoCoded[0].geometry.location.lat;
           const lng = locationGeoCoded[0].geometry.location.lng;
-
           mongoQuery.location = {
             $near: {
               $geometry: { type: 'Point', coordinates: [lat, lng] },
@@ -66,7 +79,6 @@ module.exports = {
       if (basePrice) {
         mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
         delete query.basePrice;
-        console.log(query, '*** passed one:', req.query);
       }
       if (dayPrice) {
         mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
@@ -98,17 +110,15 @@ module.exports = {
       }
       // build parking space features filter
       Object.keys(query).map((key, index) => {
-        // convert to boolean, omit false values...
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
         }
       });
-      // console.log('MODIFIED QUERY', query);
-
       // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
+      // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
-      });
+      }).sort({ _id: -1 });
       return res.send(allParkingSpaces);
     } catch (error) {
       console.log(error);

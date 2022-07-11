@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import {
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -14,6 +15,7 @@ import MoreFilters from './MoreFilters';
 import { FilterContext } from '../../contexts/FilterContext';
 
 const Bar = () => {
+  const [loading, setLoading] = useState(false);
   const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
   function MyFormHelperText(props) {
     const { focused } = useFormControl() || {};
@@ -31,25 +33,25 @@ const Bar = () => {
       </FormHelperText>
     );
   }
-  const today = moment(new Date()).format('YYYY-MM-DDTkk:mm');
 
   const handleFilterChange = (e) => {
     console.log('e.target.name', e.target.name, 'e.target.value', e.target.value);
-
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
   const searchWithFilters = async () => {
-    getAllParkingSpaces(filters);
+    setLoading(true);
+    await getAllParkingSpaces(filters);
+    setLoading(false);
   };
   return (
-    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px]">
+    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px]  z-10">
       {/* Search Location */}
       <FormControl className="w-[60%]">
         <InputBase
           sx={{
             flex: 1,
-            ml: '10px',
+            ml: '8px',
             fontSize: '0.75rem',
             fontWeight: 'bold',
             input: { padding: 0 },
@@ -97,7 +99,7 @@ const Bar = () => {
           onChange={handleFilterChange}
           value={filters?.from || ''}
           sx={{
-            ml: '10px',
+            ml: '8px',
             flex: 1,
             fontSize: '0.75rem',
             fontWeight: 'bold',
@@ -131,20 +133,25 @@ const Bar = () => {
       {/* More filters */}
       <MoreFilters handleFilterChange={handleFilterChange} />
       {/* Submit Filter/Search */}
-      <IconButton
-        type="submit"
-        size="small"
-        sx={{
-          backgroundColor: '#6F11F2',
-          ml: '10px',
-          '&:hover, &.Mui-focusVisible, &:active': {
-            backgroundColor: '#6F11F2',
-          },
-        }}
-        onClick={searchWithFilters}
-      >
-        <Search sx={{ color: 'white' }} fontSize="inherit" />
-      </IconButton>
+      <div className="ml-2 w-[30px] h-[30px]">
+        {!loading ? (
+          <IconButton
+            type="submit"
+            size="small"
+            sx={{
+              backgroundColor: '#6F11F2',
+              '&:hover, &.Mui-focusVisible, &:active': {
+                backgroundColor: '#6F11F2',
+              },
+            }}
+            onClick={searchWithFilters}
+          >
+            <Search sx={{ color: 'white' }} fontSize="inherit" />
+          </IconButton>
+        ) : (
+          <CircularProgress size={25} sx={{ display: 'flex' }} />
+        )}
+      </div>
     </div>
   );
 };

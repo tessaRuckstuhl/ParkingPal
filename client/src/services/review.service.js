@@ -16,6 +16,9 @@ const RService = {
     },
     getAllReviews() {
         return axios.get(`${process.env.REACT_APP_API_URL}review`);
+    },
+    getReviewStats(id) {
+        return axios.get(`${process.env.REACT_APP_API_URL}helperReview/${id}`);
     }
 };
 
