@@ -1,9 +1,8 @@
-import { Divider, Grid, Paper } from '@mui/material';
+import { Divider, Grid, Paper, Link } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { styled } from '@mui/material/styles';
 import Image from 'mui-image'
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 import React from 'react';
 import { Container } from '@mui/system';
@@ -56,6 +55,11 @@ const About = () => {
 
                             <br />
                             "Full Stack Developer"
+                            <br />
+                            <br />
+
+                            <Link target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/markus-gruber-0b2b41bb/"><LinkedInIcon href="www.google.de" color="primary" fontSize="small"></LinkedInIcon></Link>
+                            
 
                         </Item>
                     </Grid>
@@ -89,7 +93,13 @@ const About = () => {
                             <b>Studies:</b> &emsp; M.Sc. Information Systems<br />
 
                             <br />
-                            "Funny guy"
+                            "My software never has bugs. It just develops random features."
+                            <br />
+                            <br />
+
+                            <Link target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/jakob-kempter-45b543182/"><LinkedInIcon href="www.google.de" color="primary" fontSize="small"></LinkedInIcon></Link>
+                            
+
 
                         </Item>
                     </Grid>
@@ -157,7 +167,13 @@ const About = () => {
                             <b>Studies:</b> &emsp; M.Sc. Computer Science<br />
 
                             <br />
-                            "Berghain or I stay at home"
+                            "eat code sleep repeat"
+                            <br />
+                            <br />
+
+                            <Link target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/tessa-ruckstuhl-3571661a1/"><LinkedInIcon href="www.google.de" color="primary" fontSize="small"></LinkedInIcon></Link>
+                            
+
 
                         </Item>
                     </Grid>
