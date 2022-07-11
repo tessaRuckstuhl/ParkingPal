@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 const Marker = (options) => {
   const [marker, setMarker] = useState();
   const regIcon = {
-    url: '/svg/custom-marker.svg',
+    url: options.selected ? '/svg/custom-marker.svg' :'/svg/custom-marker.svg',
     scaledSize: new google.maps.Size(48, 48),
+
   };
 
   const largeIcon = {
@@ -17,22 +18,26 @@ const Marker = (options) => {
   });
 
   const onMouseOver = () => {
-    infowindow.open(options.map, marker);
-    marker.setIcon(largeIcon);
+    if (!options.selected){
+      infowindow.open(options.map, marker);
+      marker.setIcon(largeIcon);
 
-    const listing = document.getElementById(marker.resultId);
-    // highlight shortly...
-    listing.style.background = '#f3f3f0';
-    // scroll into view
-    listing.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const listing = document.getElementById(marker.resultId);
+      // highlight shortly...
+      listing.style.background = '#f3f3f0';
+      // scroll into view
+      listing.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
-  const onMouseOut = () => {
+  const onMouseOut = () => { 
+    if (!options.selected){
     infowindow.close(options.map, marker);
     marker.setIcon(regIcon);
     const listing = document.getElementById(marker.resultId);
     // undo highlight...
     listing.style.background = 'white';
+    }
   };
 
   useEffect(() => {

@@ -17,22 +17,21 @@ import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { fromUnixTime, setHours } from 'date-fns';
-import Map from '../Map/Map';
-import { Wrapper } from '@googlemaps/react-wrapper';
-import Marker from '../Map/Marker';
 import MapWrapper from '../Map/MapWrapper';
-import { setDayWithOptions } from 'date-fns/fp';
 
 
 
 
 
 const BookingForm = () => {
+  const [parkingSpace,setParkingSpace] = useState([]);
+  const [parkingMapCenter,setParkingMapCenter] = useState({lat:48.1488436,lng:11.5658499});
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [basePrice, setBasePrice] = useState('2');
   const [dayPrice,setDayPrice] = useState('10');
   const [todayDate,setTodayDate] = useState('');
   const [parkingProp, setParkingProp] = useState('');
+  const [parkingCandA, setParkingCandA] = useState('');
   const [address,setParkingAddress] = useState('');
   const [pics,setParkingPics1] = useState('');
   const [pics2,setParkingPics2] = useState('');
@@ -107,32 +106,15 @@ const BookingForm = () => {
     //const reviewResult = await ReviewService.getReview(bookingId)
     //const reviewResultlist = await ReviewService.getAllReviews()
     
+    console.log(parkingResult)
+
+    // time and Price
     console.log("unformatted time dif: "+timeDif)
-    
     console.log("totalTime: "+ totalTime)
     console.log("fromTimeEx: " + fromTime)
     console.log("fromTimeEx: " + fromTime)
     console.log("day:Price: " + dayPrice)
     console.log("hourPrice:" + basePrice)
-    
-    
-
-    // console.log(parkingResult.data.formattedAddress)
-    // console.log(parkingResult.data.images[1])
-    
-    console.log("This is the desc:")
-    console.log(parkingResult.data.description)
-    console.log("Test")
-    // console.log(reviewResult.data.rating)
-    console.log("Owner:")
-    console.log(owner)
-    console.log("Here is the address:")
-    console.log (parkingResult.data.location)
-    
-    // const review = await ReviewService.getReview("62bac21772fa1c20a4e88a14")
-    // setReviewRating (review.data.rating)
-    // console.log("Here ist the review:")
-    // console.log (review.rating)
     console.log("DayPrice:")
     console.log(parkingResult.data.dayPrice)
     console.log("hourPrice:")
@@ -142,9 +124,29 @@ const BookingForm = () => {
     console.log("this is hours: " + hours)
     console.log ("total day price: "+days*dayPrice)
     console.log ("total base price: "+hours*basePrice)
+
+    
+    
+    // parkign space
+    console.log("This is the desc:")
+    console.log(parkingResult.data.description)
+    console.log("Test")
+    console.log("Owner:")
+    console.log(owner)
+    console.log("Here is the address:")
+    console.log (parkingResult.data.location)
+    
+  
+  
+    // review
+    //console.log(reviewResult.data.rating)
+    const formattedParkingSpaces = {...parkingResult.data, lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1]}
+    setParkingSpace([...parkingSpace,formattedParkingSpaces])
+    setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
     setTodayDate(today)
     setParkingSpaceName(parkingResult.data.name)
     setParkingProp(parkingResult.data.properties.parking)
+    //setParkingCandA(parkingResult.data.propoerties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
     setParkingPics1(parkingResult.data.images[0])
     setParkingPics2(parkingResult.data.images[1])
@@ -203,7 +205,7 @@ const BookingForm = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
-                Information on Parkingspace from Backend
+                
                 <Divider />
                 <div
                   style={{
@@ -213,10 +215,21 @@ const BookingForm = () => {
                   }}
                 >
                   <br></br>
-                  <p>- Streetside: {parkingProp.streetside.toString()}</p>
-                  <p>- Garage: {parkingProp.garage.toString()}</p>
-                  <p>- Illuminated: {parkingProp.illuminated.toString()}</p>
-                  <p>- E-Charging: {parkingProp.e_charging.toString()}</p>
+                  {/* <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <p>- Streetside: {parkingProp.streetside.toString()}</p>
+                      <p>- Garage: {parkingProp.garage.toString()}</p>
+                      <p>- Illuminated: {parkingProp.illuminated.toString()}</p>
+                      <p>- E-Charging: {parkingProp.e_charging.toString()}</p>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <p>- Free cancellation: {parkingCandA.free_24h_before.toString()}</p>
+                      <p>- No meetup: {parkingCandA.no_meetup.toString()}</p>
+                      <p>- Pin code available: {parkingCandA.pin.toString()}</p>
+                      <p>- Security gate: {parkingCandA.security_gate.toString()}</p>
+                    </Grid>
+                  </Grid> */}
+                 
                   <br></br>
                   <Divider />
                   <br></br>
@@ -477,23 +490,12 @@ const BookingForm = () => {
           <h2>Where you'll be parking</h2>
           <br></br>
           <br></br>
-          {/* <div className="flex">
-          <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} render={render}>
-            <Map center={center} onIdle={onIdle} zoom={zoom} >
-              {results.map((result, i) => (
-                <Marker
-                  key={i}
-                  position={{ lat: result.lat, lng: result.lng }}
-                  label={'€' + result.basePrice}
-                  resultId={result._id}
-                  name={result.name}
-                />
-              ))}
-            </Map>
-          </Wrapper>
-        </div> */}
+          
         
-          <p>// TODO: insert map here // </p>
+          <div className="w-1/2">
+            <MapWrapper results={parkingSpace} center={parkingMapCenter} setCenter={setParkingMapCenter} selected={true} />
+          </div>
+
           <br></br>
           <br></br>
           <Divider />
