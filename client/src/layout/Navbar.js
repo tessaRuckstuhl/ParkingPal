@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import Login from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -46,6 +47,13 @@ const Navbar = () => {
     }
   }, [location])
 
+  //delete token from
+// when logged in show:
+{/* parking/create, all, review/create, dashboard, personal */}
+
+
+// when logged off show:
+{/* signup, all */}
 
   return (
     <div className="relative flex justify-between items-center px-5 h-[65px] box-border border-b border-lighterGray ">
@@ -108,30 +116,36 @@ const Navbar = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={() => navigate('/dashboard')}>
-          <Avatar/> Profile
-        </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => navigate('/personal')}>
           <Avatar /> My account
         </MenuItem>
-        <Divider />
-        <MenuItem>
+        <MenuItem onClick={() => navigate('/parking/create')}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-          Add another account
+          Create a Parking Space
         </MenuItem>
-        <MenuItem>
+        <Divider />
+        <MenuItem onClick={() => navigate('/personal/bookings')}>
+          <Avatar /> Personal Bookings-Error
+        </MenuItem>
+        <MenuItem onClick={() => navigate('/personal/listings')}>
+          <Avatar /> Personal Listings-Error
+        </MenuItem>
+        <MenuItem onClick={() => navigate('/dashboard')}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          Dashboard - Logout
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
+        <MenuItem onClick={() => navigate('/login')}>
+        { localStorage.getItem('token')? <ListItemIcon>
             <Logout fontSize="small" />
+          </ListItemIcon> : <ListItemIcon>
+            <Login fontSize="small" />
           </ListItemIcon>
-          Logout
+        }
+          {localStorage.getItem('token') ? "Logout" : "Login" }
         </MenuItem>
       </Menu>
       </div>
