@@ -84,7 +84,7 @@ const Listing = (props) => {
         {/* Review */}
         <div className="flex justify-between">
           <div className="flex space-x-1 ">
-            {listing.reviewStats.amount > 0 && <span>{listing.reviewStats.averageRating}</span>}
+            {listing.reviewStats.amount > 0 && <span>{listing.reviewStats.averageOverallRating}</span>}
             {listing.reviewStats.amount > 0 && (
               <span>
                 <Rating
