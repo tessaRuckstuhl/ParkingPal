@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const Marker = (options) => {
   const [marker, setMarker] = useState();
   const regIcon = {
-    url: options.selected ? '/svg/custom-marker.svg' :'/svg/custom-marker.svg',
+    url: options.selected ? '/svg/car-marker.svg' :'/svg/custom-marker.svg',
     scaledSize: new google.maps.Size(48, 48),
 
   };

@@ -183,7 +183,7 @@ const BookingForm = () => {
               <Item style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics}`}
+                  // src={`http://localhost:3001/api/images/${pics}`}
                   width={200}
                   height={300}
                 ></img>
@@ -194,7 +194,7 @@ const BookingForm = () => {
               <Item style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics2}`}
+                  // src={`http://localhost:3001/api/images/${pics2}`}
                   width={200}
                   height={300}
                 ></img>
@@ -372,11 +372,12 @@ const BookingForm = () => {
                     onChange={(end) => {
                       setEndValue(end);
                       setUntilTime(end)
-                      setTimeDif(end-fromTime)
-                      setDays ((timeDif/(1000*86400)) > 0 ? parseInt((timeDif/(1000*86400))) : 0 )
-                      setHours(days > 0 ? ((parseInt(timeDif/(1000*3600)) - days *24 )) : parseInt(timeDif/(1000*3600)))
-                      
-                      setTotalPrice((days*dayPrice + hours*basePrice))
+                      const myTimeDif = (end-fromTime)
+                      const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
+                      const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
+                      setDays(myDays)
+                      setHours(myHours)
+                      setTotalPrice((myDays*dayPrice + myHours*basePrice))
                     }}
                   />
                 </LocalizationProvider> 
@@ -492,7 +493,7 @@ const BookingForm = () => {
           <br></br>
           
         
-          <div className="w-1/2">
+          <div className="w-full">
             <MapWrapper results={parkingSpace} center={parkingMapCenter} setCenter={setParkingMapCenter} selected={true} />
           </div>
 
@@ -508,11 +509,11 @@ const BookingForm = () => {
             textAlign: 'justify',
             display: 'flex',
           }}>
-            <Avatar alt="H" src="/static/images/avatar/1.jpg" />
+
             <h2>
               <strong>Provided by {owner}</strong>
               <br></br>
-              joined May 2022
+              
             </h2>
 
           </div>
