@@ -39,6 +39,10 @@ const ParkingSpaceSchema = new Schema({
         default: false
       }
     }, 
+    size: {
+      type: Number,
+      required: true
+    },
     cancellation_and_access: {
       free_24h_before: {
         type: Boolean,
@@ -57,6 +61,7 @@ const ParkingSpaceSchema = new Schema({
         default: false
       }
     }
+
   },
   formattedAddress: {
     type: String,
@@ -75,10 +80,6 @@ const ParkingSpaceSchema = new Schema({
   },
   availability: {
     type: [Object],
-    required: true
-  },
-  size: {
-    type: Number,
     required: true
   },
   basePrice: {
