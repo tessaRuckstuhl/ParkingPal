@@ -12,26 +12,26 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Login from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
 import {useErrorSnack} from '../contexts/ErrorContext'
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AuthService from '../services/auth.service';
+import { MainContext } from '../contexts/MainContext';
 
 const Navbar = () => {
   const location = useLocation();
   const {showSnack} = useErrorSnack()
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = React.useState(false)
-   const links = []
-  // [{ name: "HOME", link: "/dashboard" },
-  // { name: "Login", link: "/login" },
-  // { name: "About", link: "/about" },
-  // { name: "Review", link: "/parking/review" },
-  // { name: "Create Parking", link: "/parking/create" },
-  // ];
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const { jwt, setJwt } = React.useContext(MainContext);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,9 +39,14 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const logout = () => {
+    AuthService.logout();
+    setJwt('');
+    navigate('/');
+  };
 
   React.useEffect(() => {
+    localStorage.getItem('token')!== null ? setLoggedIn(true) : setLoggedIn(false)
     if(location.pathname == "/"){
       setShowFilters(true)
     } else {
@@ -119,47 +124,53 @@ const Navbar = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={() => navigate('/personal')}>
-          <Avatar /> My account
+          <Avatar /> Dashboard
         </MenuItem>
         <MenuItem onClick={() => navigate('/parking/create')}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <AddLocationAltIcon />
           </ListItemIcon>
           Create a Parking Space
         </MenuItem>
-        <Divider />
         <MenuItem onClick={() => navigate('/personal/bookings')}>
-          <Avatar /> Personal Bookings-Error
+          <QuestionMarkIcon /> Personal Bookings-Error
         </MenuItem>
         <MenuItem onClick={() => navigate('/personal/listings')}>
-          <Avatar /> Personal Listings-Error
+          <QuestionMarkIcon /> Personal Listings-Error
         </MenuItem>
+        <Divider />
+        {/* remove this page
         <MenuItem onClick={() => navigate('/dashboard')}>
           <ListItemIcon>
-            <Settings fontSize="small" />
+            <Settings/>
           </ListItemIcon>
           Dashboard - Logout
         </MenuItem>
-        <MenuItem onClick={() => navigate('/login')}>
-        { localStorage.getItem('token')? <ListItemIcon>
-            <Logout fontSize="small" />
+        */}
+        {!loggedIn? <MenuItem onClick={() => navigate('/signup')}>
+          <ListItemIcon>
+            <PersonAddIcon />
+          </ListItemIcon>
+          Signup
+        </MenuItem> : null }
+        <MenuItem onClick={() => {
+          if(loggedIn){
+            logout()
+          }
+          else{
+            navigate('/login');
+          }
+        }}>
+        { loggedIn ? <ListItemIcon>
+            <Logout/>
           </ListItemIcon> : <ListItemIcon>
-            <Login fontSize="small" />
+            <Login/>
           </ListItemIcon>
         }
-          {localStorage.getItem('token') ? "Logout" : "Login" }
+          {loggedIn ? "Logout" : "Login" }
         </MenuItem>
       </Menu>
       </div>
-      <ul className="md:flex md:items-center">
-        {links.map(link =>(
-          <li key= {link.name} className="md:ml-8 text">
-            {/* this doesnt work for some reason  */}
-            <a href={link.link} className="text-blue-800 hover:text-gray-400 duration-500">{link.name}</a>
-          </li>
-        ))}
-      </ul>
-
       </div>
     </div>
   );
