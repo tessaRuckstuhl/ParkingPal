@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ParkingSpaceService from '../../services/parkingSpace.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Grid, Paper } from '@mui/material/';
+import { Grid, Paper, Box } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -55,11 +55,11 @@ const ParkingSpaceForm = () => {
 
   const navigate = useNavigate();
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
-    textAlign: 'center',
+    margin:'2px',
     color: theme.palette.text.secondary,
   }));
 
@@ -93,8 +93,6 @@ const ParkingSpaceForm = () => {
   }
 
   const handleChange = (event) => {
-    if(parkingSpaceName !== "" && size !== "" && basePrice !== "" && basePrice !== "" && street !== "" && houseNumber !== "" && postalCode !== "" && city !== "" && availability !== [])
-    setFormIncomplete(false)
     switch (event.target.name) {
       case 'parkingspacename':
         setParkingSpaceName(event.target.value);
@@ -211,14 +209,19 @@ const ParkingSpaceForm = () => {
   };
 
   useEffect(() => {
-  }, [availability]);
+    if(parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
+      setFormIncomplete(false)
+    else{
+      setFormIncomplete(true)
+    }
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city]);
 
   return (
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="mb-6 text-xl">
           <b>Welcome to the Creator Dashboard</b>
-          <p className="text-[#9f9a9a] text-sm">Work your way down and enter all the information a potential parking guest might need.</p>
+          <p className="text-[#9f9a9a] text-sm font-bold">Work your way down and enter all the information a potential parking guest might need.</p>
         </div>
         <form className="text-3x2 font-bold my-2" noValidate onSubmit={(e) => handleSubmit(e)}>
           <p>Step 1: Name your parking place</p>
@@ -247,7 +250,7 @@ const ParkingSpaceForm = () => {
           <b>Step 3: Provide additional information to help</b>
           <Grid container spacing={3}>
             <Grid item sm={4}>
-              <Item>Parking Properties</Item>
+              <Item><u>Parking Properties</u></Item>
               <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="Streetside" name="streetside" checked={streetside} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Garage" name="garage" checked={garage} onChange={(e) => handleChange(e)} />
@@ -256,7 +259,7 @@ const ParkingSpaceForm = () => {
               </FormGroup>
             </Grid>
             <Grid item sm={4}>
-              <Item>Size</Item>
+              <Item><u>Size</u></Item>
               <FormControl>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
@@ -272,9 +275,9 @@ const ParkingSpaceForm = () => {
               </FormControl>
             </Grid>
             <Grid item sm={4}>
-              <Item>Cancellation and Access</Item>
+              <Item><u>Cancellation and Access</u></Item>
               <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Free cancellation 24 hours before booking" name="free_24h_before" checked={free_24h_before} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Free cancellation 24h before booking" name="free_24h_before" checked={free_24h_before} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="No meetup required" name="no_meetup" checked={no_meetup} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Access via pin" name="pin" checked={pin} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" checked={securityGate} onChange={(e) => handleChange(e)} />
@@ -316,6 +319,7 @@ const ParkingSpaceForm = () => {
               {availability.length > 0 ? availability.map((slot) => {
                 return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
               }) : null}
+               <Box className="my-4">
               <Button variant="contained" color="primary" onClick={() => {
                 if(fromValue >= toValue) {
                   alert("Please make sure the start date is before the end date!")
@@ -335,6 +339,7 @@ const ParkingSpaceForm = () => {
                 setFromValue(null);
                 setAvailability([]);
               }}>Clear Dates</Button>
+              </Box>
             </LocalizationProvider>
           </div>
           <b>Step 6: Set a price</b>
