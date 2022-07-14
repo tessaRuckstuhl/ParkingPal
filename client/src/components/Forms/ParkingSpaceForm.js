@@ -21,7 +21,7 @@ const ParkingSpaceForm = () => {
 
   const [description, setDescription] = useState('');
 
-  const [size, setSize] = useState('');
+  const [size, setSize] = useState(0);
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
@@ -162,7 +162,6 @@ const ParkingSpaceForm = () => {
           coordinates: [response.data.results[0].geometry.location.lat, response.data.results[0].geometry.location.lng]
         },
         availability: availability,
-        size: size,
         basePrice: basePrice,
         dayPrice: dayPrice,
         longTermStayPrice: longTermStayPrice,
@@ -175,6 +174,7 @@ const ParkingSpaceForm = () => {
             e_charging: e_charging,
             illuminated: illuminated
           },
+          size: Number(size),
           cancellation_and_access: {
             free_24h_before: free_24h_before,
             no_meetup: no_meetup,
@@ -281,14 +281,14 @@ const ParkingSpaceForm = () => {
               <FormControl>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="S"
+                  value={size}
                   name="radio-buttons-size"
                   onChange={(e) => handleChange(e)}
                 >
-                  <FormControlLabel value="0" control={<Radio />} label="S" />
-                  <FormControlLabel value="1" control={<Radio />} label="M" />
-                  <FormControlLabel value="2" control={<Radio />} label="L" />
-                  <FormControlLabel value="3" control={<Radio />} label="XL" />
+                  <FormControlLabel value={0} control={<Radio />} label="S" />
+                  <FormControlLabel value={1} control={<Radio />} label="M" />
+                  <FormControlLabel value={2} control={<Radio />} label="L" />
+                  <FormControlLabel value={3} control={<Radio />} label="XL" />
                 </RadioGroup>
               </FormControl>
             </Grid>
