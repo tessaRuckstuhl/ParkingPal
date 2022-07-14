@@ -181,7 +181,7 @@ const BookingForm = () => {
     setParkingSpace([...parkingSpace,formattedParkingSpaces])
     setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
     setTodayDate(today)
-    setParkingSpaceName(parkingResult.data._id)
+    setParkingSpaceName(parkingResult.data.name)
     setParkingProp(parkingResult.data.properties.parking)
     //setParkingCandA(parkingResult.data.propoerties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
