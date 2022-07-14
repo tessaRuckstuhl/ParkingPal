@@ -1,35 +1,58 @@
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import BookingService from '../../services/booking.service';
+
 const initialOptions = {
-    "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
-    currency: "EUR",
-    debug:true
+  'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+  currency: 'EUR',
 };
 const Paypal = () => {
-    const navigate = useNavigate()
+  const { state } = useLocation();
+  console.log(state);
+  const navigate = useNavigate();
+
+  const updateBooking = async (details) => {
+    try {
+      const updatedBooking = await BookingService.update(state._id, {payed: true})
+      console.log(updatedBooking.data.booking.parkingSpace)
+      navigate('/pay/success', {state: {booking: updatedBooking.data.booking}});
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   return (
-    <PayPalScriptProvider options={initialOptions}>
-      <PayPalButtons
-        style={{ layout: 'vertical' }}
-        createOrder={(data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: '0.01',
-                },
-              },
-            ],
-          });
-        }}
-        onApprove={(data, actions) => {
-          return actions.order.capture().then((details) => {
-            const name = details.payer.name.given_name;
-            navigate('/pay/success')
-          });
-        }}
-      />
-    </PayPalScriptProvider>
+
+    <div className="flex flex-col items-center justify-center mt-10 p-5">
+      <div className="text-3xl font-semibold ">How would you like to pay?</div>
+      <div className=" text-lg mb-10"> Choose a payment method.</div>
+
+      <div className="w-[60%] text-center">
+        <PayPalScriptProvider options={initialOptions}>
+          <PayPalButtons
+            style={{ layout: 'vertical' }}
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: state.price + 1,
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then((details) => {
+                updateBooking(details)
+               
+              });
+            }}
+          />
+        </PayPalScriptProvider>
+      </div>
+    </div>
   );
 };
 

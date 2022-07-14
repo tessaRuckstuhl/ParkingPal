@@ -34,6 +34,7 @@ module.exports = {
   },
 
   async updateBookingById(req, res) {
+    console.log(req.params, req.body)
     const { id } = req.params;
     const update = req.body;
     try {

@@ -61,7 +61,8 @@ const App = () => {
                     <Route path="personal" element={<Dashboard />}></Route>
                     <Route path="personal/bookings" element={<Bookings />}></Route>
                     <Route path="personal/listings" element={<Listings />}></Route>
-                    <Route path="pay" element={Payment}></Route>
+                    <Route path="pay" element={<Paypal/>}></Route>
+                    <Route path="pay/success" element={<PaymentSuccess/>}></Route>
 
                     {/* matches anything except the above */}
                     <Route path="*" element={<PageNotFound />} />

@@ -42,6 +42,8 @@ const BookingForm = () => {
   const [parkingSpace,setParkingSpace] = useState([]);
   const [parkingMapCenter,setParkingMapCenter] = useState({lat:48.1488436,lng:11.5658499});
   const [parkingSpaceName, setParkingSpaceName] = useState('');
+  const [parkingSpaceId, setParkingSpaceId] = useState('');
+
   const [basePrice, setBasePrice] = useState();
   const [dayPrice,setDayPrice] = useState();
   const [longPrice, setLongPrice] = useState()
@@ -87,15 +89,22 @@ const BookingForm = () => {
   const len = ary.length  
   const today = new Date()
 
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const user = parseJwt(localStorage.getItem('token'))
       const booking = {
-        parkingSpace: parkingSpaceName,
+        parkingSpace: parkingSpaceId,
         // guest ist der, der ein Parkplatz bucht
-        guest: user, 
+        guest: user._id, 
         // owner ist der Besitzer den ich über Parkplatz ID hole
         owner: owner,
         // Was ist mit terms: gemeint?
@@ -103,17 +112,23 @@ const BookingForm = () => {
         startDate: startValue,
         endDate: endValue, 
         price: totalPrice,
+        payed:false
       };
-      await BookingService.create(booking);
+      const createdBooking = await BookingService.create(booking);
+      // first we create the booking with payed set to false, then we handle payment and update payed field to true
+      handlePayment(createdBooking.data)
+
     } catch (error) {
+      console.log(error)
     }
   };
 
   // leave me here
   // redirect with state: price, other stats,search for booking id and update as payed
   // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
-  const handlePayment = () => {
+  const handlePayment = (data) => {
     console.log(totalPrice)
+    navigate('/pay', {state: data})
   }
 
   
@@ -122,11 +137,12 @@ const BookingForm = () => {
 
   useEffect(async () => {
     const parkingId = new URL(location.href).searchParams.get('parkingId')
+    setParkingSpaceId(parkingId)
+
     console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
     //const reviewResultlist = await ReviewService.getReview(parkingId)
-    
     console.log(parkingResult)
     console.log(reviewResult.data)
     // console.log(reviewResultlist.data)
@@ -165,7 +181,7 @@ const BookingForm = () => {
     setParkingSpace([...parkingSpace,formattedParkingSpaces])
     setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
     setTodayDate(today)
-    setParkingSpaceName(parkingResult.data.name)
+    setParkingSpaceName(parkingResult.data._id)
     setParkingProp(parkingResult.data.properties.parking)
     //setParkingCandA(parkingResult.data.propoerties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
@@ -388,7 +404,6 @@ const BookingForm = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  onClick={handlePayment}
                 >
                   Book now
                 </Button>
