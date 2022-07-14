@@ -319,8 +319,7 @@ const ParkingSpaceForm = () => {
               {availability.length > 0 ? availability.map((slot) => {
                 return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
               }) : null}
-               <Box className="my-4">
-              <Button variant="contained" color="primary" onClick={() => {
+              <Button style={{marginTop:10}} variant="contained" color="primary" onClick={() => {
                 if(fromValue >= toValue) {
                   alert("Please make sure the start date is before the end date!")
                 }
@@ -334,12 +333,11 @@ const ParkingSpaceForm = () => {
                 setToValue(null);
                 setFromValue(null);
               }}}>Add Availability</Button>
-              <Button disabled={availability.length === 0} variant="contained" color="primary" onClick={() => {
+              <Button style={{marginTop:10}} disabled={availability.length === 0} variant="contained" color="primary" onClick={() => {
                 setToValue(null);
                 setFromValue(null);
                 setAvailability([]);
               }}>Clear Dates</Button>
-              </Box>
             </LocalizationProvider>
           </div>
           <b>Step 6: Set a price</b>
@@ -393,7 +391,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '70%', marginRight: 5}}
+              style ={{width: '69.5%', marginRight: 5}}
               name="street"
               label="Street"
               id="street"
@@ -404,7 +402,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '29.7%'}}
+              style ={{width: '30%'}}
               name="houseNumber"
               label="House Number"
               id="houseNumber"
@@ -415,7 +413,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '70%', marginRight: 5}}
+              style ={{width: '69.5%', marginRight: 5}}
               name="city"
               label="City"
               id="city"
@@ -426,7 +424,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '29.7%'}}
+              style ={{width: '30%'}}
               name="postalCode"
               label="Postal Code"
               id="postalCode"
