@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import { useState, useContext } from 'react';
+import ParkingSpaceService from '../../services/parkingSpace.service';
+import { useState, useContext, useEffect } from 'react';
 import { ImageContext } from '../../contexts/ImageContext';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -12,7 +13,6 @@ import ImageListItem from '@mui/material/ImageListItem';
 const ImageUploaderForm = () => {
     const [file, setFile] = useState(null)
     const [inputContainsFile, setInputContainsFile] = useState(false)
-    const [imageId, setImageId] = useState(null)
     const { imageIDs, addImageID } = useContext(ImageContext)
 
     const handleFile = (event) => {
@@ -24,7 +24,6 @@ const ImageUploaderForm = () => {
         const fd = new FormData();
         fd.append('file', file, file.name)
         axios.post("http://localhost:3001/api/images/upload", fd).then(({ data }) => {
-            setImageId(data)
             addImageID(data)
 
             setFile(null)
@@ -32,23 +31,32 @@ const ImageUploaderForm = () => {
         }).catch((error) => {
             console.log(error)
         })
-
     }
+    useEffect(() => {
+      }, [imageIDs]);
+    
 
     return (
         <div className="my-4">
             <div >
-                <input type="file" name="file" id="file" onChange={handleFile}></input>
+                <label htmlFor="file">Click on browse to add photos</label>
+                <div className="mt-2"> <input type="file" name="file" id="file" onChange={handleFile}></input>    
+               
                 {file ? <Button variant="contained" color="primary" onClick={() => {
                     if (inputContainsFile) {
                         fileUploadHandler()
+                        document.getElementById('file').value = ''
                     }
                 }}>Upload</Button> : null}
+                {imageIDs.length > 0 ? <Button variant="contained" color="primary" onClick={() => {
+                        imageIDs.map(imageID => ParkingSpaceService.deleteImage(imageID))
+                    }
+                }>Delete All</Button> : null}
             </div>
-            <div>
+            <div className="mt-4">
                 {imageIDs.length > 0 ? ( 
                     <>
-                        <ImageList sx={{ width: 1000, height: 400 }} cols={3} rowHeight={300}>
+                        <ImageList sx={{ width:1000,height: 350}} cols={3} rowHeight={300}>
                             {imageIDs.map((id) => (
                                 <ImageListItem key={id}>
                                     <img
@@ -62,7 +70,7 @@ const ImageUploaderForm = () => {
                     </>
                 ) :
                     (<></>)}
-
+    </div>
             </div>
         </div>)
 

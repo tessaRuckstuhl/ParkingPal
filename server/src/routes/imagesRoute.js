@@ -111,7 +111,11 @@ router.get('/:id', ({ params: { id } }, res) => {
 })
 
 router.delete('/:id', ({ params: { id } }, res) => {
-   deleteImage(id)
+   try { 
+    deleteImage(id) 
+    return res.send("Image with ID: " + id +" was deleted successfully")
+}
+   catch (err) { res.status(400).send('image deletion failed')}
 })
 
 

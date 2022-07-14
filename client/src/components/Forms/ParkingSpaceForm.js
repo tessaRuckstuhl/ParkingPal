@@ -1,10 +1,9 @@
 
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ParkingSpaceService from '../../services/parkingSpace.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Grid, Paper, Box } from '@mui/material/';
+import { Grid, Box } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -52,8 +51,6 @@ const ParkingSpaceForm = () => {
   const [pin, setPin] = useState(false)
   const [securityGate, setSecurityGate] = useState(false)
   const [formIncomplete, setFormIncomplete] = useState(true)
-
-  const navigate = useNavigate();
 
   const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
