@@ -10,18 +10,11 @@ import AuthComponent from './services/AuthComponent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
-<<<<<<< HEAD
-import CreateParkingSpace from './pages/CreateParkingSpace';
-import ListViewParkingSpaces from './pages/ListViewParkingSpaces';
-import CreateReview from './pages/CreateReview';
-import CreateBooking from './pages/CreateBooking';
-
-=======
 import CreateParkingSpace from './pages/CreateParkingSpace'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import CreateReview from './pages/CreateReview'
+import CreateBooking from './pages/CreateBooking'
 import About from './pages/About'
->>>>>>> develop
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
 import Dashboard from './pages/UserDashboard/Dashboard';

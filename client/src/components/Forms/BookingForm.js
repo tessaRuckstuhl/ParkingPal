@@ -125,7 +125,7 @@ const BookingForm = () => {
     // console.log(reviewResultlist.data)
 
 
-    console.log ("this is the pic: "+ parkingResult.data.images[0])
+    console.log (parkingResult.data.images[0])
     // time and Price
     // console.log("unformatted time dif: "+timeDif)
     // console.log("totalTime: "+ totalTime)
