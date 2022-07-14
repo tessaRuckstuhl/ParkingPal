@@ -109,6 +109,10 @@ const BookingForm = () => {
     }
   };
 
+  const handlePayment = () => {
+    console.log(totalPrice)
+  }
+
   
 
 
@@ -381,6 +385,7 @@ const BookingForm = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  onClick={handlePayment}
                 >
                   Book now
                 </Button>
