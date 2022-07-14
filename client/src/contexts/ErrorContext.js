@@ -29,7 +29,7 @@ export function ErrorContextProvider({ children }) {
       {children}
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'center',
         }}
         open={snack.open}

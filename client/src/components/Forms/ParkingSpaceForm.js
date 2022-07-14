@@ -1,21 +1,19 @@
 
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ParkingSpaceService from '../../services/parkingSpace.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Grid, Paper } from '@mui/material/';
+import { Grid, Box, IconButton, Radio, RadioGroup, FormControl , Tooltip, Checkbox,FormGroup , FormControlLabel } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Tooltip from '@mui/material/Tooltip';
-import { ImageContext } from '../../contexts/ImageContext';
+import { LocalizationProvider,DateTimePicker } from '@mui/x-date-pickers';
+import { useErrorSnack } from '../../contexts/ErrorContext'
+import { ImageContext } from '../../contexts/ImageContext'
+import Info from '@mui/icons-material/Info';
 import moment from 'moment';
+
+//https://mui.com/material-ui/react-stepper/ maybe add
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
@@ -28,8 +26,8 @@ const ParkingSpaceForm = () => {
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
 
-  const [fromValue, setFromValue] = React.useState("");
-  const [toValue, setToValue] = React.useState("");
+  const [fromValue, setFromValue] = React.useState('');
+  const [toValue, setToValue] = React.useState('');
   const [availability, setAvailability] = useState([]);
 
   const [street, setStreet] = useState('');
@@ -45,16 +43,24 @@ const ParkingSpaceForm = () => {
   const [no_meetup, setNo_Meetup] = useState(false)
   const [pin, setPin] = useState(false)
   const [securityGate, setSecurityGate] = useState(false)
+  const [formIncomplete, setFormIncomplete] = useState(true)
 
-  const navigate = useNavigate();
+  const [missingFileds,setMissingFields] = useState([])
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
-    textAlign: 'center',
+    margin: '2px',
     color: theme.palette.text.secondary,
   }));
+  const { showSnack } = useErrorSnack()
+
+  //TODO:
+  /*
+  delete photos on no submit - does it work?
+  update parkimg space
+  */
   const clearAll = () => {
     setParkingSpaceName("")
     setImageIDs([])
@@ -84,7 +90,7 @@ const ParkingSpaceForm = () => {
       case 'parkingspacename':
         setParkingSpaceName(event.target.value);
         break;
-      case 'size':
+      case 'radio-buttons-size':
         setSize(event.target.value);
         break;
       case 'street':
@@ -139,6 +145,7 @@ const ParkingSpaceForm = () => {
         break;
     }
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -180,8 +187,11 @@ const ParkingSpaceForm = () => {
       await ParkingSpaceService.create(parkingSpace);
       clearAll()
     } catch (error) {
-    }
-  };
+      for (var i = 0; i < imageIDs.length; i++) {
+        await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
+      }
+    };
+  }
 
   const parseJwt = (token) => {
     try {
@@ -192,16 +202,24 @@ const ParkingSpaceForm = () => {
   };
 
   useEffect(() => {
-  }, [availability]);
+    if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
+      setFormIncomplete(false)
+    else {
+      setFormIncomplete(true)
+      setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value !== (""||null)).map(item => item.label) )
+    }
+  }, [parkingSpaceName, size, availability, basePrice, street, houseNumber, postalCode, city]);
 
   return (
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="mb-6 text-xl">
           <b>Welcome to the Creator Dashboard</b>
+          <p className="text-[#9f9a9a] text-sm font-bold">Work your way down and enter all the information a potential parking guest might need.</p>
         </div>
         <form className="text-3x2 font-bold my-2" noValidate onSubmit={(e) => handleSubmit(e)}>
           <p>Step 1: Name your parking place</p>
+          <p className="text-[#9f9a9a] text-sm">Enter a listing name in 50 characters or less. Make it stick out!</p>
           <TextField
             variant="outlined"
             margin="normal"
@@ -215,17 +233,18 @@ const ParkingSpaceForm = () => {
             onChange={(e) => handleChange(e)}
           />
           <b>Step 2: Upload photos of your parking space and its environment</b>
+          <p className="text-[#9f9a9a] text-sm">Set the scene and impove your visibility by adding photos.</p>
           <ImageUploaderForm />
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item sm={6}>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item sm={6}>
             </Grid>
           </Grid>
-          <p>Step 3: Provide additional information to help</p>
+          <b>Step 3: Provide additional information to help</b>
           <Grid container spacing={3}>
-            <Grid item xs={4}>
-              <Item>Parking Properties</Item>
+            <Grid item sm={4}>
+              <Item><u>Parking Properties</u></Item>
               <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="Streetside" name="streetside" checked={streetside} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Garage" name="garage" checked={garage} onChange={(e) => handleChange(e)} />
@@ -233,31 +252,34 @@ const ParkingSpaceForm = () => {
                 <FormControlLabel control={<Checkbox />} label="Illuminated" name="illuminated" checked={illuminated} onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
-            <Grid item xs={4}>
-              <Item>Size</Item>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                required
-                name="size"
-                label="Size"
-                id="size"
-                value={size}
-                onChange={(e) => handleChange(e)}
-              />
+            <Grid item sm={4}>
+              <Item><u>Size</u></Item>
+              <FormControl>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="S"
+                  name="radio-buttons-size"
+                  onChange={(e) => handleChange(e)}
+                >
+                  <FormControlLabel value="0" control={<Radio />} label="S" />
+                  <FormControlLabel value="1" control={<Radio />} label="M" />
+                  <FormControlLabel value="2" control={<Radio />} label="L" />
+                  <FormControlLabel value="3" control={<Radio />} label="XL" />
+                </RadioGroup>
+              </FormControl>
             </Grid>
-            <Grid item xs={4}>
-              <Item>Cancellation and Access</Item>
+            <Grid item sm={4}>
+              <Item><u>Cancellation and Access</u></Item>
               <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Free cancellation 24 hours before booking" name="free_24h_before" checked={free_24h_before} onChange={(e) => handleChange(e)} />
+                <FormControlLabel control={<Checkbox />} label="Free cancellation 24h before booking" name="free_24h_before" checked={free_24h_before} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="No meetup required" name="no_meetup" checked={no_meetup} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Access via pin" name="pin" checked={pin} onChange={(e) => handleChange(e)} />
                 <FormControlLabel control={<Checkbox />} label="Security Gate" name="securityGate" checked={securityGate} onChange={(e) => handleChange(e)} />
               </FormGroup>
             </Grid>
           </Grid>
-          <p>Step 4: Edit your description</p>
+          <b>Step 4: Edit your description</b>
+          <p className="text-[#9f9a9a] text-sm">Describe what's nearby and let the guests know, why your parking space is unique.</p>
           <TextField
             variant="outlined"
             margin="normal"
@@ -268,12 +290,13 @@ const ParkingSpaceForm = () => {
             value={description}
             onChange={(e) => handleChange(e)}
           />
-          <p>Step 5: When is your parking place available?</p>
+          <b>Step 5: When is your parking place available?</b>
+          <p className="text-[#9f9a9a] text-sm">Provide all dates throughout the year. This can be hours, days, weeks or months.</p>
           <div className="my-4 space-x-4">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker className=""
+              <DateTimePicker
                 label="From"
-                value={fromValue}
+                value={fromValue || null}
                 onChange={(newValue) => {
                   setFromValue(newValue);
                 }}
@@ -281,7 +304,7 @@ const ParkingSpaceForm = () => {
               />
               <DateTimePicker
                 label="To"
-                value={toValue}
+                value={toValue || null}
                 onChange={(newValue) => {
                   setToValue(newValue);
                 }}
@@ -290,18 +313,30 @@ const ParkingSpaceForm = () => {
               {availability.length > 0 ? availability.map((slot) => {
                 return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
               }) : null}
-              <Button variant="contained" color="primary" onClick={() => {
-                let available = {
-                  from: fromValue.toISOString(),
-                  to: toValue.toISOString()
+              <Button style={{ marginTop: 10 }} variant="contained" color="primary" onClick={() => {
+                if (fromValue >= toValue) {
+                  showSnack("Please make sure the start date is before the end date!", "warning")
                 }
+                else {
+                  let available = {
+                    from: fromValue.toISOString(),
+                    to: toValue.toISOString()
+                  }
+                  setAvailability(state => [...state, available]);
+
+                  setToValue(null);
+                  setFromValue(null);
+                }
+              }}>Add Availability</Button>
+              <Button style={{ marginTop: 10 }} disabled={availability.length === 0} variant="contained" color="primary" onClick={() => {
                 setToValue(null);
                 setFromValue(null);
-                setAvailability(state => [...state, available]);
-              }}>Add Availability</Button>
+                setAvailability([]);
+              }}>Clear Dates</Button>
             </LocalizationProvider>
           </div>
-          <p>Step 6: Set a price</p>
+          <b>Step 6: Set a price</b>
+          <p className="text-[#9f9a9a] text-sm">This is your default price per hour</p>
           <div className="mb-2">
             <Tooltip title="This is the default price per hour" placement="top" arrow >
               <TextField
@@ -316,6 +351,7 @@ const ParkingSpaceForm = () => {
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
+            <p className="text-[#9f9a9a] text-sm">This ist the price, for a full day</p>
             <Tooltip title="This ist the price, for a full day" placement="top" arrow >
               <TextField
                 variant="outlined"
@@ -328,6 +364,7 @@ const ParkingSpaceForm = () => {
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
+            <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
             <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
               <TextField
                 variant="outlined"
@@ -343,11 +380,13 @@ const ParkingSpaceForm = () => {
           </div>
 
           <p>Step 7: Enter the address</p>
-          <div className="space-x-2">
+          <div>
             <TextField
+              className="mr-2"
               variant="outlined"
               margin="normal"
               required
+              style={{ width: '69.5%', marginRight: 5 }}
               name="street"
               label="Street"
               id="street"
@@ -358,6 +397,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
+              style={{ width: '30%' }}
               name="houseNumber"
               label="House Number"
               id="houseNumber"
@@ -368,38 +408,40 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              name="postalCode"
-              label="Postal Code"
-              id="postalCode"
-              value={postalCode}
-              onChange={(e) => handleChange(e)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
+              style={{ width: '69.5%', marginRight: 5 }}
               name="city"
               label="City"
               id="city"
               value={city}
               onChange={(e) => handleChange(e)}
             />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              style={{ width: '30%' }}
+              name="postalCode"
+              label="Postal Code"
+              id="postalCode"
+              value={postalCode}
+              onChange={(e) => handleChange(e)}
+            />
           </div>
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Create Parking Space
-          </Button>
-          <div className="mt-4">
+          <div className="my-4">
             <Button
+              disabled={formIncomplete}
+              type="submit"
               variant="contained"
               color="primary"
-              onClick={() => navigate('/all')}
-            >All Parking Spaces</Button>
-          </div>
+            >
+              Create Parking Space
+            </Button>
+            {formIncomplete?
+            <IconButton onClick={() => showSnack("You need to fill out" +  missingFileds, 'warning')}>
+              <Info sx={{ fontSize: 20 }} color="secondary" />
+            </IconButton>
+            :null}
+          </div >
         </form>
       </div>
     </div>

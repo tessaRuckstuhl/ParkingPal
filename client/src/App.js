@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
 import Default from './layout/Default';
 import CreateParkingSpace from './pages/CreateParkingSpace'
+import CreateBooking from './pages/CreateBooking'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import CreateReview from './pages/CreateReview'
 import CreateBooking from './pages/CreateBooking'

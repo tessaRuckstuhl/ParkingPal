@@ -11,6 +11,9 @@ router.get('/:id',parkingSpaceController.getParkingSpaceById);
 // api/parkingSpace/:id
 router.delete('/:id',parkingSpaceController.deleteParkingSpace);
 
+// api/parkingSpace/:id
+router.patch('/:id',parkingSpaceController.updateParkingSpace);
+
 // api/parkingSpace/
 router.get('/',parkingSpaceController.listParkingSpaces);
 
