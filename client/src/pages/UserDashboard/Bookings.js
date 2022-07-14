@@ -49,7 +49,7 @@ const Bookings = () => {
   };
 
   const reviewBooking = (bookingId) => {
-    navigate(`/review/create?bookingId=${bookingId}`, { bookingId: bookingId });
+    navigate(`/review/create?bookingId=${bookingId}`);
   };
 
   return (

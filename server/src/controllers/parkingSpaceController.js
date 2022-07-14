@@ -62,8 +62,7 @@ module.exports = {
       const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
         req.query;
 
-      console.log('REQUEST QUERY', req.query);
-
+      // console.log('REQUEST QUERY', req.query);
       const query = Object.assign({}, req.query);
       let mongoQuery = {};
       // build address + radius filter
