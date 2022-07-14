@@ -8,18 +8,15 @@ const initialOptions = {
 };
 const Paypal = () => {
   const { state } = useLocation();
-  console.log(state);
   const navigate = useNavigate();
 
   const updateBooking = async (details) => {
     try {
       const updatedBooking = await BookingService.update(state._id, {payed: true})
-      console.log(updatedBooking.data.booking.parkingSpace)
       navigate('/pay/success', {state: {booking: updatedBooking.data.booking}});
     } catch (error) {
       console.log(error)
     }
-
   }
 
   return (
