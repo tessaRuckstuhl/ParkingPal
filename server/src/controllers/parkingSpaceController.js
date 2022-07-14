@@ -1,7 +1,7 @@
 const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
 const { toIsoString } = require('../services/toIsoString');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 module.exports = {
   async createParkingSpace(req, res) {
@@ -18,7 +18,10 @@ module.exports = {
   async updateParkingSpace(req, res) {
     try {
       console.log(req.body);
-      const parkingSpace = await ParkingSpace.update({name: req.body.parkingSpaceName},{$set: req.body});
+      const parkingSpace = await ParkingSpace.update(
+        { name: req.body.parkingSpaceName },
+        { $set: req.body }
+      );
       return res.send(parkingSpace.toJSON());
     } catch (error) {
       console.log(error);
@@ -29,10 +32,10 @@ module.exports = {
   async deleteParkingSpace(req, res) {
     try {
       const { id } = req.params;
-      await ParkingSpace.deleteOne({_id: mongoose.Types.ObjectId(id)} );
+      await ParkingSpace.deleteOne({ _id: mongoose.Types.ObjectId(id) });
       return res.status(200).send({ success: 'ParkingSpace was deleted' });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).send({ error: 'Could not remove this ParkingSpace' }); // 'we have an error we don\'t know what to do' })
     }
   },
@@ -47,25 +50,19 @@ module.exports = {
   },
   async listParkingSpaces(req, res) {
     try {
-      const {
-        formattedAddress,
-        basePrice,
-        dayPrice,
-        longTermStayPrice,
-        radius,
-        from,
-        to,
-        ownerId,
-      } = req.query;
-      if (ownerId) {
-        const allParkingSpaces = await ParkingSpace.find({
-          owner: mongoose.Types.ObjectId(ownerId) 
-        }).sort({ _id: -1 });
-        return res.send(allParkingSpaces);
-      }
+      const allParkingSpaces = await ParkingSpace.find({});
+      return res.send(allParkingSpaces);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });
+    }
+  },
+  async filterParkingSpaces(req, res) {
+    try {
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
+        req.query;
+
       // console.log('REQUEST QUERY', req.query);
-      // create copy, in js objects are passed and assigned by reference thus modifying the same if not copied correctly
-      // deleting object so properties can be filtered in final step
       const query = Object.assign({}, req.query);
       let mongoQuery = {};
       // build address + radius filter
@@ -125,7 +122,6 @@ module.exports = {
           return (mongoQuery[key] = true);
         }
       });
-      // console.log('MONGO QUERY BUILT: ', JSON.stringify(mongoQuery), { ...mongoQuery });
       // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
@@ -136,7 +132,35 @@ module.exports = {
       return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });
     }
   },
+  async listOwnedParkingSpaces(req, res) {
+    const { id } = req.params;
+    if (id) {
+      const allParkingSpaces = await ParkingSpace.find({
+        owner: mongoose.Types.ObjectId(id),
+      }).sort({ _id: -1 });
+      return res.send(allParkingSpaces);
+    } else {
+      return res
+        .status(400)
+        .send({ error: 'There was an error trying to get owner parking spaces' });
+    }
+  },
   async getFilterConstraints(req, res) {
+    const maxDayPrice = await ParkingSpace.find({}, { dayPrice: 1, _id: 0 })
+      .sort({ dayPrice: -1 })
+      .limit(1); // for MAX
+    const maxLongTermStayPrice = await ParkingSpace.find({}, { longTermStayPrice: 1, _id: 0 })
+      .sort({ longTermStayPrice: -1 })
+      .limit(1); // for MAX
+    const maxBasePrice = await ParkingSpace.find({}, { basePrice: 1, _id: 0 })
+      .sort({ basePrice: -1 })
+      .limit(1); // for MAX
+    return res.send({
+      maxDayPrice: maxDayPrice[0].dayPrice,
+      maxLongTermStayPrice: maxLongTermStayPrice[0].longTermStayPrice,
+      maxBasePrice: maxBasePrice[0].basePrice,
+    });
+
     // find max day price, base price, ... for filters
   },
 };

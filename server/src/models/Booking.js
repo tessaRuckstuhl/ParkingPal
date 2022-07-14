@@ -38,6 +38,10 @@ const BookingSchema = new Schema({
   price: {
     type: Number, 
     trim: true
+  },
+  payed: {
+    type: Boolean,
+    required: true
   }
 },
 

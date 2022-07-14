@@ -4,6 +4,7 @@ const booking = require('./bookingRoute');
 const review = require('./reviewRoute');
 const helperReview = require('./helperReviewRoute')
 const parkingSpace = require('./parkingSpaceRoute')
+const helperParkingSpace = require('./helperParkingSpaceRoute')
 const images = require('./imagesRoute')
 
 
@@ -17,6 +18,8 @@ router.use('/booking', booking);
 router.use('/images', images)
 // /api/parkingspace
 router.use('/parkingspace', parkingSpace);
+// /api/review/average
+router.use('/helperParkingspace', helperParkingSpace);
 // /api/images
 router.use('/images', images)
 // /api/review
