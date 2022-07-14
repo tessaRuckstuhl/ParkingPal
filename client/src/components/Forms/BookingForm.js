@@ -109,6 +109,9 @@ const BookingForm = () => {
     }
   };
 
+  // leave me here
+  // redirect with state: price, other stats,search for booking id and update as payed
+  // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
   const handlePayment = () => {
     console.log(totalPrice)
   }
