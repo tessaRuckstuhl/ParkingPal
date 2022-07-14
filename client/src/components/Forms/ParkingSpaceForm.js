@@ -206,7 +206,7 @@ const ParkingSpaceForm = () => {
       setFormIncomplete(false)
     else {
       setFormIncomplete(true)
-      setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value !== (""||null)).map(item => item.label) )
+      setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value == (""||null)).map(item => item.label) )
     }
   }, [parkingSpaceName, size, availability, basePrice, street, houseNumber, postalCode, city]);
 
