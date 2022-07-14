@@ -19,6 +19,21 @@ import Avatar from '@mui/material/Avatar';
 import { fromUnixTime, setHours } from 'date-fns';
 import MapWrapper from '../Map/MapWrapper';
 
+import GarageIcon from '@mui/icons-material/Garage';
+import AddRoadIcon from '@mui/icons-material/AddRoad';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import ElectricCarIcon from '@mui/icons-material/ElectricCar';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NoMeetingRoomIcon from '@mui/icons-material/NoMeetingRoom';
+import PinIcon from '@mui/icons-material/Pin';
+import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
+import LooksOneIcon from '@mui/icons-material/LooksOne';
+import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+import Looks3Icon from '@mui/icons-material/Looks3';
+import Looks4Icon from '@mui/icons-material/Looks4';
+import Looks5Icon from '@mui/icons-material/Looks5';
+
+
 
 
 
@@ -27,8 +42,9 @@ const BookingForm = () => {
   const [parkingSpace,setParkingSpace] = useState([]);
   const [parkingMapCenter,setParkingMapCenter] = useState({lat:48.1488436,lng:11.5658499});
   const [parkingSpaceName, setParkingSpaceName] = useState('');
-  const [basePrice, setBasePrice] = useState('2');
-  const [dayPrice,setDayPrice] = useState('10');
+  const [basePrice, setBasePrice] = useState();
+  const [dayPrice,setDayPrice] = useState();
+  const [longPrice, setLongPrice] = useState()
   const [todayDate,setTodayDate] = useState('');
   const [parkingProp, setParkingProp] = useState('');
   const [parkingCandA, setParkingCandA] = useState('');
@@ -36,23 +52,21 @@ const BookingForm = () => {
   const [pics,setParkingPics1] = useState('');
   const [pics2,setParkingPics2] = useState('');
   const [desc,setParkingDesc] = useState('');
-  const [review,setReviewRating] = useState('');
-  const [reviewlist, setReviewList] = useState('');
   const [owner, setParkingOwner] = useState('');
-  const [nr, setNR] = useState(2);
+  const [reviewamount, setReviewamount] = useState(0)
+  const [overallRating, setOverallRating] = useState(0)
+  const [nr, setNR] = useState(5);
   const [cr, setCR] = useState(5);
-  const [ar, setAR] = useState(3);
-  const [acr, setACR] = useState(4);
+  const [ar, setAR] = useState(5);
+  const [acr, setACR] = useState(5);
   const [lr, setLR] = useState(5);
-  const [vr, setVR] = useState(1);
+  const [vr, setVR] = useState(5);
   const [fromTime,setFromTime] = useState (new Date(1));
   const [untilTime,setUntilTime] = useState (new Date(1));
-  const [timeDif,setTimeDif] = useState('');
-  const [totalTime,setTotalTime] = useState(0);
-  const [totalPrice,setTotalPrice] = useState(2);
+  const [totalPrice,setTotalPrice] = useState(0);
   const [days,setDays] = useState(0);
   const [hours,setHours] = useState(0);
-  
+  const [parkingSpaceSize,setParkingSpaceSize] = useState();
   
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
@@ -100,41 +114,41 @@ const BookingForm = () => {
 
 
   useEffect(async () => {
-    const bookingId = new URL(location.href).searchParams.get('bookingId')
-    console.log(bookingId)
-    const parkingResult = await ParkingSpaceService.listParkingSpace(bookingId)
-    //const reviewResult = await ReviewService.getReview(bookingId)
-    //const reviewResultlist = await ReviewService.getAllReviews()
+    const parkingId = new URL(location.href).searchParams.get('parkingId')
+    console.log(parkingId)
+    const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
+    const reviewResult = await ReviewService.getReviewStats(parkingId)
+    //const reviewResultlist = await ReviewService.getReview(parkingId)
     
     console.log(parkingResult)
+    console.log(reviewResult.data)
+    // console.log(reviewResultlist.data)
 
+
+    console.log ("this is the pic: "+ parkingResult.data.images[0])
     // time and Price
-    console.log("unformatted time dif: "+timeDif)
-    console.log("totalTime: "+ totalTime)
-    console.log("fromTimeEx: " + fromTime)
-    console.log("fromTimeEx: " + fromTime)
-    console.log("day:Price: " + dayPrice)
-    console.log("hourPrice:" + basePrice)
-    console.log("DayPrice:")
-    console.log(parkingResult.data.dayPrice)
-    console.log("hourPrice:")
-    console.log(parkingResult.data.basePrice)
-    console.log("Days :")
-    console.log(days)
-    console.log("this is hours: " + hours)
-    console.log ("total day price: "+days*dayPrice)
-    console.log ("total base price: "+hours*basePrice)
+    // console.log("unformatted time dif: "+timeDif)
+    // console.log("totalTime: "+ totalTime)
+    // console.log("fromTimeEx: " + fromTime)
+    // console.log("fromTimeEx: " + fromTime)
+    // console.log("day:Price: " + dayPrice)
+    // console.log("hourPrice:" + basePrice)
+    // console.log("DayPrice:")
+    // console.log(parkingResult.data.dayPrice)
+    // console.log("hourPrice:")
+    // console.log(parkingResult.data.basePrice)
+    // console.log("Days :")
+    // console.log(days)
+    // console.log("this is hours: " + hours)
+    // console.log ("total day price: "+days*dayPrice)
+    // console.log ("total base price: "+hours*basePrice)
 
     
     
     // parkign space
-    console.log("This is the desc:")
-    console.log(parkingResult.data.description)
-    console.log("Test")
-    console.log("Owner:")
-    console.log(owner)
-    console.log("Here is the address:")
-    console.log (parkingResult.data.location)
+    console.log("This is the desc: "+ parkingResult.data.description)
+    console.log("Owner: "+ owner)
+    console.log("Here is the address: "+ parkingResult.data.location)
     
   
   
@@ -154,14 +168,16 @@ const BookingForm = () => {
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
-    // setReviewRating(reviewResult.data.rating)
-    // setReviewList(reviewResultlist.data)
-    // setNR(reviewResultlist.data.neighborhoodRating)
-    // setCR(reviewResultlist.data.communicationRating)
-    // setAR(reviewResultlist.data.accessRating)
-    // setACR(reviewResultlist.data.accuracyRating)
-    // setLR(reviewResultlist.data.locationRating)
-    // setVR(reviewResultlist.data.valueRating)
+    setLongPrice(parkingResult.data.longTermStayPrice)
+    setParkingSpaceSize(parkingResult.data.size)
+    setReviewamount(reviewResult.data.amount)
+    setOverallRating(reviewResult.data.averageOverallRating)
+    setNR(reviewResult.data.averageNeighborhoodRating)
+    setCR(reviewResult.data.averageCommunicationRating)
+    setAR(reviewResult.data.averageAccessRating)
+    setACR(reviewResult.data.averageAccuracyRating)
+    setLR(reviewResult.data.averageLocationRating)
+    setVR(reviewResult.data.averageValueRating)
     
   
   }, []);
@@ -172,41 +188,41 @@ const BookingForm = () => {
           <b>{address}</b>
         </div>
         <div className="mb-6 font-light text-s">
-        <a>{review} • </a>
-          <a>Insert Review here •  </a>
+        
+          <a>{overallRating} ⭐ Rating from {reviewamount} reviews</a>
           
         </div>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               {/* <Item style={{ height: 300 }}>{pics}</Item> */}
-              <Item style={{ height: 300 }}>
+              <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
                   // src={`http://localhost:3001/api/images/${pics}`}
                   width={200}
                   height={300}
                 ></img>
-              </Item>
+              </Box>
             </Grid>
             <Grid item xs={6}>
               {/* <Item style={{ height: 300 }}>{pics2}</Item> */}
-              <Item style={{ height: 300 }}>
+              <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
                   // src={`http://localhost:3001/api/images/${pics2}`}
                   width={200}
                   height={300}
                 ></img>
-              </Item>
+              </Box>
             </Grid>
           </Grid>
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Item style={{ height: 300, justifyContent: 'begin', textAlign: 'justify' }}>
+              <Box style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
                 
-                <Divider />
+                
                 <div
                   style={{
                     justifyContent: 'begin',
@@ -215,21 +231,94 @@ const BookingForm = () => {
                   }}
                 >
                   <br></br>
-                  {/* <Grid container spacing={2}>
+                  <Grid container spacing={2}>
                     <Grid item xs={6}>
-                      <p>- Streetside: {parkingProp.streetside.toString()}</p>
-                      <p>- Garage: {parkingProp.garage.toString()}</p>
-                      <p>- Illuminated: {parkingProp.illuminated.toString()}</p>
-                      <p>- E-Charging: {parkingProp.e_charging.toString()}</p>
+                      <br />
+
+                      {parkingProp.streetside &&
+                        <h2>
+                          <AddRoadIcon color="primary" fontSize="large"></AddRoadIcon> Steetside Parking
+                        </h2>
+                      }
+
+                      {parkingProp.garage &&
+                        <h2>
+                          <GarageIcon color="primary" fontSize="large"></GarageIcon> Entire Garage
+                        </h2>
+                      }
+
+                      {parkingProp.illuminated &&
+                        <h2>
+                          <LightModeIcon color="primary" fontSize="large"></LightModeIcon> Fully Illuminated
+                        </h2>
+                      }
+                      {parkingProp.e_charging &&
+                        <h2>
+                          <ElectricCarIcon color="primary" fontSize="large"></ElectricCarIcon> E-Charging
+                        </h2>
+                      }
+                      <br></br>
                     </Grid>
+                    <Grid item xs={6}>
+                      <br />
+                      <h2>
+                        {
+                          {
+                            '1': <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
+                            '2': <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
+                            '3': <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
+                            '4': <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
+                            '5': <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
+                          }[parkingSpaceSize]
+                        } Size
+                      </h2>
+
+                      {parkingCandA.free_24h_before &&
+                        <h2>
+                          <NavigateBeforeIcon color="primary" fontSize="large"></NavigateBeforeIcon> 24 h before free
+                        </h2>
+                      }
+                      {parkingCandA.no_meetup &&
+                        <h2>
+                          <NoMeetingRoomIcon color="primary" fontSize="large"></NoMeetingRoomIcon> No meetup required
+                        </h2>
+                      }
+                      {parkingCandA.pin &&
+                        <h2>
+                          <PinIcon color="primary" fontSize="large"></PinIcon> Pin Access
+                        </h2>
+                      }
+                      {parkingCandA.security_gate &&
+                        <h2>
+                          <DoorSlidingIcon color="primary" fontSize="large"></DoorSlidingIcon> Security gate for access
+                        </h2>
+                      }
+
+                      <br></br>
+                    </Grid>
+                  </Grid>
+
+                  
+                  
+                  
+                  
+                  
+                  {/* old version */}
+                  {/* <Grid container spacing={2}>
                     <Grid item xs={6}>
                       <p>- Free cancellation: {parkingCandA.free_24h_before.toString()}</p>
                       <p>- No meetup: {parkingCandA.no_meetup.toString()}</p>
                       <p>- Pin code available: {parkingCandA.pin.toString()}</p>
                       <p>- Security gate: {parkingCandA.security_gate.toString()}</p>
                     </Grid>
-                  </Grid> */}
-                 
+                  
+                  <Grid item xs={6}>
+                      <p>- Streetside: {parkingProp.streetside}</p>
+                      <p>- Garage: {parkingProp.garage}</p>
+                      <p>- Illuminated: {parkingProp.illuminated}</p>
+                      <p>- E-Charging: {parkingProp.e_charging}</p>
+                    </Grid>
+                 </Grid> */}
                   <br></br>
                   <Divider />
                   <br></br>
@@ -237,18 +326,29 @@ const BookingForm = () => {
                   <br></br>
                   <p>{desc}</p>                  
                 </div>
-              </Item>
+              </Box>
             </Grid>
             <Grid item xs={6}>
-              <Item style={{ height: 300 }}>
+              <Item style={{ height: 400 }}>
 
-                <div className=" font-regular  text-s">
+                <div className=" font-regular  text-s"  
+                  style={{
+                    justifyContent: 'center',
+                    textAlign: 'justify',
+                    //display: 'flex',
+                  }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                      <a>{basePrice} € / hour  and {dayPrice} € / day</a>
+                      <b>↠ {basePrice} € / hour</b> 
+                      <br></br>
+                      <b>↠ {dayPrice} € / day</b>
+                      <br></br>
+                      <a>Staying longer than 5h?</a>
+                      <br></br>
+                      it's only <b>{longPrice}€ </b>for the rest of the day
                     </Grid>
                     <Grid item xs={6}>
-                      <a>⭐  5.0</a>
+                    <b>Rating:</b> ⭐  {overallRating} ({reviewamount})
                     </Grid>
                   </Grid>
                   <br></br>
@@ -256,10 +356,10 @@ const BookingForm = () => {
                 <div className="mb-6 font-regular  text-s">
                   <Grid container spacing={2}>
                     <Grid item xs={5}>
-                      <Item style={{ height: 70 }} key={5} elevation={5}>
-                        <a>CHECK-IN</a>
+                      <Item style={{ height: 80 }} key={5} elevation={5}>
+                        <b>CHECK-IN</b>
                         <br></br>
-                        <b> {fromTime.toString().substring(0,24)}</b>
+                        <a> {fromTime.toString().substring(0,24)}</a>
                       </Item>
                     </Grid>
                     <Grid item xs={1}>
@@ -267,10 +367,10 @@ const BookingForm = () => {
                       <b> - </b>
                     </Grid>
                     <Grid item xs={5}>
-                      <Item style={{ height: 70 }} key={5} elevation={5}>
-                        <a>CHECK-OUT</a>
+                      <Item style={{ height: 80 }} key={5} elevation={5}>
+                        <b>CHECK-OUT</b>
                         <br></br>
-                        <b>{untilTime.toString().substring(0,24)}</b>
+                        <a>{untilTime.toString().substring(0,24)}</a>
                       </Item>
                     </Grid>
                   </Grid>
@@ -313,7 +413,7 @@ const BookingForm = () => {
 
           <br></br>
           <br></br>
-          <Divider />
+          {/* <Divider /> */}
           <br></br>
           <br></br>
           {/* Date picker from when to when the client wants to book */}
@@ -359,7 +459,7 @@ const BookingForm = () => {
               </Grid>
               <Grid item xs={1}>
                 <br></br>
-                <b> - </b>
+                
               </Grid>
               <Grid item xs={5}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -375,14 +475,15 @@ const BookingForm = () => {
                       const myTimeDif = (end-fromTime)
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
+                      const remainHourPrice = (myHours > 5 ? longPrice : (myHours)* basePrice)
                       setDays(myDays)
                       setHours(myHours)
-                      setTotalPrice((myDays*dayPrice + myHours*basePrice))
+                      setTotalPrice((myDays*dayPrice + remainHourPrice))
                     }}
                   />
                 </LocalizationProvider> 
               </Grid>
-            </Grid>
+            </Grid> 
           </div>
           <br></br>
           <br></br>
@@ -401,7 +502,7 @@ const BookingForm = () => {
               //display: 'flex',
             }}
           >
-            <a>⭐  5.0 • {len} Reviews in total</a>
+            
 
           </div>
 
@@ -485,7 +586,7 @@ const BookingForm = () => {
           <br></br>
           
     
-          <Divider />
+          {/* <Divider /> */}
           <br></br>
           <br></br>
           <h2>Where you'll be parking</h2>

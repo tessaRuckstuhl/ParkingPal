@@ -148,7 +148,7 @@ const ReviewForm = () => {
 
     const resultOwner = await UserService.getUser(resultBooking.data.owner)
     setOwner(resultGuest.data)
-
+    console.log(resultBooking.data.parkingSpace)
     setReviewStats(resultBooking.data.parkingSpace)
 
   }, []);
