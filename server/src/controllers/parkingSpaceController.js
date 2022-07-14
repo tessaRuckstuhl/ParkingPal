@@ -17,12 +17,12 @@ module.exports = {
   //not tested but should work
   async updateParkingSpace(req, res) {
     try {
-      console.log(req.body);
-      const parkingSpace = await ParkingSpace.update(
-        { name: req.body.parkingSpaceName },
+      const { id } = req.params;
+      const parkingSpace = await ParkingSpace.updateOne(
+        { _id: mongoose.Types.ObjectId(id) },       
         { $set: req.body }
       );
-      return res.send(parkingSpace.toJSON());
+      return res.send(parkingSpace);
     } catch (error) {
       console.log(error);
       return res.status(400).send({ error: 'Error when updating a Parking Space' });

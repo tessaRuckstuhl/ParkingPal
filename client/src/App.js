@@ -42,8 +42,8 @@ const App = () => {
                   {/* Routes */}
                   <Routes>
                     <Route path="/login" element={<Login />}></Route>
-                    <Route path="parking/create" element={<CreateParkingSpace type="Create"/>}></Route>
-                    <Route path="parking/update" element={<CreateParkingSpace type="Update"/>}></Route>
+                    <Route path="parking/create" element={<CreateParkingSpace/>}></Route>
+                    <Route path="parking/update" element={<CreateParkingSpace/>}></Route>
                     <Route path="parking/booking" element={<CreateBooking/>}></Route>
                     <Route path="all" element={<ListViewParkingSpaces />}></Route>
                     <Route path="signup" element={<Signup />}></Route>

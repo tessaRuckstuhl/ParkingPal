@@ -52,7 +52,6 @@ const Listings = () => {
   };
   const updateParkingSpace = async (id) => {
     try {
-      console.log(id)
       localStorage.setItem('parkingSpace',id);
       navigate("/parking/update")
     } catch (error) {
