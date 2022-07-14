@@ -109,7 +109,7 @@ const ReviewForm = () => {
       setTimeout(() => {  navigate("/personal"); }, 1500);
 
     } catch (error) {
-      showSnack('Parking space deleted.', 'success')
+      showSnack('Could not create review.', 'error')
     }
   };
 
