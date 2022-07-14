@@ -1,26 +1,41 @@
 import { Button, Divider, IconButton } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowBackIos, DeleteOutline } from '@mui/icons-material';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowBackIos } from '@mui/icons-material';
 import { useErrorSnack } from '../../contexts/ErrorContext';
 import BService from '../../services/booking.service';
 import PSService from '../../services/parkingSpace.service';
 import moment from 'moment';
+import { MainContext } from '../../contexts/MainContext';
+import AuthService from '../../services/auth.service';
+
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const { showSnack } = useErrorSnack();
-  const location = useLocation();
-  const { ownerId } = location.state;
+  const { jwt, setJwt } = useContext(MainContext);
+  const [parsedData, setParsedData] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    getBookings(ownerId);
-  }, []);
-
-  const getBookings = async () => {
     try {
-      // ToDo beautify...
-      const res = await BService.getAllBooking({ guestId: ownerId });
+      setParsedData(AuthService.getCurrentUser(jwt));
+    } catch (error) {
+      console.log(error);
+      AuthService.logout();
+      setJwt('');
+      return navigate('/login');
+    }
+  }, [jwt, navigate, setJwt]);
+
+  useEffect(() => {
+    if (parsedData) {
+      getBookings(parsedData._id);
+    }
+  }, [parsedData]);
+
+  const getBookings = async (guestId) => {
+    try {
+      const res = await BService.getAllBooking({ guestId: guestId });
       const bookings = res.data;
       for (let i = 0; i < bookings.length; i++) {
         const matchedParkingSpace = await PSService.listParkingSpace(bookings[i].parkingSpace);

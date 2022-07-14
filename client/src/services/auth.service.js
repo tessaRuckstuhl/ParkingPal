@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Buffer } from 'buffer';
 
 const AuthService = {
   signup(credentials) {
@@ -10,9 +11,10 @@ const AuthService = {
   logout() {
     return localStorage.removeItem('token');
   },
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('token'));
-  }
+  getCurrentUser(token) {
+    console.log(token)
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64'));
+  },
 };
 
 export default AuthService;

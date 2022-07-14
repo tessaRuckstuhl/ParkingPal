@@ -16,7 +16,6 @@ const Dashboard = () => {
   useEffect(() => {
     try {
       setParsedData(JSON.parse(Buffer.from(jwt.split('.')[1], 'base64')));
-      console.log(JSON.parse(Buffer.from(jwt.split('.')[1], 'base64')));
     } catch (error) {
       console.log(error);
       AuthService.logout();
@@ -49,14 +48,14 @@ const Dashboard = () => {
           link="/personal/bookings"
           description="Here you can view, edit and review your past bookings."
           Icon={GarageOutlined}
-          ownerId={parsedData._id}
+          ownerId={parsedData?._id}
         />
         <Tile
           title="My listings"
           link="/personal/listings"
           description="Here you can create, update and delete listings"
           Icon={LocalOfferOutlined}
-          ownerId={parsedData._id}
+          ownerId={parsedData?._id}
         />
       </div>
     </div>

@@ -16,6 +16,7 @@ import { Divider } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { FilterContext } from '../../contexts/FilterContext';
 import _ from 'lodash';
+import PSService from '../../services/parkingSpace.service';
 const MoreFilters = (props) => {
   const { filters, setFilters, getAllParkingSpaces } = useContext(FilterContext);
 
@@ -23,7 +24,11 @@ const MoreFilters = (props) => {
   const { handleFilterChange } = props;
   const [open, setOpen] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
-
+  const [priceConstraints, setPriceConstraints] = useState({
+    maxDayPrice: 200,
+    maxBasePrice: 100,
+    maxLongTermStayPrice: 50,
+  });
   // workaround for counting active filters...
   const enhancedFilterKeys = [
     'dayPrice',
@@ -63,17 +68,23 @@ const MoreFilters = (props) => {
 
   const handleCheckboxChange = (e) => {
     // set nested key by path string, delete if set to false for correct filter count
-    if(e.target.checked){
+    if (e.target.checked) {
       setFilters({ ...filters, [e.target.name]: e.target.checked });
     } else {
-      const copy = {...filters}
-      delete copy[e.target.name]
-      setFilters({ ...copy});
-
+      const copy = { ...filters };
+      delete copy[e.target.name];
+      setFilters({ ...copy });
     }
   };
 
+  const setInitialFilterContraints = async () => {
+    const res = await PSService.filterConstraints();
+    const constraints = res.data;
+    setPriceConstraints({ ...constraints });
+  };
+
   useEffect(() => {
+    setInitialFilterContraints();
     let count = 0;
     enhancedFilterKeys.map((key) => {
       if (filters?.hasOwnProperty(key)) {
@@ -116,16 +127,20 @@ const MoreFilters = (props) => {
             <div className="font-bold">Hour Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price by hour</div>
             <Slider
-              class="more-filter-option"
               onChange={handleFilterChange}
               name="basePrice"
-              value={filters?.basePrice || [0, 100]}
+              value={filters?.basePrice || [0, priceConstraints.maxBasePrice]}
               valueLabelDisplay="auto"
+              min={0}
+              max={priceConstraints.maxBasePrice}
               getAriaLabel={(index) => (index === 0 ? 'Minimum hour price' : 'Maximum hour price')}
               getAriaValueText={(value) => `${value} €`}
               marks={[
                 { value: 0, label: '0 €' },
-                { value: 100, label: '100 €' },
+                {
+                  value: priceConstraints.maxBasePrice,
+                  label: `${priceConstraints.maxBasePrice} €`,
+                },
               ]}
             />
           </DialogContent>
@@ -135,15 +150,15 @@ const MoreFilters = (props) => {
             <Slider
               onChange={handleFilterChange}
               name="dayPrice"
-              value={filters?.dayPrice || [0, 300]}
+              value={filters?.dayPrice || [0, priceConstraints.maxDayPrice]}
               valueLabelDisplay="auto"
               min={0}
-              max={300}
+              max={priceConstraints.maxDayPrice}
               getAriaLabel={(index) => (index === 0 ? 'Minimum day price' : 'Maximum day price')}
               getAriaValueText={(value) => `${value} €`}
               marks={[
                 { value: 0, label: '0 €' },
-                { value: 300, label: '300 €' },
+                { value: priceConstraints.maxDayPrice, label: `${priceConstraints.maxDayPrice} €` },
               ]}
             />
           </DialogContent>
@@ -155,17 +170,20 @@ const MoreFilters = (props) => {
             <Slider
               onChange={handleFilterChange}
               name="longTermStayPrice"
-              value={filters?.longTermStayPrice || [0, 500]}
+              value={filters?.longTermStayPrice || [0, priceConstraints.maxLongTermStayPrice]}
               valueLabelDisplay="auto"
               min={0}
-              max={500}
+              max={priceConstraints.maxLongTermStayPrice}
               getAriaLabel={(index) =>
                 index === 0 ? 'Minimum longterm stay price' : 'Maximum longterm stay price'
               }
               getAriaValueText={(value) => `${value} €`}
               marks={[
                 { value: 0, label: '0 €' },
-                { value: 500, label: '500 €' },
+                {
+                  value: priceConstraints.maxLongTermStayPrice,
+                  label: `${priceConstraints.maxLongTermStayPrice} €`,
+                },
               ]}
             />
           </DialogContent>

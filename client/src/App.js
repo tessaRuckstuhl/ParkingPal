@@ -13,6 +13,7 @@ import Default from './layout/Default';
 import CreateParkingSpace from './pages/CreateParkingSpace'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import CreateReview from './pages/CreateReview'
+import CreateBooking from './pages/CreateBooking'
 import About from './pages/About'
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
