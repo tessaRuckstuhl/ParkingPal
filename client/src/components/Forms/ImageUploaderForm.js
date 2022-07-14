@@ -13,7 +13,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 const ImageUploaderForm = () => {
     const [file, setFile] = useState(null)
     const [inputContainsFile, setInputContainsFile] = useState(false)
-    const { imageIDs, addImageID } = useContext(ImageContext)
+    const { imageIDs, addImageID, setImageIDs } = useContext(ImageContext)
 
     const handleFile = (event) => {
         setFile(event.target.files[0]);
@@ -42,7 +42,7 @@ const ImageUploaderForm = () => {
                 <label htmlFor="file">Click on browse to add photos</label>
                 <div className="mt-2"> <input type="file" name="file" id="file" onChange={handleFile}></input>    
                
-                {file ? <Button variant="contained" color="primary" onClick={() => {
+                {file ? <Button sx={{mr:2}}variant="contained" color="primary" onClick={() => {
                     if (inputContainsFile) {
                         fileUploadHandler()
                         document.getElementById('file').value = ''
@@ -50,6 +50,7 @@ const ImageUploaderForm = () => {
                 }}>Upload</Button> : null}
                 {imageIDs.length > 0 ? <Button variant="contained" color="primary" onClick={() => {
                         imageIDs.map(imageID => ParkingSpaceService.deleteImage(imageID))
+                        setImageIDs([])
                     }
                 }>Delete All</Button> : null}
             </div>
