@@ -13,6 +13,7 @@ import Default from './layout/Default';
 import CreateParkingSpace from './pages/CreateParkingSpace'
 import ListViewParkingSpaces from './pages/ListViewParkingSpaces'
 import CreateReview from './pages/CreateReview'
+import CreateBooking from './pages/CreateBooking'
 import About from './pages/About'
 import PageNotFound from './pages/404';
 import Results from './pages/Results';
@@ -20,6 +21,8 @@ import Dashboard from './pages/UserDashboard/Dashboard';
 import Bookings from './pages/UserDashboard/Bookings';
 import Listings from './pages/UserDashboard/Listings';
 import { ErrorContextProvider } from './contexts/ErrorContext';
+import Paypal from './components/Payment/Paypal';
+import PaymentSuccess from './pages/PaymentSuccess';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
@@ -40,6 +43,7 @@ const App = () => {
                   <Routes>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="parking/create" element={<CreateParkingSpace />}></Route>
+                    <Route path="parking/booking" element={<CreateBooking />}></Route>
                     <Route path="all" element={<ListViewParkingSpaces />}></Route>
                     <Route path="signup" element={<Signup />}></Route>
                     <Route path="review/create" element={<CreateReview />}></Route>
@@ -57,6 +61,8 @@ const App = () => {
                     <Route path="personal" element={<Dashboard />}></Route>
                     <Route path="personal/bookings" element={<Bookings />}></Route>
                     <Route path="personal/listings" element={<Listings />}></Route>
+                    <Route path="pay" element={<Paypal/>}></Route>
+                    <Route path="pay/success" element={<PaymentSuccess/>}></Route>
 
                     {/* matches anything except the above */}
                     <Route path="*" element={<PageNotFound />} />

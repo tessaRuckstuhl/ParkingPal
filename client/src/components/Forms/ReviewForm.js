@@ -109,7 +109,7 @@ const ReviewForm = () => {
       setTimeout(() => {  navigate("/personal"); }, 1500);
 
     } catch (error) {
-      showSnack('Parking space deleted.', 'success')
+      showSnack('Could not create review.', 'error')
     }
   };
 
@@ -148,7 +148,7 @@ const ReviewForm = () => {
 
     const resultOwner = await UserService.getUser(resultBooking.data.owner)
     setOwner(resultGuest.data)
-
+    console.log(resultBooking.data.parkingSpace)
     setReviewStats(resultBooking.data.parkingSpace)
 
   }, []);

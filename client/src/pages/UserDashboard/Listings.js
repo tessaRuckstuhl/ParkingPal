@@ -1,22 +1,39 @@
 import { Button, Divider, IconButton } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import PSService from '../../services/parkingSpace.service';
 import { ArrowBackIos, DeleteOutline } from '@mui/icons-material';
 import { useErrorSnack } from '../../contexts/ErrorContext';
+import { MainContext } from '../../contexts/MainContext';
+import AuthService from '../../services/auth.service';
 
 const Listings = () => {
   const [ownerParkingSpaces, setOwnerParkingSpaces] = useState([]);
   const { showSnack } = useErrorSnack();
-  const location = useLocation();
-  const { ownerId } = location.state;
-  useEffect(() => {
-    getOwnersParkingSpaces(ownerId);
-  }, []);
+  const { jwt, setJwt } = useContext(MainContext);
+  const [parsedData, setParsedData] = useState('');
+  const navigate = useNavigate();
 
-  const getOwnersParkingSpaces = async () => {
+  useEffect(() => {
     try {
-      const parkingSpaces = await PSService.listAllParkingSpaces({ ownerId: ownerId });
+      setParsedData(AuthService.getCurrentUser(jwt));
+    } catch (error) {
+      console.log(error);
+      AuthService.logout();
+      setJwt('');
+      return navigate('/login');
+    }
+  }, [jwt, navigate, setJwt]);
+  
+  useEffect(() => {
+    if (parsedData) {
+      getOwnersParkingSpaces(parsedData._id);
+    }
+  }, [parsedData]);
+
+  const getOwnersParkingSpaces = async (ownerId) => {
+    try {
+      const parkingSpaces = await PSService.listOwnedParkingSpaces(ownerId);
       setOwnerParkingSpaces(parkingSpaces.data);
     } catch (error) {
       console.log(error);
@@ -60,8 +77,9 @@ const Listings = () => {
         ))
       ) : (
         <div className="mt-20 text-center ">
-          <div className="text-3xl font-semibold mb-5">Get started on ParkingPal</div>Got a parking space to
-          share? <br/>Earn money as an ParkingPal host. Get started by creating a listing.
+          <div className="text-3xl font-semibold mb-5">Get started on ParkingPal</div>Got a parking
+          space to share? <br />
+          Earn money as an ParkingPal host. Get started by creating a listing.
         </div>
       )}
     </div>

@@ -1,10 +1,12 @@
 import React from 'react';
 import { FavoriteBorderOutlined, StarBorder, LocationOn } from '@mui/icons-material';
 import { Divider, Rating } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 
 const Listing = (props) => {
   const { listing, setCenter } = props;
+  const navigate = useNavigate();
+
   const recenter = (e) => {
     setCenter({ lat: listing.lat, lng: listing.lng });
   };
@@ -30,6 +32,10 @@ const Listing = (props) => {
     } else {
       return 'No additional information to display...';
     }
+  };
+
+    const viewListing = () => {
+    navigate(`/parking/booking?parkingId=${listing._id}`);
   };
 
   return (
@@ -62,9 +68,9 @@ const Listing = (props) => {
             <div className="text-lightGray">
               {buildFormattedPropertiesString(listing.properties?.cancellation_and_access)}
             </div>
-            <Link to={'/404'}>
+            <a onClick={() =>viewListing()}>
               <div className="text-xl hover:underline hover:cursor-pointer">{listing.name}</div>
-            </Link>
+            </a>
             <div className="text-sm flex items-center space-x-1">
               <span>
                 <LocationOn sx={{ fontSize: '.75rem' }} />

@@ -4,7 +4,7 @@ import Map from './Map';
 import Marker from './Marker';
 
 const MapWrapper = (props) => {
-  const { results, center, setCenter } = props;
+  const { results, center, setCenter, selected } = props;
   const [zoom, setZoom] = useState(11); // initial zoom
 
   const render = (status) => {
@@ -24,7 +24,8 @@ const MapWrapper = (props) => {
             <Marker
               key={i}
               position={{ lat: result.lat, lng: result.lng }}
-              label={'€' + result.basePrice}
+              label={selected ? '': '€' + result.basePrice}
+              selected = {selected}
               resultId={result._id}
               name={result.name}
             />

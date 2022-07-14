@@ -12,7 +12,7 @@ const Tile = (props) => {
       </div>
       <Icon sx={{ fontSize: 40, justifySelf: 'center' }} />
       <div className="text-lightGray text-sm">{description}</div>
-      <Link to={link} state={{ ownerId: ownerId }}>
+      <Link to={link}>
         <div className="text-sm text-purple hover:underline hover:cursor-pointer">
           {`VIEW ${title.toUpperCase()}`} <ChevronRight />
         </div>
