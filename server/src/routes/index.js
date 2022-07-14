@@ -14,19 +14,17 @@ const router = express.Router();
 // /api/user
 router.use('/user', user);
 // /api/booking
-router.use('/booking',isAuthenticated, booking);
-// /api/images
-router.use('/images', isAuthenticated, images)
+router.use('/booking', booking);
 // /api/parkingspace
-router.use('/parkingspace',isAuthenticated, parkingSpace);
+router.use('/parkingspace', parkingSpace);
 // /api/review/average
 router.use('/helperParkingspace', helperParkingSpace);
 // /api/images
-router.use('/images',isAuthenticated, images)
+router.use('/images', images)
 // /api/review
-router.use('/review',isAuthenticated, review);
+router.use('/review', review);
 // /api/review/average
-router.use('/helperReview', isAuthenticated, helperReview);
+router.use('/helperReview', helperReview);
 
 
 

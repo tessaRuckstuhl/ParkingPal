@@ -184,7 +184,7 @@ const ParkingSpaceForm = () => {
         },
       };
       console.log(parkingSpace)
-      await ParkingSpaceService.create(parkingSpace);
+      location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(parkingSpace)
       clearAll()
     } catch (error) {
       for (var i = 0; i < imageIDs.length; i++) {
@@ -201,7 +201,31 @@ const ParkingSpaceForm = () => {
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
+    if(localStorage.getItem('parkingSpace')){
+      const updateParkingSpace = await (await ParkingSpaceService.listParkingSpace(localStorage.getItem('parkingSpace'))).data
+      console.log(updateParkingSpace)
+      setParkingSpaceName(updateParkingSpace.name)
+      //setImageIDs(updateParkingSpace.images)
+      setDescription(updateParkingSpace.description)
+      setSize(updateParkingSpace.properties.size)
+      setBasePrice(updateParkingSpace.basePrice)
+      setDayPrice(updateParkingSpace.dayPrice)
+      setLongTermStayPrice(updateParkingSpace.longTermStayPrice)
+      setAvailability(updateParkingSpace.availability)
+      setStreet(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[0])
+      setHouseNumber(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[1])
+      setPostalCode(updateParkingSpace.formattedAddress.split(',')[1].split(' ')[1])
+      setCity(updateParkingSpace.formattedAddress.split(',')[1].split(' ')[2])
+      setE_Charging(updateParkingSpace.properties.parking.e_charging)
+      setStreetside(updateParkingSpace.properties.parking.streetside)
+      setIlluminated(updateParkingSpace.properties.parking.illuminated)
+      setGarage(updateParkingSpace.properties.parking.garage)
+      setFree_24h_before(updateParkingSpace.properties.cancellation_and_access.free_24h_before)
+      setNo_Meetup(updateParkingSpace.properties.cancellation_and_access.no_meetup)
+      setPin(updateParkingSpace.properties.cancellation_and_access.pin)
+      setSecurityGate(updateParkingSpace.properties.cancellation_and_access.pin)
+    } 
     if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
       setFormIncomplete(false)
     else {
@@ -428,14 +452,22 @@ const ParkingSpaceForm = () => {
             />
           </div>
           <div className="my-4">
-            <Button
+            {location.pathname === "/parking/create" ? <Button
               disabled={formIncomplete}
               type="submit"
               variant="contained"
               color="primary"
             >
               Create Parking Space
-            </Button>
+            </Button> :
+            <Button
+              disabled={formIncomplete}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Update Parking Space
+            </Button>}
             {formIncomplete?
             <IconButton onClick={() => showSnack("You need to fill out" +  missingFileds, 'warning')}>
               <Info sx={{ fontSize: 20 }} color="secondary" />

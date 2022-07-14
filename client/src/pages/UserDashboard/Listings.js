@@ -2,7 +2,7 @@ import { Button, Divider, IconButton } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PSService from '../../services/parkingSpace.service';
-import { ArrowBackIos, DeleteOutline } from '@mui/icons-material';
+import { ArrowBackIos, DeleteOutline, Edit } from '@mui/icons-material';
 import { useErrorSnack } from '../../contexts/ErrorContext';
 import { MainContext } from '../../contexts/MainContext';
 import AuthService from '../../services/auth.service';
@@ -50,6 +50,17 @@ const Listings = () => {
       console.log(error);
     }
   };
+  const updateParkingSpace = async (id) => {
+    try {
+      console.log(id)
+      localStorage.setItem('parkingSpace',id);
+      navigate("/parking/update")
+    } catch (error) {
+      showSnack('Something went wrong.', 'error');
+      console.log(error);
+    }
+  };
+
   return (
     <div className="p-3 m-3">
       <Link to="/personal">
@@ -67,12 +78,18 @@ const Listings = () => {
       </div>
 
       {ownerParkingSpaces.length > 0 ? (
-        ownerParkingSpaces.map((parking) => (
-          <div className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
+        ownerParkingSpaces.map((parking,k) => (
+          <div key={k} className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
             {`${parking.name} in ${parking.formattedAddress}`}{' '}
+            <div>
+            <IconButton onClick={() => updateParkingSpace(parking._id)}>
+              <Edit />
+            </IconButton>  
             <IconButton onClick={() => deleteParkingSpace(parking._id)}>
               <DeleteOutline />
-            </IconButton>{' '}
+            </IconButton>
+            </div>
+            {' '}
           </div>
         ))
       ) : (
