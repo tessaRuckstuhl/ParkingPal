@@ -17,9 +17,11 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Login from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
+import {useErrorSnack} from '../contexts/ErrorContext'
 
 const Navbar = () => {
   const location = useLocation();
+  const {showSnack} = useErrorSnack()
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = React.useState(false)
    const links = []
@@ -64,7 +66,7 @@ const Navbar = () => {
         {showFilters && <Bar/>}
         {/* Language, Profile, .. */}
       <div className="flex space-x-2 items-center">
-        <IconButton onClick={() => alert('TBD')}>
+        <IconButton onClick={() => showSnack('At the moment we only support English, German is coming soon!', 'info')}>
           <LanguageIcon sx={{ fontSize: 20 }} color="secondary" />
         </IconButton>
         <div className="flex space-x-1 border-darkGray rounded-3xl border px-1">

@@ -3,21 +3,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import ParkingSpaceService from '../../services/parkingSpace.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Grid, Box } from '@mui/material/';
+import { Grid, Box, IconButton, Radio, RadioGroup, FormControl , Tooltip, Checkbox,FormGroup , FormControlLabel } from '@mui/material/';
 import { styled } from '@mui/material/styles';
 import ImageUploaderForm from './ImageUploaderForm';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Tooltip from '@mui/material/Tooltip';
-import { ImageContext } from '../../contexts/ImageContext';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-
+import { LocalizationProvider,DateTimePicker } from '@mui/x-date-pickers';
+import { useErrorSnack } from '../../contexts/ErrorContext'
+import { ImageContext } from '../../contexts/ImageContext'
+import Info from '@mui/icons-material/Info';
 import moment from 'moment';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
@@ -52,13 +45,16 @@ const ParkingSpaceForm = () => {
   const [securityGate, setSecurityGate] = useState(false)
   const [formIncomplete, setFormIncomplete] = useState(true)
 
+  const [missingFileds,setMissingFields] = useState([])
+
   const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
-    margin:'2px',
+    margin: '2px',
     color: theme.palette.text.secondary,
   }));
+  const { showSnack } = useErrorSnack()
 
   //TODO:
   /*
@@ -191,10 +187,10 @@ const ParkingSpaceForm = () => {
       await ParkingSpaceService.create(parkingSpace);
       clearAll()
     } catch (error) {
-      for (var i = 0; i < imageIDs.length;i++){
+      for (var i = 0; i < imageIDs.length; i++) {
         await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
-    }
-  };
+      }
+    };
   }
 
   const parseJwt = (token) => {
@@ -206,12 +202,13 @@ const ParkingSpaceForm = () => {
   };
 
   useEffect(() => {
-    if(parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
+    if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
       setFormIncomplete(false)
-    else{
+    else {
       setFormIncomplete(true)
+      setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value !== (""||null)).map(item => item.label) )
     }
-  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city]);
+  }, [parkingSpaceName, size, availability, basePrice, street, houseNumber, postalCode, city]);
 
   return (
     <div className="flex flex-col items-center ">
@@ -264,7 +261,7 @@ const ParkingSpaceForm = () => {
                   name="radio-buttons-size"
                   onChange={(e) => handleChange(e)}
                 >
-                  <FormControlLabel value="0" control={<Radio />} label="S"/>
+                  <FormControlLabel value="0" control={<Radio />} label="S" />
                   <FormControlLabel value="1" control={<Radio />} label="M" />
                   <FormControlLabel value="2" control={<Radio />} label="L" />
                   <FormControlLabel value="3" control={<Radio />} label="XL" />
@@ -316,21 +313,22 @@ const ParkingSpaceForm = () => {
               {availability.length > 0 ? availability.map((slot) => {
                 return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
               }) : null}
-              <Button style={{marginTop:10}} variant="contained" color="primary" onClick={() => {
-                if(fromValue >= toValue) {
-                  alert("Please make sure the start date is before the end date!")
+              <Button style={{ marginTop: 10 }} variant="contained" color="primary" onClick={() => {
+                if (fromValue >= toValue) {
+                  showSnack("Please make sure the start date is before the end date!", "warning")
                 }
-                else{
+                else {
                   let available = {
                     from: fromValue.toISOString(),
                     to: toValue.toISOString()
                   }
                   setAvailability(state => [...state, available]);
-                
-                setToValue(null);
-                setFromValue(null);
-              }}}>Add Availability</Button>
-              <Button style={{marginTop:10}} disabled={availability.length === 0} variant="contained" color="primary" onClick={() => {
+
+                  setToValue(null);
+                  setFromValue(null);
+                }
+              }}>Add Availability</Button>
+              <Button style={{ marginTop: 10 }} disabled={availability.length === 0} variant="contained" color="primary" onClick={() => {
                 setToValue(null);
                 setFromValue(null);
                 setAvailability([]);
@@ -388,7 +386,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '69.5%', marginRight: 5}}
+              style={{ width: '69.5%', marginRight: 5 }}
               name="street"
               label="Street"
               id="street"
@@ -399,7 +397,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '30%'}}
+              style={{ width: '30%' }}
               name="houseNumber"
               label="House Number"
               id="houseNumber"
@@ -410,7 +408,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '69.5%', marginRight: 5}}
+              style={{ width: '69.5%', marginRight: 5 }}
               name="city"
               label="City"
               id="city"
@@ -421,7 +419,7 @@ const ParkingSpaceForm = () => {
               variant="outlined"
               margin="normal"
               required
-              style ={{width: '30%'}}
+              style={{ width: '30%' }}
               name="postalCode"
               label="Postal Code"
               id="postalCode"
@@ -430,14 +428,19 @@ const ParkingSpaceForm = () => {
             />
           </div>
           <div className="my-4">
-          <Button 
-            disabled={formIncomplete}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Create Parking Space
-          </Button>
+            <Button
+              disabled={formIncomplete}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Create Parking Space
+            </Button>
+            {formIncomplete?
+            <IconButton onClick={() => showSnack("You need to fill out" +  missingFileds, 'warning')}>
+              <Info sx={{ fontSize: 20 }} color="secondary" />
+            </IconButton>
+            :null}
           </div >
         </form>
       </div>
