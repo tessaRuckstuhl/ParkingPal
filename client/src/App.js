@@ -21,6 +21,8 @@ import Dashboard from './pages/UserDashboard/Dashboard';
 import Bookings from './pages/UserDashboard/Bookings';
 import Listings from './pages/UserDashboard/Listings';
 import { ErrorContextProvider } from './contexts/ErrorContext';
+import Paypal from './components/Payment/Paypal';
+import PaymentSuccess from './pages/PaymentSuccess';
 const App = () => {
   // main parkingpal theme
   const theme = createTheme(mainTheme);
@@ -59,6 +61,8 @@ const App = () => {
                     <Route path="personal" element={<Dashboard />}></Route>
                     <Route path="personal/bookings" element={<Bookings />}></Route>
                     <Route path="personal/listings" element={<Listings />}></Route>
+                    <Route path="pay" element={<Paypal/>}></Route>
+                    <Route path="pay/success" element={<PaymentSuccess/>}></Route>
 
                     {/* matches anything except the above */}
                     <Route path="*" element={<PageNotFound />} />

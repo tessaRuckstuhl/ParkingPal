@@ -12,11 +12,19 @@ const PSService = {
         return axios.delete(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
     listParkingSpace(id) {
-        console.log(id)
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
     },
     listAllParkingSpaces(filters) {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters});
+    },
+    listOwnedParkingSpaces(ownerId) {
+        return axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/listings/${ownerId}`);
+    },
+    filterParkingSpaces(filters){
+        return  axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/filter`, {params: filters});
+    },
+    filterConstraints(){
+        return  axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/filter/constraints`);
     },
     getCoordinates(address) {
         let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + `&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`

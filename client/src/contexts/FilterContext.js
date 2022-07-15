@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PSService from '../services/parkingSpace.service';
 import RService from '../services/review.service';
 import { useErrorSnack } from './ErrorContext';
@@ -6,13 +7,17 @@ import { useErrorSnack } from './ErrorContext';
 const FilterContext = React.createContext();
 
 const FilterContextProvider = (props) => {
+  const navigate = useNavigate()
   const [filters, setFilters] = useState();
   const [results, setResults] = useState([]);
   const {showSnack} = useErrorSnack()
   const getAllParkingSpaces = async (query) => {
     try {
-      const parkingSpaces = await PSService.listAllParkingSpaces(query);
-
+      let parkingSpaces = await PSService.filterParkingSpaces(query);
+      if(parkingSpaces.data.length == 0){
+        showSnack('There are no parking places available that match your filters. Change and search again...', 'warning')
+        parkingSpaces = await PSService.filterParkingSpaces();
+      }
       const formattedParkingSpaces = parkingSpaces.data.map((d) => {
         return { ...d, lat: d.location.coordinates[0], lng: d.location.coordinates[1] };
       });
@@ -22,13 +27,13 @@ const FilterContextProvider = (props) => {
       }
       setResults(formattedParkingSpaces);
     } catch (error) {
-      showSnack('An error ocurred.', 'error')
+      showSnack(error?.response?.data?.error || error.message, 'error')
     }
   };
 
   useEffect(() => {
-    getAllParkingSpaces(null);
-  }, []);
+    getAllParkingSpaces(filters);
+  }, [navigate]);
 
   return (
     <FilterContext.Provider
