@@ -121,6 +121,7 @@ const BookingForm = () => {
     //const reviewResultlist = await ReviewService.getReview(parkingId)
     
     console.log(parkingResult)
+    console.log("hallo")
     console.log(reviewResult.data)
     // console.log(reviewResultlist.data)
 
@@ -148,7 +149,7 @@ const BookingForm = () => {
     // parkign space
     console.log("This is the desc: "+ parkingResult.data.description)
     console.log("Owner: "+ owner)
-    console.log("Here is the address: "+ parkingResult.data.location)
+    console.log("Here is the address: "+ parkingResult.data)
     
   
   
@@ -170,14 +171,14 @@ const BookingForm = () => {
     setBasePrice(parkingResult.data.basePrice)
     setLongPrice(parkingResult.data.longTermStayPrice)
     setParkingSpaceSize(parkingResult.data.size)
-    setReviewamount(reviewResult.data.amount)
-    setOverallRating(reviewResult.data.averageOverallRating)
-    setNR(reviewResult.data.averageNeighborhoodRating)
-    setCR(reviewResult.data.averageCommunicationRating)
-    setAR(reviewResult.data.averageAccessRating)
-    setACR(reviewResult.data.averageAccuracyRating)
-    setLR(reviewResult.data.averageLocationRating)
-    setVR(reviewResult.data.averageValueRating)
+    setReviewamount(reviewResult.data.amount || 0)
+    setOverallRating(reviewResult.data.averageOverallRating || 0)
+    setNR(reviewResult.data.averageNeighborhoodRating || 0)
+    setCR(reviewResult.data.averageCommunicationRating|| 0)
+    setAR(reviewResult.data.averageAccessRating || 0)
+    setACR(reviewResult.data.averageAccuracyRating || 0)
+    setLR(reviewResult.data.averageLocationRating || 0)
+    setVR(reviewResult.data.averageValueRating|| 0) 
     
   
   }, []);
