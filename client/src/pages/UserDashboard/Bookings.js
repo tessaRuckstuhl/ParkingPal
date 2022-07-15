@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton } from '@mui/material';
+import { Button, CircularProgress, Divider, IconButton } from '@mui/material';
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowBackIos } from '@mui/icons-material';
@@ -14,6 +14,7 @@ const Bookings = () => {
   const { showSnack } = useErrorSnack();
   const { jwt, setJwt } = useContext(MainContext);
   const [parsedData, setParsedData] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +30,9 @@ const Bookings = () => {
 
   useEffect(() => {
     if (parsedData) {
+      setLoading(true);
       getBookings(parsedData._id);
+      setLoading(false);
     }
   }, [parsedData]);
 
@@ -62,10 +65,16 @@ const Bookings = () => {
       <div className="flex justify-between mb-5">
         <div className="text-3xl font-bold">My bookings</div>
       </div>
-
-      {bookings.length > 0 ? (
-        bookings.map((b) => (
-          <div className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
+      {loading ? (
+        <div className=" flex justify-center">
+          <CircularProgress />
+        </div>
+      ) : bookings.length > 0 ? (
+        bookings.map((b, i) => (
+          <div
+            key={i}
+            className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between"
+          >
             {`${moment(b.startDate).format('DD.MM.YYYY,  HH:MM')} to ${moment(b.endDate).format(
               'DD.MM.YYYY, HH:MM'
             )} in ${b.parkingSpaceProps?.name} at ${b.parkingSpaceProps?.formattedAddress}`}

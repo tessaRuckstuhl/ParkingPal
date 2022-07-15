@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton } from '@mui/material';
+import { Button, Divider, IconButton, CircularProgress } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PSService from '../../services/parkingSpace.service';
@@ -12,6 +12,8 @@ const Listings = () => {
   const { showSnack } = useErrorSnack();
   const { jwt, setJwt } = useContext(MainContext);
   const [parsedData, setParsedData] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,10 +26,12 @@ const Listings = () => {
       return navigate('/login');
     }
   }, [jwt, navigate, setJwt]);
-  
+
   useEffect(() => {
     if (parsedData) {
+      setLoading(true);
       getOwnersParkingSpaces(parsedData._id);
+      setLoading(false);
     }
   }, [parsedData]);
 
@@ -36,6 +40,7 @@ const Listings = () => {
       const parkingSpaces = await PSService.listOwnedParkingSpaces(ownerId);
       setOwnerParkingSpaces(parkingSpaces.data);
     } catch (error) {
+      showSnack('Something went wrong trying to fetch your listings.', 'error');
       console.log(error);
     }
   };
@@ -43,7 +48,7 @@ const Listings = () => {
   const deleteParkingSpace = async (id) => {
     try {
       const deleted = await PSService.delete(id);
-      getOwnersParkingSpaces();
+      getOwnersParkingSpaces(parsedData._id);
       showSnack('Parking space deleted.', 'success');
     } catch (error) {
       showSnack('Something went wrong.', 'error');
@@ -66,9 +71,13 @@ const Listings = () => {
         </Link>
       </div>
 
-      {ownerParkingSpaces.length > 0 ? (
-        ownerParkingSpaces.map((parking) => (
-          <div className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
+      {loading ? (
+        <div className=" flex justify-center">
+          <CircularProgress />
+        </div>
+      ) : ownerParkingSpaces.length > 0 ? (
+        ownerParkingSpaces.map((parking, i) => (
+          <div key={i} className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
             {`${parking.name} in ${parking.formattedAddress}`}{' '}
             <IconButton onClick={() => deleteParkingSpace(parking._id)}>
               <DeleteOutline />

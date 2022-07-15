@@ -1,12 +1,12 @@
-import React from 'react';
-import { FavoriteBorderOutlined, StarBorder, LocationOn } from '@mui/icons-material';
-import { Divider, Rating } from '@mui/material';
-import { Link , useNavigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import { FavoriteBorderOutlined, Favorite, StarBorder, LocationOn } from '@mui/icons-material';
+import { Divider, IconButton, Rating } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Listing = (props) => {
   const { listing, setCenter } = props;
   const navigate = useNavigate();
-
+  const [liked, setLiked] = useState(false);
   const recenter = (e) => {
     setCenter({ lat: listing.lat, lng: listing.lng });
   };
@@ -34,7 +34,7 @@ const Listing = (props) => {
     }
   };
 
-    const viewListing = () => {
+  const viewListing = () => {
     navigate(`/parking/booking?parkingId=${listing._id}`);
   };
 
@@ -68,7 +68,7 @@ const Listing = (props) => {
             <div className="text-lightGray">
               {buildFormattedPropertiesString(listing.properties?.cancellation_and_access)}
             </div>
-            <a onClick={() =>viewListing()}>
+            <a onClick={() => viewListing()}>
               <div className="text-xl hover:underline hover:cursor-pointer">{listing.name}</div>
             </a>
             <div className="text-sm flex items-center space-x-1">
@@ -78,7 +78,15 @@ const Listing = (props) => {
               <span> {listing.formattedAddress}</span>
             </div>
           </div>
-          <FavoriteBorderOutlined />
+          <div>
+            <IconButton
+              onClick={() => {
+                setLiked(!liked);
+              }}
+            >
+              {liked ? <Favorite color='primary'/> : <FavoriteBorderOutlined />}
+            </IconButton>
+          </div>
         </div>
         <Divider sx={{ width: '30%' }} />
         {/* Listing Properties */}
@@ -90,13 +98,15 @@ const Listing = (props) => {
         {/* Review */}
         <div className="flex justify-between">
           <div className="flex space-x-1 ">
-            {listing.reviewStats.amount > 0 && <span>{listing.reviewStats.averageOverallRating}</span>}
+            {listing.reviewStats.amount > 0 && (
+              <span>{listing.reviewStats.averageOverallRating}</span>
+            )}
             {listing.reviewStats.amount > 0 && (
               <span>
                 <Rating
                   sx={{ color: '#6F11F2' }}
                   size="small"
-                  defaultValue={listing.reviewStats.averageOverallRating}
+                  defaultValue={parseFloat(listing.reviewStats?.averageOverallRating) || 0}
                   readOnly
                   precision={0.1}
                 />
