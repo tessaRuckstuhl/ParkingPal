@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Grid, Paper } from '@mui/material/';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -15,9 +16,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import { fromUnixTime, setHours } from 'date-fns';
+import { useErrorSnack } from '../../contexts/ErrorContext'
 import MapWrapper from '../Map/MapWrapper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import GarageIcon from '@mui/icons-material/Garage';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
@@ -32,6 +38,7 @@ import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import Looks3Icon from '@mui/icons-material/Looks3';
 import Looks4Icon from '@mui/icons-material/Looks4';
 import Looks5Icon from '@mui/icons-material/Looks5';
+import { fontWeight } from '@mui/system';
 
 
 
@@ -43,7 +50,7 @@ const BookingForm = () => {
   const [parkingMapCenter,setParkingMapCenter] = useState({lat:48.1488436,lng:11.5658499});
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [parkingSpaceId, setParkingSpaceId] = useState('');
-
+  const [availability, setAvailability] = useState([]);
   const [basePrice, setBasePrice] = useState();
   const [dayPrice,setDayPrice] = useState();
   const [longPrice, setLongPrice] = useState()
@@ -74,6 +81,7 @@ const BookingForm = () => {
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
   
+  const { showSnack } = useErrorSnack()
 
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -83,6 +91,30 @@ const BookingForm = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+  const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor:'#6F11F2',
+      color: theme.palette.common.white,
+      fontSize: 16,
+      fontWeight: 'bold'
+    },
+    body: {
+      fontSize: 16,
+    },
+  }))(TableCell);
+
+  const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.mode == 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+      },
+    },
+  }))(TableRow);
 
 
   const ary = ["hi ","this ","is a","Review showcase","dont show me"];
@@ -122,13 +154,27 @@ const BookingForm = () => {
       console.log(error)
     }
   };
-
+  
+  
   // leave me here
   // redirect with state: price, other stats,search for booking id and update as payed
   // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
   const handlePayment = (data) => {
     console.log(totalPrice)
-    navigate('/pay', {state: data})
+    var okDate = false
+    for (let i = 0; i<availability.length;i++){
+      if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
+        okDate = true
+        break;
+      }
+    }
+    if (okDate) {navigate('/pay', {state: data})}
+    else {
+      showSnack("Your selected dates are not available. Please choose another date","error")
+      console.log("its not available")
+      console.log (fromTime.toISOString())
+      console.log (untilTime.toISOString())
+    }
   }
 
   
@@ -142,12 +188,15 @@ const BookingForm = () => {
     console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
-    //const reviewResultlist = await ReviewService.getReview(parkingId)
+    const reviewResultget = await ReviewService.getReview('62d116600e01b534f6079dfa')
+    //const reviewResultlist = await ReviewService.getAllReviews()
     console.log(parkingResult)
     console.log("hallo")
+    console.log(parkingResult.data.availability)
     console.log(reviewResult.data)
-    // console.log(reviewResultlist.data)
-
+    console.log(reviewResultget.data)
+    
+    
 
     console.log (parkingResult.data.images[0])
     // time and Price
@@ -184,7 +233,7 @@ const BookingForm = () => {
     setTodayDate(today)
     setParkingSpaceName(parkingResult.data.name)
     setParkingProp(parkingResult.data.properties.parking)
-    //setParkingCandA(parkingResult.data.propoerties.cancellation_and_access)
+    setParkingCandA(parkingResult.data.properties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
     setParkingPics1(parkingResult.data.images[0])
     setParkingPics2(parkingResult.data.images[1])
@@ -193,6 +242,7 @@ const BookingForm = () => {
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
     setLongPrice(parkingResult.data.longTermStayPrice)
+    setAvailability(parkingResult.data.availability)
     setParkingSpaceSize(parkingResult.data.size)
     setReviewamount(reviewResult.data.amount || 0)
     setOverallRating(reviewResult.data.averageOverallRating || 0)
@@ -202,8 +252,8 @@ const BookingForm = () => {
     setACR(reviewResult.data.averageAccuracyRating || 0)
     setLR(reviewResult.data.averageLocationRating || 0)
     setVR(reviewResult.data.averageValueRating|| 0) 
-    
-  
+   
+      
   }, []);
   return (
     <div className="flex flex-col items-center ">
@@ -244,7 +294,7 @@ const BookingForm = () => {
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <Box style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
+              <Item style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
                 
                 
                 <div
@@ -321,36 +371,14 @@ const BookingForm = () => {
                       <br></br>
                     </Grid>
                   </Grid>
-
-                  
-                  
-                  
-                  
-                  
-                  {/* old version */}
-                  {/* <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <p>- Free cancellation: {parkingCandA.free_24h_before.toString()}</p>
-                      <p>- No meetup: {parkingCandA.no_meetup.toString()}</p>
-                      <p>- Pin code available: {parkingCandA.pin.toString()}</p>
-                      <p>- Security gate: {parkingCandA.security_gate.toString()}</p>
-                    </Grid>
-                  
-                  <Grid item xs={6}>
-                      <p>- Streetside: {parkingProp.streetside}</p>
-                      <p>- Garage: {parkingProp.garage}</p>
-                      <p>- Illuminated: {parkingProp.illuminated}</p>
-                      <p>- E-Charging: {parkingProp.e_charging}</p>
-                    </Grid>
-                 </Grid> */}
                   <br></br>
                   <Divider />
                   <br></br>
                   <b>Description</b>
                   <br></br>
-                  <p>{desc}</p>                  
+                  <a>{desc}</a>                  
                 </div>
-              </Box>
+              </Item>
             </Grid>
             <Grid item xs={6}>
               <Item style={{ height: 400 }}>
@@ -380,7 +408,7 @@ const BookingForm = () => {
                 <div className="mb-6 font-regular  text-s">
                   <Grid container spacing={2}>
                     <Grid item xs={5}>
-                      <Item style={{ height: 80 }} key={5} elevation={5}>
+                      <Item style={{ height: 70 }} key={5} elevation={5}>
                         <b>CHECK-IN</b>
                         <br></br>
                         <a> {fromTime.toString().substring(0,24)}</a>
@@ -391,7 +419,7 @@ const BookingForm = () => {
                       <b> - </b>
                     </Grid>
                     <Grid item xs={5}>
-                      <Item style={{ height: 80 }} key={5} elevation={5}>
+                      <Item style={{ height: 70 }} key={5} elevation={5}>
                         <b>CHECK-OUT</b>
                         <br></br>
                         <a>{untilTime.toString().substring(0,24)}</a>
@@ -399,16 +427,8 @@ const BookingForm = () => {
                     </Grid>
                   </Grid>
                 </div>
-                <br></br>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  Book now
-                </Button>
-                <div className="mt-6 font-light text-s">
+                
+                <div className="mt-2 font-bold">
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                     Total Time
@@ -418,7 +438,7 @@ const BookingForm = () => {
                     </Grid>
                   </Grid>
                 </div>
-                <div className="mt-1 font-light text-s">
+                <div className="mt-1 mb-8 font-bold">
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                     Total Price
@@ -428,7 +448,14 @@ const BookingForm = () => {
                     </Grid>
                   </Grid>
                 </div>
-
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Book now
+                </Button>
               </Item>
 
             </Grid>
@@ -440,7 +467,7 @@ const BookingForm = () => {
           {/* <Divider /> */}
           <br></br>
           <br></br>
-          {/* Date picker from when to when the client wants to book */}
+          
           <div
             style={{
               marginTop: '5%',
@@ -510,10 +537,34 @@ const BookingForm = () => {
             </Grid> 
           </div>
           <br></br>
+          <div style ={{ marginBottom: '1pt'}}>
+          <a>List of available slots</a>
+          </div>
+          <br></br>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>From</StyledTableCell>
+                  <StyledTableCell align="right">Until</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {availability.map((date) => (  
+                  <StyledTableRow>
+                    <StyledTableCell component ="th" scope ="row">{date.from.substring(0,19)}</StyledTableCell>
+                    <StyledTableCell align="right">{date.to.substring(0,19)}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+        </TableContainer>
+
+          <br></br>
           <br></br>
           <Divider />
           <br></br>
-          <br></br>
+          
           <div
             style={{
               marginTop: '10%',
@@ -526,7 +577,7 @@ const BookingForm = () => {
               //display: 'flex',
             }}
           >
-            
+            Customer Ratings
 
           </div>
 
@@ -556,15 +607,7 @@ const BookingForm = () => {
             </Grid>
           </Grid>
 
-          {/* <div >
-            <Grid container spacing={2}>
-                {reviewlist.map((rev) => (
-                  <Grid item xs={6}>
-                  <Item style={{ height: 100 }}>
-                  <a>{rev.description}</a>
-                ))}
-            </Grid>
-          </div> */}
+          
           <br></br>
           <Grid container spacing={2}>  
             {len <5 ? ary.map((aryitem) => (     
