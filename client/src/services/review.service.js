@@ -19,6 +19,9 @@ const RService = {
     },
     getReviewStats(id) {
         return axios.get(`${process.env.REACT_APP_API_URL}helperReview/${id}`);
+    },
+    getReviewsOfParkingSpace(id) {
+        return axios.post(`${process.env.REACT_APP_API_URL}helperReview/${id}`);
     }
 };
 

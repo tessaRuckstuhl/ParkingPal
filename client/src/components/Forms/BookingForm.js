@@ -142,10 +142,10 @@ const BookingForm = () => {
     console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
-    //const reviewResultlist = await ReviewService.getReview(parkingId)
+    const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
     console.log(parkingResult)
     console.log(reviewResult.data)
-    // console.log(reviewResultlist.data)
+    console.log(reviewResultlist.data)
 
 
     console.log ("this is the pic: "+ parkingResult.data.images[0])

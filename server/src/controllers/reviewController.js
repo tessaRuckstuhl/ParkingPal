@@ -63,9 +63,6 @@ module.exports = {
             return res.send({
                 reviews: reviews
             });
-
-            await Review.deleteOne({ _id: id })
-            return res.status(200).send({ success: 'Review was deleted' })
         } catch (error) {
             return res.status(400).send({ error: 'something is wrong' });
         }
