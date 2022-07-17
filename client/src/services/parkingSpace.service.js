@@ -1,7 +1,9 @@
 import axios from 'axios';
+import authHeader from './auth-header';
+
+const requestConfig = {headers: authHeader()}
 
 const PSService = {
-
     create(body) {
         return axios.post(`${process.env.REACT_APP_API_URL}parkingSpace`, body);
     },
@@ -19,7 +21,7 @@ const PSService = {
         return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters});
     },
     listOwnedParkingSpaces(ownerId) {
-        return axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/listings/${ownerId}`);
+        return axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/listings/${ownerId}`,requestConfig);
     },
     filterParkingSpaces(filters){
         return  axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/filter`, {params: filters});

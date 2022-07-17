@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const parkingSpaceController = require('../controllers/parkingSpaceController');
+const { isAuthenticated } = require('../middlewares');
 
 
 // api/parkingSpace/
@@ -15,6 +16,6 @@ router.delete('/:id',parkingSpaceController.deleteParkingSpace);
 router.patch('/:id',parkingSpaceController.updateParkingSpace);
 
 // api/parkingSpace/
-router.get('/',parkingSpaceController.listParkingSpaces);
+router.get('/', isAuthenticated, parkingSpaceController.listParkingSpaces);
 
 module.exports = router;

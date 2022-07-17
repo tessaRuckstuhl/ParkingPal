@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
-
 const { isAuthenticated, signup } = require('../middlewares');
 
 // api/user

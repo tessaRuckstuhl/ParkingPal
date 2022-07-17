@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const parkingSpaceController = require('../controllers/parkingSpaceController');
+const { isAuthenticated} = require('../middlewares');
 
 // api/parkingSpace/filter
 router.get('/filter',parkingSpaceController.filterParkingSpaces);
@@ -8,6 +9,6 @@ router.get('/filter',parkingSpaceController.filterParkingSpaces);
 router.get('/filter/constraints', parkingSpaceController.getFilterConstraints)
 
 // api/helperParkingSpace/:id
-router.get('/listings/:id',parkingSpaceController.listOwnedParkingSpaces);
+router.get('/listings/:id',isAuthenticated, parkingSpaceController.listOwnedParkingSpaces);
 
 module.exports = router;
