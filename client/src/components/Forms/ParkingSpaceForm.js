@@ -12,6 +12,7 @@ import { useErrorSnack } from '../../contexts/ErrorContext'
 import { ImageContext } from '../../contexts/ImageContext'
 import Info from '@mui/icons-material/Info';
 import moment from 'moment';
+import { useLocation } from 'react-router-dom';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
 
@@ -56,6 +57,7 @@ const ParkingSpaceForm = () => {
     color: theme.palette.text.secondary,
   }));
   const { showSnack } = useErrorSnack()
+  const {state} = useLocation()
 
   //TODO:
   /*
@@ -202,9 +204,10 @@ const ParkingSpaceForm = () => {
   };
 
   useEffect(async () => {
-    if(localStorage.getItem('parkingSpace')){
-      setUpdateID(localStorage.getItem('parkingSpace'))
-      const updateParkingSpace = await (await ParkingSpaceService.listParkingSpace(localStorage.getItem('parkingSpace'))).data
+    if(location.pathname === "/parking/update"){
+      console.log(state)
+      const updateParkingSpace = state
+      setUpdateID(updateParkingSpace._id)
       setParkingSpaceName(updateParkingSpace.name)
       //setImageIDs(updateParkingSpace.images)
       setDescription(updateParkingSpace.description)
@@ -232,7 +235,7 @@ const ParkingSpaceForm = () => {
       setFormIncomplete(true)
       //setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value == (""||null)).map(item => item.label) )
     }
-  }, [parkingSpaceName, size, availability, basePrice, street, houseNumber, postalCode, city]);
+  }, []);
 
   return (
     <div className="flex flex-col items-center ">

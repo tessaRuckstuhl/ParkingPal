@@ -50,10 +50,11 @@ const Listings = () => {
       console.log(error);
     }
   };
-  const updateParkingSpace = async (id) => {
+  const updateParkingSpace = async (data) => {
     try {
-      localStorage.setItem('parkingSpace',id);
-      navigate("/parking/update")
+      //localStorage.setItem('parkingSpace',id);
+      console.log(data)
+      navigate("/parking/update", {state:data})
     } catch (error) {
       showSnack('Something went wrong.', 'error');
       console.log(error);
@@ -81,7 +82,7 @@ const Listings = () => {
           <div key={k} className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between">
             {`${parking.name} in ${parking.formattedAddress}`}{' '}
             <div>
-            <IconButton onClick={() => updateParkingSpace(parking._id)}>
+            <IconButton onClick={() => updateParkingSpace(parking)}>
               <Edit />
             </IconButton>  
             <IconButton onClick={() => deleteParkingSpace(parking._id)}>
