@@ -14,15 +14,15 @@ const router = express.Router();
 // /api/user
 router.use('/user', user);
 // /api/booking
-router.use('/booking', booking);
+router.use('/booking',isAuthenticated, booking);
 // /api/parkingspace
-router.use('/parkingspace', parkingSpace);
+router.use('/parkingspace',isAuthenticated, parkingSpace);
 // /api/review/average
 router.use('/helperParkingspace', helperParkingSpace);
 // /api/images
 router.use('/images', images)
 // /api/review
-router.use('/review', review);
+router.use('/review',isAuthenticated, review);
 // /api/review/average
 router.use('/helperReview', helperReview);
 
