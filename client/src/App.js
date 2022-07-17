@@ -5,7 +5,6 @@ import { ImageContextProvider } from './contexts/ImageContext';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Dash from './pages/Dash';
 import AuthComponent from './services/AuthComponent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import mainTheme from './theme/mainTheme';
@@ -41,29 +40,21 @@ const App = () => {
                 <Default>
                   {/* Routes */}
                   <Routes>
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="parking/create" element={<CreateParkingSpace/>}></Route>
-                    <Route path="parking/update" element={<CreateParkingSpace/>}></Route>
-                    <Route path="parking/booking" element={<CreateBooking/>}></Route>
-                    <Route path="all" element={<ListViewParkingSpaces />}></Route>
-                    <Route path="signup" element={<Signup />}></Route>
-                    <Route path="review/create" element={<CreateReview />}></Route>
-                    <Route path="about" element={<About />}></Route>
-                    <Route
-                      path="dashboard"
-                      element={
-                        <AuthComponent>
-                          <Dash />
-                        </AuthComponent>
-                      }
-                    ></Route>
-                    <Route path="/" element={<Results />}></Route>
+                    <Route path="/login" element={<AuthComponent><Login /></AuthComponent>}></Route>
+                    <Route path="parking/create" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
+                    <Route path="parking/update" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
+                    <Route path="parking/booking" element={<AuthComponent><CreateBooking/></AuthComponent>}></Route>
+                    <Route path="all" element={<AuthComponent><ListViewParkingSpaces /></AuthComponent>}></Route>
+                    <Route path="signup" element={<AuthComponent><Signup /></AuthComponent>}></Route>
+                    <Route path="review/create" element={<AuthComponent><CreateReview /></AuthComponent>}></Route>
+                    <Route path="about" element={<AuthComponent><About /></AuthComponent>}></Route>
+                    <Route path="/" element={<AuthComponent><Results /></AuthComponent>}></Route>
                     {/* User Dashboard */}
-                    <Route path="personal" element={<Dashboard />}></Route>
-                    <Route path="personal/bookings" element={<Bookings />}></Route>
-                    <Route path="personal/listings" element={<Listings />}></Route>
-                    <Route path="pay" element={<Paypal/>}></Route>
-                    <Route path="pay/success" element={<PaymentSuccess/>}></Route>
+                    <Route path="personal" element={<AuthComponent><Dashboard /></AuthComponent>}></Route>
+                    <Route path="personal/bookings" element={<AuthComponent><Bookings /></AuthComponent>}></Route>
+                    <Route path="personal/listings" element={<AuthComponent><Listings /></AuthComponent>}></Route>
+                    <Route path="pay" element={<AuthComponent><Paypal/></AuthComponent>}></Route>
+                    <Route path="pay/success" element={<AuthComponent><PaymentSuccess/></AuthComponent>}></Route>
 
                     {/* matches anything except the above */}
                     <Route path="*" element={<PageNotFound />} />
