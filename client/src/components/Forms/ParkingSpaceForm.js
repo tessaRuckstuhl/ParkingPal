@@ -350,7 +350,6 @@ const ParkingSpaceForm = () => {
                     to: toValue.toISOString()
                   }
                   setAvailability(state => [...state, available]);
-
                   setToValue(null);
                   setFromValue(null);
                 }
