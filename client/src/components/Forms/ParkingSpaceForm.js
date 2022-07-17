@@ -13,7 +13,6 @@ import { ImageContext } from '../../contexts/ImageContext'
 import Info from '@mui/icons-material/Info';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
-import AuthComponent from '../../services/AuthComponent';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
 
@@ -76,6 +75,8 @@ const ParkingSpaceForm = () => {
     setNo_Meetup(false)
     setPin(false)
     setSecurityGate(false)
+    setFromValue("")
+    setToValue("")
   }
 
   const handleChange = (event) => {
@@ -175,6 +176,7 @@ const ParkingSpaceForm = () => {
             security_gate: securityGate
           }
         },
+        status: "available"
       };
       location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
       clearAll()
@@ -229,7 +231,7 @@ const ParkingSpaceForm = () => {
     console.log(error);
     return navigate('/login');
   }
-  }, []);
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode]);
 
   return (
     <div className="flex flex-col items-center ">
