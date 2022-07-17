@@ -13,29 +13,25 @@ import { ImageContext } from '../../contexts/ImageContext'
 import Info from '@mui/icons-material/Info';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
+import AuthComponent from '../../services/AuthComponent';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const { imageIDs, setImageIDs } = useContext(ImageContext)
-
   const [description, setDescription] = useState('');
-
   const [size, setSize] = useState(0);
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
-
   const [fromValue, setFromValue] = React.useState('');
   const [toValue, setToValue] = React.useState('');
   const [availability, setAvailability] = useState([]);
-
   const [street, setStreet] = useState('');
   const [houseNumber, setHouseNumber] = useState('');
   const [postalCode, setPostalCode] = useState('')
   const [city, setCity] = useState('')
-
   const [e_charging, setE_Charging] = useState(false)
   const [streetside, setStreetside] = useState(false)
   const [illuminated, setIlluminated] = useState(false)
@@ -59,11 +55,6 @@ const ParkingSpaceForm = () => {
   const { showSnack } = useErrorSnack()
   const {state} = useLocation()
 
-  //TODO:
-  /*
-  delete photos on no submit - does it work?
-  update parkimg space
-  */
   const clearAll = () => {
     setParkingSpaceName("")
     setImageIDs([])
@@ -185,7 +176,6 @@ const ParkingSpaceForm = () => {
           }
         },
       };
-      console.log(parkingSpace)
       location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
       clearAll()
     } catch (error) {
@@ -203,9 +193,9 @@ const ParkingSpaceForm = () => {
     }
   };
 
-  useEffect(async () => {
+  useEffect( () => {
+  try{
     if(location.pathname === "/parking/update"){
-      console.log(state)
       const updateParkingSpace = state
       setUpdateID(updateParkingSpace._id)
       setParkingSpaceName(updateParkingSpace.name)
@@ -235,6 +225,10 @@ const ParkingSpaceForm = () => {
       setFormIncomplete(true)
       //setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value == (""||null)).map(item => item.label) )
     }
+  } catch (error) {
+    console.log(error);
+    return navigate('/login');
+  }
   }, []);
 
   return (
