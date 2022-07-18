@@ -41,23 +41,23 @@ const Listing = (props) => {
   return (
     <div
       id={listing._id}
-      className="flex space-x-5 p-3 bg-white  "
+      className="flex space-x-3 p-3 bg-white  "
       onMouseEnter={() => recenter(listing)}
     >
-      {/* Listing image */}
+      {/* Listing image Apsect Ratio 4:3 */}
       {listing.images[0] ? (
         <img
-          className="rounded object-contain"
-          src={`http://localhost:3001/api/images/${listing.images[0]}`}
-          width={200}
-          height={150}
+          className="rounded object-cover w-[190px] h-[143px]"
+          src={`${process.env.REACT_APP_API_URL}images/${listing.images[0]}`}
+          width={190}
+          height={143}
         ></img>
       ) : (
         <img
-          className="rounded object-contain"
+          className="rounded  object-cover w-[190px] h-[143px]"
           src={`/img/image-not-available.jpg`}
-          width={200}
-          height={150}
+          width={190}
+          height={143}
         ></img>
       )}
       {/* Listing description */}
@@ -84,7 +84,7 @@ const Listing = (props) => {
                 setLiked(!liked);
               }}
             >
-              {liked ? <Favorite color='primary'/> : <FavoriteBorderOutlined />}
+              {liked ? <Favorite color="primary" /> : <FavoriteBorderOutlined />}
             </IconButton>
           </div>
         </div>
