@@ -16,11 +16,14 @@ module.exports = {
   },
   //not tested but should work
   async updateParkingSpace(req, res) {
+    const { id } = req.params;
+    const update = req.body;
     try {
       console.log(req.body);
-      const parkingSpace = await ParkingSpace.update(
-        { name: req.body.parkingSpaceName },
-        { $set: req.body }
+      const parkingSpace = await ParkingSpace.findOneAndUpdate(
+        { _id: id },
+        { ...update },
+        { new: true }
       );
       return res.send(parkingSpace.toJSON());
     } catch (error) {
