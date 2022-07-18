@@ -34,7 +34,7 @@ const Paypal = () => {
                 purchase_units: [
                   {
                     amount: {
-                      value: state.price + 1,
+                      value: state.price,
                     },
                   },
                 ],
