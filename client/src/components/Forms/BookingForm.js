@@ -39,7 +39,8 @@ import Looks3Icon from '@mui/icons-material/Looks3';
 import Looks4Icon from '@mui/icons-material/Looks4';
 import Looks5Icon from '@mui/icons-material/Looks5';
 import { fontWeight } from '@mui/system';
-
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 
 
@@ -58,8 +59,7 @@ const BookingForm = () => {
   const [parkingProp, setParkingProp] = useState('');
   const [parkingCandA, setParkingCandA] = useState('');
   const [address,setParkingAddress] = useState('');
-  const [pics,setParkingPics1] = useState('');
-  const [pics2,setParkingPics2] = useState('');
+  const [images,setParkingPics] = useState([])
   const [desc,setParkingDesc] = useState('');
   const [owner, setParkingOwner] = useState('');
   const [reviewamount, setReviewamount] = useState(0)
@@ -202,11 +202,7 @@ const BookingForm = () => {
 
     
     
-    
 
-    console.log(reviewResultlist.data.reviews)
-    console.log (ary)
-    console.log(reviewResultlist.data.reviews[0].description)
 
     
 
@@ -247,8 +243,9 @@ const BookingForm = () => {
     setParkingProp(parkingResult.data.properties.parking)
     setParkingCandA(parkingResult.data.properties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
-    setParkingPics1(parkingResult.data.images[0])
-    setParkingPics2(parkingResult.data.images[1])
+    
+    setParkingPics(parkingResult.data.images)
+    
     setParkingOwner(parkingResult.data.owner)
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
@@ -280,9 +277,8 @@ const BookingForm = () => {
           
         </div>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-          <Grid container spacing={2}>
+          {/* <Grid container spacing={2}>
             <Grid item xs={6}>
-              {/* <Item style={{ height: 300 }}>{pics}</Item> */}
               <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
@@ -293,7 +289,6 @@ const BookingForm = () => {
               </Box>
             </Grid>
             <Grid item xs={6}>
-              {/* <Item style={{ height: 300 }}>{pics2}</Item> */}
               <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
@@ -302,7 +297,17 @@ const BookingForm = () => {
                 ></img>
               </Box>
             </Grid>
-          </Grid>
+          </Grid> */}
+          <ImageList cols={2} rowHeight={400}>
+            {images.map((picture) => (
+              <ImageListItem >
+                <img
+                  src={`http://localhost:3001/api/images/${picture}`}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -633,7 +638,7 @@ const BookingForm = () => {
               }}>
                 <b>{aryitem.reviewer}</b>
                 <br></br>
-                <a>{aryitem.description}</a>
+                <a>{aryitem.description }</a>
                 </div>
             </Item> 
           </Grid>
