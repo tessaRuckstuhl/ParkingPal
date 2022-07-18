@@ -47,7 +47,7 @@ const App = () => {
                     <Route path="all" element={<AuthComponent><ListViewParkingSpaces /></AuthComponent>}></Route>
                     <Route path="signup" element={<AuthComponent><Signup /></AuthComponent>}></Route>
                     <Route path="review/create" element={<AuthComponent><CreateReview /></AuthComponent>}></Route>
-                    <Route path="about" element={<AuthComponent><About /></AuthComponent>}></Route>
+                    <Route path="about" element={<About />}></Route>
                     <Route path="/" element={<AuthComponent><Results /></AuthComponent>}></Route>
                     {/* User Dashboard */}
                     <Route path="personal" element={<AuthComponent><Dashboard /></AuthComponent>}></Route>
