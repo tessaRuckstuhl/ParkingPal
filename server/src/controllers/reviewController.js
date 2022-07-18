@@ -54,6 +54,19 @@ module.exports = {
             return res.status(400).send({ error: 'something is wrong' });
         }
     },
+    async getReviewsForParkingSpace(req,res) {
+        const { id } = req.params
+        try {
+
+            const reviews = await Review.find({ parkingSpace: mongoose.Types.ObjectId(id) });
+
+            return res.send({
+                reviews: reviews
+            });
+        } catch (error) {
+            return res.status(400).send({ error: 'something is wrong' });
+        }
+    },
     async getReviewStats(req, res) {
         const { id } = req.params
         try {

@@ -33,7 +33,7 @@ module.exports = {
     try {
       const { id } = req.params;
       await ParkingSpace.deleteOne({ _id: mongoose.Types.ObjectId(id) });
-      return res.status(200).send({ success: 'ParkingSpace was deleted' });
+      return res.status(200).send({ success: 'ParkingSpace was deleted ' });
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: 'Could not remove this ParkingSpace' }); // 'we have an error we don\'t know what to do' })
@@ -80,7 +80,7 @@ module.exports = {
           delete query.formattedAddress;
           delete query.radius;
         } else {
-          throw 'Not a valid location string';
+          throw 'Please enter a valid location';
         }
       }
       // build price filter
@@ -128,8 +128,10 @@ module.exports = {
       }).sort({ _id: -1 });
       return res.send(allParkingSpaces);
     } catch (error) {
-      console.log(error);
-      return res.status(400).send({ error: 'There was an error trying to get all parkingSpaces' });
+      console.log('hi', error);
+      return res
+        .status(400)
+        .send({ error: error || 'There was an error trying to get all parkingSpaces' });
     }
   },
   async listOwnedParkingSpaces(req, res) {
@@ -145,22 +147,28 @@ module.exports = {
         .send({ error: 'There was an error trying to get owner parking spaces' });
     }
   },
-  async getFilterConstraints(req, res) {
-    const maxDayPrice = await ParkingSpace.find({}, { dayPrice: 1, _id: 0 })
-      .sort({ dayPrice: -1 })
-      .limit(1); // for MAX
-    const maxLongTermStayPrice = await ParkingSpace.find({}, { longTermStayPrice: 1, _id: 0 })
-      .sort({ longTermStayPrice: -1 })
-      .limit(1); // for MAX
-    const maxBasePrice = await ParkingSpace.find({}, { basePrice: 1, _id: 0 })
-      .sort({ basePrice: -1 })
-      .limit(1); // for MAX
-    return res.send({
-      maxDayPrice: maxDayPrice[0].dayPrice,
-      maxLongTermStayPrice: maxLongTermStayPrice[0].longTermStayPrice,
-      maxBasePrice: maxBasePrice[0].basePrice,
-    });
+  // find max day price, base price, ... for filters
 
-    // find max day price, base price, ... for filters
+  async getFilterConstraints(req, res) {
+    try {
+      const maxDayPrice = await ParkingSpace.find({}, { dayPrice: 1, _id: 0 })
+        .sort({ dayPrice: -1 })
+        .limit(1); // for MAX
+      const maxLongTermStayPrice = await ParkingSpace.find({}, { longTermStayPrice: 1, _id: 0 })
+        .sort({ longTermStayPrice: -1 })
+        .limit(1); // for MAX
+      const maxBasePrice = await ParkingSpace.find({}, { basePrice: 1, _id: 0 })
+        .sort({ basePrice: -1 })
+        .limit(1); // for MAX
+      return res.send({
+        maxDayPrice: maxDayPrice[0].dayPrice,
+        maxLongTermStayPrice: maxLongTermStayPrice[0].longTermStayPrice,
+        maxBasePrice: maxBasePrice[0].basePrice,
+      });
+    } catch (error) {
+      return res
+        .status(400)
+        .send({ error: 'There was an error trying to get owner parking spaces' });
+    }
   },
 };

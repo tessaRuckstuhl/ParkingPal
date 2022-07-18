@@ -198,16 +198,18 @@ const MoreFilters = (props) => {
             <Slider
               onChange={handleFilterChange}
               name="size"
-              value={filters?.size || [0, 2]}
+              value={filters?.size || [0, 3]}
               valueLabelDisplay="auto"
               min={0}
-              max={2}
-              getAriaLabel={(index) => (index === 0 ? 'Size S' : 'Size L')}
+              max={3}
+              getAriaLabel={(index) => (index === 0 ? 'Size S' : 'Size XL')}
               getAriaValueText={(value) => `${value} €`}
               marks={[
                 { value: 0, label: 'S' },
                 { value: 1, label: 'M' },
                 { value: 2, label: 'L' },
+                { value: 3, label: 'XL' },
+
               ]}
             />
           </DialogContent>

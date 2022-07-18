@@ -35,7 +35,6 @@ const Bar = () => {
   }
 
   const handleFilterChange = (e) => {
-    console.log('e.target.name', e.target.name, 'e.target.value', e.target.value);
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
@@ -86,7 +85,7 @@ const Bar = () => {
               <span className="text-[.75rem]">km</span>
             </InputAdornment>
           }
-          inputProps={{ 'aria-label': 'search parking places' }}
+          inputProps={{ 'aria-label': 'search parking places', min:0 }}
         />
         <MyFormHelperText text="Flexible?" />
       </FormControl>
