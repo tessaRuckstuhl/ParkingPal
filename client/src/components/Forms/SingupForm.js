@@ -49,7 +49,7 @@ const SignupForm = () => {
       const { token } = response?.data;
       localStorage.setItem('token', token);
       setJwt(token);
-      navigate('/dashboard');
+      navigate('/personal');
     } catch (error) {
       alertToggle(error?.response?.data?.error || error.message);
     }
