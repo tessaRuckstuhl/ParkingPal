@@ -76,7 +76,7 @@ const BookingForm = () => {
   const [days,setDays] = useState(0);
   const [hours,setHours] = useState(0);
   const [parkingSpaceSize,setParkingSpaceSize] = useState();
-  
+  const [reviewsAry, setReviews] = useState([]);
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
@@ -188,24 +188,27 @@ const BookingForm = () => {
     console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
-<<<<<<< HEAD
-    const reviewResultget = await ReviewService.getReview('62d116600e01b534f6079dfa')
-    //const reviewResultlist = await ReviewService.getAllReviews()
-=======
+
+    
+    
+
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
->>>>>>> develop
+
+    
     console.log(parkingResult)
     console.log("hallo")
     console.log(parkingResult.data.availability)
     console.log(reviewResult.data)
-<<<<<<< HEAD
-    console.log(reviewResultget.data)
-    
-    
-=======
-    console.log(reviewResultlist.data)
 
->>>>>>> develop
+    
+    
+    
+
+    console.log(reviewResultlist.data.reviews)
+    console.log (ary)
+    console.log(reviewResultlist.data.reviews[0].description)
+
+    
 
     console.log (parkingResult.data.images[0])
     // time and Price
@@ -261,8 +264,9 @@ const BookingForm = () => {
     setACR(reviewResult.data.averageAccuracyRating || 0)
     setLR(reviewResult.data.averageLocationRating || 0)
     setVR(reviewResult.data.averageValueRating|| 0) 
+    setReviews(reviewResultlist.data.reviews)
    
-      
+    
   }, []);
   return (
     <div className="flex flex-col items-center ">
@@ -282,8 +286,8 @@ const BookingForm = () => {
               <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
-                  // src={`http://localhost:3001/api/images/${pics}`}
-                  width={200}
+                  src={`http://localhost:3001/api/images/${pics}`}
+                  style={{ height: 300, width: 375 }}
                   height={300}
                 ></img>
               </Box>
@@ -293,9 +297,8 @@ const BookingForm = () => {
               <Box style={{ height: 300 }}>
                 <img
                   className="rounded object-contain"
-                  // src={`http://localhost:3001/api/images/${pics2}`}
-                  width={200}
-                  height={300}
+                  src={`http://localhost:3001/api/images/${pics2}`}
+                  style={{ height: 300, width: 375 }}
                 ></img>
               </Box>
             </Grid>
@@ -619,7 +622,7 @@ const BookingForm = () => {
           
           <br></br>
           <Grid container spacing={2}>  
-            {len <5 ? ary.map((aryitem) => (     
+            {reviewsAry.length <5 ? reviewsAry.map((aryitem) => (     
               <Grid item xs={6}>
                     <Item style={{ height: 100 }}>
                     <div style={{
@@ -627,11 +630,13 @@ const BookingForm = () => {
                   fontSize: 15,
                   justifyContent: 'begin',
                   textAlign: 'justify',
-                  display: 'flex',
-                }}>
-                  <a>{aryitem}</a>
-                  </div></Item>
-              </Grid>
+              }}>
+                <b>{aryitem.reviewer}</b>
+                <br></br>
+                <a>{aryitem.description}</a>
+                </div>
+            </Item> 
+          </Grid>
           )): ary.slice(0,4).map((aryitem) => (
                 <Grid item xs={6}>
                     <Item style={{ height: 100 }}>
