@@ -19,7 +19,6 @@ module.exports = {
     const { id } = req.params;
     const update = req.body;
     try {
-      console.log(req.body);
       const parkingSpace = await ParkingSpace.findOneAndUpdate(
         { _id: id },
         { ...update },

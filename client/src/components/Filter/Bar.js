@@ -44,9 +44,9 @@ const Bar = () => {
     setLoading(false);
   };
   return (
-    <div className=" absolute px-4 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray w-[800px]  z-10">
+    <div className=" absolute sm:px-1 px-2 py-[0.1rem] left-0 right-0 ml-auto mr-auto  shadow-bar rounded-3xl flex items-center border border-lighterGray lg:w-[750px] sm:w-[500px]">
       {/* Search Location */}
-      <FormControl className="w-[60%]">
+      <FormControl className="w-[60%] ">
         <InputBase
           sx={{
             flex: 1,
@@ -69,7 +69,7 @@ const Bar = () => {
       <FormControl className="w-[70%]">
         <InputBase
           sx={{
-            ml: '10px',
+            ml: '8px',
             flex: 1,
             fontSize: '0.75rem',
             fontWeight: 'bold',
@@ -85,7 +85,7 @@ const Bar = () => {
               <span className="text-[.75rem]">km</span>
             </InputAdornment>
           }
-          inputProps={{ 'aria-label': 'search parking places', min:0 }}
+          inputProps={{ 'aria-label': 'search parking places', min: 0 }}
         />
         <MyFormHelperText text="Flexible?" />
       </FormControl>
@@ -118,7 +118,7 @@ const Bar = () => {
           name="to"
           value={filters?.to || ''}
           sx={{
-            ml: '10px',
+            ml: '8px',
             flex: 1,
             fontSize: '0.75rem',
             fontWeight: 'bold',
