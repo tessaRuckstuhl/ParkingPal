@@ -22,6 +22,7 @@ import AuthService from '../services/auth.service';
 import { MainContext } from '../contexts/MainContext';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const Navbar = () => {
   const location = useLocation();
@@ -128,16 +129,21 @@ const Navbar = () => {
             <MenuItem onClick={() => navigate('/personal')}>
              <Avatar /> Dashboard
            </MenuItem>
+           <Divider />
+           <MenuItem onClick={() => navigate('/')}>
+              <ManageSearchIcon />Book Parking 
+            </MenuItem>
            <MenuItem onClick={() => navigate('/parking/create')}>
              <AddLocationAltIcon />
-             Add Parking Space
+             Host Parking
            </MenuItem>
-           <MenuItem onClick={() => navigate('/personal/bookings')}>
-             <LocalParkingIcon />Personal Bookings
-           </MenuItem>
-            <MenuItem onClick={() => navigate('/personal/listings')}>
-              <ViewListIcon />Personal Listings
+           <MenuItem onClick={() => navigate('/personal/listings')}>
+              <ViewListIcon />Listings
             </MenuItem>
+           <MenuItem onClick={() => navigate('/personal/bookings')}>
+             <LocalParkingIcon />Bookings
+           </MenuItem>
+            
             </div>
               : null}
             <Divider />
