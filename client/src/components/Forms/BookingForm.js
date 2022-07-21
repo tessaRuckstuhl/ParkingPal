@@ -117,6 +117,9 @@ const BookingForm = () => {
   }))(TableRow);
 
 
+  const resultGuest = await UserService.getUser(resultBooking.data.guest)
+    setGuest(resultGuest.data)
+
   const ary = ["hi ","this ","is a","Review showcase","dont show me"];
   const len = ary.length  
   const today = new Date()
@@ -642,7 +645,7 @@ const BookingForm = () => {
                 </div>
             </Item> 
           </Grid>
-          )): ary.slice(0,4).map((aryitem) => (
+          )): reviewsAry.slice(0,4).map((aryitem) => (
                 <Grid item xs={6}>
                     <Item style={{ height: 100 }}>
                       
@@ -663,7 +666,9 @@ const BookingForm = () => {
                           textAlign: 'justify',
                           display: 'flex',
                         }}>
-                           <a>{aryitem}</a>
+                          <b>{aryitem.reviewer}</b>
+                          <br></br>
+                          <a>{aryitem.description }</a>
                         </div>
                     </Item>
                </Grid>
