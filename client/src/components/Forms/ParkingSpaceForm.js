@@ -12,7 +12,7 @@ import { useErrorSnack } from '../../contexts/ErrorContext'
 import { ImageContext } from '../../contexts/ImageContext'
 import Info from '@mui/icons-material/Info';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { useLocation ,useNavigate} from 'react-router-dom';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
 
@@ -42,8 +42,9 @@ const ParkingSpaceForm = () => {
   const [formIncomplete, setFormIncomplete] = useState(true)
 
   const [missingFileds,setMissingFields] = useState([])
-  const [updateID,setUpdateID] = useState("")
-
+  const [updateID,setUpdateID] = useState("") 
+  const navigate = useNavigate();
+  
   const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -180,6 +181,7 @@ const ParkingSpaceForm = () => {
       };
       location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
       clearAll()
+      navigate("/personal/listings")
     } catch (error) {
       for (var i = 0; i < imageIDs.length; i++) {
         await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
@@ -231,7 +233,7 @@ const ParkingSpaceForm = () => {
     console.log(error);
     return navigate('/login');
   }
-  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode]);
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,street]);
 
   return (
     <div className="flex flex-col items-center ">
@@ -319,6 +321,7 @@ const ParkingSpaceForm = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label="From"
+                disablePast = {true} 
                 value={fromValue || null}
                 onChange={(newValue) => {
                   setFromValue(newValue);
@@ -328,6 +331,7 @@ const ParkingSpaceForm = () => {
               <DateTimePicker
                 label="To"
                 value={toValue || null}
+                minDate={fromValue || null}
                 onChange={(newValue) => {
                   setToValue(newValue);
                 }}
@@ -373,6 +377,19 @@ const ParkingSpaceForm = () => {
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
+              <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
+            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="longTermStayPrice"
+                label="Long Term Stay Price"
+                id="longTermStayPrice"
+                value={longTermStayPrice}
+                onChange={(e) => handleChange(e)}
+              />
+            </Tooltip>
             <p className="text-[#9f9a9a] text-sm">This ist the price, for a full day</p>
             <Tooltip title="This ist the price, for a full day" placement="top" arrow >
               <TextField
@@ -383,19 +400,6 @@ const ParkingSpaceForm = () => {
                 label="Day Price"
                 id="dayPrice"
                 value={dayPrice}
-                onChange={(e) => handleChange(e)}
-              />
-            </Tooltip>
-            <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
-            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="longTermStayPrice"
-                label="Long Term Stay Price"
-                id="longTermStayPrice"
-                value={longTermStayPrice}
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>

@@ -31,7 +31,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const { jwt, setJwt } = React.useContext(MainContext);
-  
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -122,19 +122,24 @@ const Navbar = () => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
+
+            {loggedIn ? 
+            <>
             <MenuItem onClick={() => navigate('/personal')}>
-              <Avatar /> Dashboard
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/parking/create')}>
-              <AddLocationAltIcon />
-              Add Parking Space
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/personal/bookings')}>
-              <LocalParkingIcon />Personal Bookings
-            </MenuItem>
+             <Avatar /> Dashboard
+           </MenuItem>
+           <MenuItem onClick={() => navigate('/parking/create')}>
+             <AddLocationAltIcon />
+             Add Parking Space
+           </MenuItem>
+           <MenuItem onClick={() => navigate('/personal/bookings')}>
+             <LocalParkingIcon />Personal Bookings
+           </MenuItem>
             <MenuItem onClick={() => navigate('/personal/listings')}>
               <ViewListIcon />Personal Listings
             </MenuItem>
+            </>
+              : null}
             <Divider />
             {!loggedIn ? <MenuItem onClick={() => navigate('/signup')}>
               <PersonAddIcon />
