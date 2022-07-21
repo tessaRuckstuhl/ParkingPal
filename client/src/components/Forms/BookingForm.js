@@ -141,11 +141,8 @@ const BookingForm = () => {
       const user = parseJwt(localStorage.getItem('token'))
       const booking = {
         parkingSpace: parkingSpaceId,
-        // guest ist der, der ein Parkplatz bucht
         guest: user._id, 
-        // owner ist der Besitzer den ich über Parkplatz ID hole
         owner: owner,
-        // Was ist mit terms: gemeint?
         issueDate: todayDate,
         startDate: startValue,
         endDate: endValue, 
@@ -195,30 +192,15 @@ const BookingForm = () => {
 
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
-
-   
+    const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
+    
+    //Owner Name
     const resultOwner = await UserService.getUser(parkingResult.data.owner)
     setOwner(resultOwner.data)
-
-    const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
-    console.log(reviewResultlist.data)
-
+    //Reviewer Names
     await reviewName(reviewResultlist.data.reviews)
-    console.log(reviewNameAry)
-    console.log(reviewNameAry[0])
-
-    console.log (parkingResult.data.images[0])
-
     
-    
-    // parkign space
-    console.log("This is the desc: "+ parkingResult.data.description)
-    console.log("Here is the address: "+ parkingResult.data)
-    
-  
-  
-    // review
-    //console.log(reviewResult.data.rating)
+    // Parking Space related
     const formattedParkingSpaces = {...parkingResult.data, lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1]}
     setParkingSpace([...parkingSpace,formattedParkingSpaces])
     setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
@@ -227,15 +209,15 @@ const BookingForm = () => {
     setParkingProp(parkingResult.data.properties.parking)
     setParkingCandA(parkingResult.data.properties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
-    
     setParkingPics(parkingResult.data.images)
-    
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
     setLongPrice(parkingResult.data.longTermStayPrice)
     setAvailability(parkingResult.data.availability)
     setParkingSpaceSize(parkingResult.data.size)
+
+    //Review Related
     setReviewamount(reviewResult.data.amount || 0)
     setOverallRating(Number(reviewResult.data.averageOverallRating) || 0)
     setNR(Number(reviewResult.data.averageNeighborhoodRating) || 0)
@@ -261,27 +243,6 @@ const BookingForm = () => {
           
         </div>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-          {/* <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Box style={{ height: 300 }}>
-                <img
-                  className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics}`}
-                  style={{ height: 300, width: 375 }}
-                  height={300}
-                ></img>
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box style={{ height: 300 }}>
-                <img
-                  className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics2}`}
-                  style={{ height: 300, width: 375 }}
-                ></img>
-              </Box>
-            </Grid>
-          </Grid> */}
           <ImageList cols={2} rowHeight={400}>
             {images.map((picture, i) => (
               <ImageListItem key={1}>
@@ -296,13 +257,10 @@ const BookingForm = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
-                
-                
                 <div
                   style={{
                     justifyContent: 'begin',
                     textAlign: 'justify',
-
                   }}
                 >
                   <br></br>
@@ -388,7 +346,6 @@ const BookingForm = () => {
                   style={{
                     justifyContent: 'center',
                     textAlign: 'justify',
-                    //display: 'flex',
                   }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -656,16 +613,11 @@ const BookingForm = () => {
           ))}
           </Grid>
           <br></br>
-          
-    
-          {/* <Divider /> */}
           <br></br>
           <br></br>
           <h2>Where you'll be parking</h2>
           <br></br>
-          <br></br>
-          
-        
+          <br></br>  
           <div className="w-full">
             <MapWrapper results={parkingSpace} center={parkingMapCenter} setCenter={setParkingMapCenter} selected={true} />
           </div>
@@ -741,7 +693,6 @@ const BookingForm = () => {
           </div>
           <br></br>
           <br></br>
-
         </form>
       </div>
     </div>
