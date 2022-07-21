@@ -549,7 +549,7 @@ const BookingForm = () => {
                       const myTimeDif = (end-fromTime)
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
-                      const remainHourPrice = (myHours > 5 ? longPrice : (myHours)* basePrice)
+                      const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
                       setDays(myDays)
                       setHours(myHours)
                       setTotalPrice((myDays*dayPrice + remainHourPrice))
