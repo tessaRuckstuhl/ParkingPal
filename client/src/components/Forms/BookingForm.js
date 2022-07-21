@@ -14,6 +14,7 @@ import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import UserService from '../../services/user.service';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import { useErrorSnack } from '../../contexts/ErrorContext'
@@ -41,6 +42,8 @@ import Looks5Icon from '@mui/icons-material/Looks5';
 import { fontWeight } from '@mui/system';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import { map } from 'lodash';
+import { ListItem } from '@material-ui/core';
 
 
 
@@ -61,7 +64,7 @@ const BookingForm = () => {
   const [address,setParkingAddress] = useState('');
   const [images,setParkingPics] = useState([])
   const [desc,setParkingDesc] = useState('');
-  const [owner, setParkingOwner] = useState('');
+  const [owner, setOwner] = useState('');
   const [reviewamount, setReviewamount] = useState(0)
   const [overallRating, setOverallRating] = useState(0)
   const [nr, setNR] = useState(5);
@@ -80,6 +83,7 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
+ 
   
   const { showSnack } = useErrorSnack()
 
@@ -117,11 +121,9 @@ const BookingForm = () => {
   }))(TableRow);
 
 
-  const resultGuest = await UserService.getUser(resultBooking.data.guest)
-    setGuest(resultGuest.data)
+  
 
-  const ary = ["hi ","this ","is a","Review showcase","dont show me"];
-  const len = ary.length  
+
   const today = new Date()
 
   const parseJwt = (token) => {
@@ -180,22 +182,57 @@ const BookingForm = () => {
     }
   }
 
+
+  // const setReviewName = async (reviewsList) => {
+
+  //   reviewsList.map((review) => (
+  //     const resultOwner = await UserService.getUser(review.owner)
+  //     review.ownername = resultOwner.data.name
+  //   )
+    
+  //   )}
+  // }
+
   
 
+  // const reviewName = async (reviewId) => {
+  //   let name = await UserService.getUser(reviewId)
+  //   firstname = name.data.firstName 
+  //   return firstname 
+  // }
+
+  const reviewNameAry = []
+
+  const reviewName = async () => {
+    for (let i = 0; i<reviewsAry.length; i++) {
+      let name = await UserService.getUser(reviewsAry[i].reviewer) //id
+      let firstname = name.data.firstName
+      reviewNameAry[i] = firstname
+      console.log("i got triggered")
+    }
+  }
 
 
   useEffect(async () => {
     const parkingId = new URL(location.href).searchParams.get('parkingId')
     setParkingSpaceId(parkingId)
+    console.log("test")
 
     console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
 
+    const resultOwner = await UserService.getUser(parkingResult.data.owner)
     
+    console.log(parkingResult.data)
     
+    //const resultGuest = await UserService.getUser(resultBooking.data.guest)
+    setOwner(resultOwner.data.surname)
+    console.log(resultOwner)
 
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
+    console.log("Hey")
+    console.log(reviewResultlist.data)
 
     
     console.log(parkingResult)
@@ -203,10 +240,11 @@ const BookingForm = () => {
     console.log(parkingResult.data.availability)
     console.log(reviewResult.data)
 
+   reviewName()
+   console.log("schau hier") 
+   console.log(reviewNameAry)
     
-    
-
-
+ 
     
 
     console.log (parkingResult.data.images[0])
@@ -249,7 +287,6 @@ const BookingForm = () => {
     
     setParkingPics(parkingResult.data.images)
     
-    setParkingOwner(parkingResult.data.owner)
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
@@ -266,6 +303,7 @@ const BookingForm = () => {
     setVR(reviewResult.data.averageValueRating|| 0) 
     setReviews(reviewResultlist.data.reviews)
    
+    
     
   }, []);
   return (
