@@ -43,6 +43,8 @@ const ParkingSpaceForm = () => {
 
   const [missingFileds,setMissingFields] = useState([])
   const [updateID,setUpdateID] = useState("") 
+  const [loadUpdateData,setLoadUpdateData] = useState(true) 
+
   const navigate = useNavigate();
   
   const Item = styled(Box)(({ theme }) => ({
@@ -199,7 +201,7 @@ const ParkingSpaceForm = () => {
 
   useEffect( () => {
   try{
-    if(location.pathname === "/parking/update"){
+    if(location.pathname === "/parking/update" && loadUpdateData){
       const updateParkingSpace = state
       setUpdateID(updateParkingSpace._id)
       setParkingSpaceName(updateParkingSpace.name)
@@ -222,6 +224,7 @@ const ParkingSpaceForm = () => {
       setNo_Meetup(updateParkingSpace.properties.cancellation_and_access.no_meetup)
       setPin(updateParkingSpace.properties.cancellation_and_access.pin)
       setSecurityGate(updateParkingSpace.properties.cancellation_and_access.pin)
+      setLoadUpdateData(false)
     } 
     if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
       setFormIncomplete(false)
@@ -233,7 +236,7 @@ const ParkingSpaceForm = () => {
     console.log(error);
     return navigate('/login');
   }
-  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,street]);
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city]);
 
   return (
     <div className="flex flex-col items-center ">

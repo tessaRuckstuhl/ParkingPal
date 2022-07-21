@@ -124,7 +124,7 @@ const Navbar = () => {
           >
 
             {loggedIn ? 
-            <>
+            <div>
             <MenuItem onClick={() => navigate('/personal')}>
              <Avatar /> Dashboard
            </MenuItem>
@@ -138,7 +138,7 @@ const Navbar = () => {
             <MenuItem onClick={() => navigate('/personal/listings')}>
               <ViewListIcon />Personal Listings
             </MenuItem>
-            </>
+            </div>
               : null}
             <Divider />
             {!loggedIn ? <MenuItem onClick={() => navigate('/signup')}>
