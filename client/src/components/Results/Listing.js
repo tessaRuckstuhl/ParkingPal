@@ -41,27 +41,27 @@ const Listing = (props) => {
   return (
     <div
       id={listing._id}
-      className="flex space-x-5 p-3 bg-white  "
+      className="flex space-x-3 p-3 bg-white  "
       onMouseEnter={() => recenter(listing)}
     >
-      {/* Listing image */}
+      {/* Listing image Apsect Ratio 4:3 */}
       {listing.images[0] ? (
         <img
-          className="rounded object-contain"
-          src={`http://localhost:3001/api/images/${listing.images[0]}`}
-          width={200}
-          height={150}
+          className="rounded object-cover lg:w-[190px] lg:h-[143px] sm:w-[120px] sm:h-[90px]"
+          src={`${process.env.REACT_APP_API_URL}images/${listing.images[0]}`}
+          width={190}
+          height={143}
         ></img>
       ) : (
         <img
-          className="rounded object-contain"
+          className="rounded  object-cover lg:w-[190px] lg:h-[143px] sm:w-[120px] sm:h-[90px]"
           src={`/img/image-not-available.jpg`}
-          width={200}
-          height={150}
+          width={190}
+          height={143}
         ></img>
       )}
       {/* Listing description */}
-      <div className="flex-1 flex flex-col justify-between text-sm  space-y-1">
+      <div className="flex-1 flex flex-col justify-between lg:text-sm sm:text-[9px] lg:space-y-1 sm:space-y-0">
         {/* Listing Title */}
         <div className="flex justify-between ">
           <div>
@@ -69,9 +69,9 @@ const Listing = (props) => {
               {buildFormattedPropertiesString(listing.properties?.cancellation_and_access)}
             </div>
             <a onClick={() => viewListing()}>
-              <div className="text-xl hover:underline hover:cursor-pointer">{listing.name}</div>
+              <div className="lg:text-xl sm:text-xs hover:underline hover:cursor-pointer">{listing.name}</div>
             </a>
-            <div className="text-sm flex items-center space-x-1">
+            <div className="lg:text-sm sm:text-[9px] flex items-center space-x-1">
               <span>
                 <LocationOn sx={{ fontSize: '.75rem' }} />
               </span>
@@ -84,7 +84,7 @@ const Listing = (props) => {
                 setLiked(!liked);
               }}
             >
-              {liked ? <Favorite color='primary'/> : <FavoriteBorderOutlined />}
+              {liked ? <Favorite color="primary" /> : <FavoriteBorderOutlined />}
             </IconButton>
           </div>
         </div>

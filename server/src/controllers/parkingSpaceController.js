@@ -16,11 +16,20 @@ module.exports = {
   },
   //not tested but should work
   async updateParkingSpace(req, res) {
+    const { id } = req.params;
+    const update = req.body;
     try {
+<<<<<<< HEAD
       const { id } = req.params;
       const parkingSpace = await ParkingSpace.updateOne(
         { _id: mongoose.Types.ObjectId(id) },       
         { $set: req.body }
+=======
+      const parkingSpace = await ParkingSpace.findOneAndUpdate(
+        { _id: id },
+        { ...update },
+        { new: true }
+>>>>>>> c630a6fefb46ba082db8d6a83b7fccebc5cd7857
       );
       return res.send(parkingSpace);
     } catch (error) {

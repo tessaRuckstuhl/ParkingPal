@@ -35,9 +35,8 @@ const About = () => {
                                 width="100%"
                                 fit="cover"
                                 duration={
-                                    3000
+                                    0
                                 }
-                                shift={null}
                                 distance="100px"
                             />
 
@@ -74,9 +73,8 @@ const About = () => {
                                 width="100%"
                                 fit="cover"
                                 duration={
-                                    3000
+                                    0
                                 }
-                                shift={null}
                                 distance="100px"
                             />
 
@@ -112,12 +110,10 @@ const About = () => {
                                 src={require('../images/alex.png')}
                                 height="100%"
                                 width="100%"
-                                fit="cover"
-                                duration={
-                                    3000
-                                }
-                                shift={null}
                                 distance="100px"
+                                duration={
+                                    0
+                                }
                             />
 
                         </Item>
@@ -155,9 +151,8 @@ const About = () => {
                                 width="100%"
                                 fit="cover"
                                 duration={
-                                    3000
+                                    0
                                 }
-                                shift={null}
                                 distance="100px"
                             />
 
