@@ -53,7 +53,7 @@ const About = () => {
                             <b>Studies:</b> &emsp; M.Sc. Information Systems<br />
 
                             <br />
-                            "Full Stack Developer"
+                            "I like available parking spaces"
                             <br />
                             <br />
 
