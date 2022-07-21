@@ -7,7 +7,7 @@ const AuthComponent = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!jwt || jwt === '') {
+    if (!jwt || jwt === ''|| jwt === undefined) {
       return navigate('/');
     }
   }, [jwt]);

@@ -1,6 +1,8 @@
 const authHeader = () => {
-  const token = JSON.parse(localStorage.getItem('token'));
+  console.log("im here")
+  const token = localStorage.getItem('token');
   if (token) {
+    console.log("im here in if token")
     return {
       Authorization: 'Bearer ' + token
     };
