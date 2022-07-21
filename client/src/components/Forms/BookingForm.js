@@ -155,7 +155,7 @@ const BookingForm = () => {
       const createdBooking = await BookingService.create(booking);
       // first we create the booking with payed set to false, then we handle payment and update payed field to true
       handlePayment(createdBooking.data)
-
+      setTimeout(() => {  navigate("/personal"); }, 1500);
     } catch (error) {
       console.log(error)
     }
@@ -176,30 +176,8 @@ const BookingForm = () => {
     if (okDate) {navigate('/pay', {state: data})}
     else {
       showSnack("Your selected dates are not available. Please choose another date","error")
-      console.log("its not available")
-      console.log (fromTime.toISOString())
-      console.log (untilTime.toISOString())
     }
   }
-
-
-  // const setReviewName = async (reviewsList) => {
-
-  //   reviewsList.map((review) => (
-  //     const resultOwner = await UserService.getUser(review.owner)
-  //     review.ownername = resultOwner.data.name
-  //   )
-    
-  //   )}
-  // }
-
-  
-
-  // const reviewName = async (reviewId) => {
-  //   let name = await UserService.getUser(reviewId)
-  //   firstname = name.data.firstName 
-  //   return firstname 
-  // }
 
   const reviewName = async (reviews) => {
     for (let i = 0; i<reviews.length; i++) {
@@ -706,7 +684,7 @@ const BookingForm = () => {
           }}>
 
             <h2>
-              <strong>Provided by {owner.surname}</strong>
+              <strong>Provided by {owner.firstName}</strong>
               <br></br>
               
             </h2>
@@ -717,6 +695,7 @@ const BookingForm = () => {
             type="submit"
             variant="outlined"
             color="primary"
+            onClick={() => { window.location = "mailto:" + owner.username; }}
           >
             Contact Host
           </Button>
