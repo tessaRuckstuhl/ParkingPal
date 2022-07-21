@@ -7,9 +7,7 @@ const path = require('path');
 
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-
 const api = require('./routes');
-const { isAuthenticated } = require('./middlewares');
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ path: path.resolve('.env') });
@@ -44,16 +42,27 @@ mongoose
     console.log('err :>> ', err);
   });
 
+app.use('/api', api);
 
 app.get('/ping', (req, res) => {
-  res.send('pong');
+  if (req.statusCode !== 304) {
+    res.send('pong');
+  }
+  else {
+    res.send('Authorization failed');
+  }
 });
 
 app.get('/', (req, res) => {
-  res.send('Nothing to see here...');
+  if (res.statusCode !== 403) {
+    res.send('Nothing to see here...');
+  }
+  else {
+    res.send('Authorization failed');
+  }
 });
-app.use('/api', api);
-//app.use(isAuthenticated);
+
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

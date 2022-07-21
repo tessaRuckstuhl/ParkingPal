@@ -24,7 +24,7 @@ module.exports = {
         { ...update },
         { new: true }
       );
-      return res.send(parkingSpace.toJSON());
+      return res.send(parkingSpace);
     } catch (error) {
       console.log(error);
       return res.status(400).send({ error: 'Error when updating a Parking Space' });
