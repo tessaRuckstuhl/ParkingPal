@@ -62,6 +62,7 @@ const BookingForm = () => {
   const [parkingProp, setParkingProp] = useState('');
   const [parkingCandA, setParkingCandA] = useState('');
   const [address,setParkingAddress] = useState('');
+  const [parkingName, setParkingName] = useState('');
   const [images,setParkingPics] = useState([])
   const [desc,setParkingDesc] = useState('');
   const [owner, setOwner] = useState('');
@@ -209,6 +210,7 @@ const BookingForm = () => {
     setParkingProp(parkingResult.data.properties.parking)
     setParkingCandA(parkingResult.data.properties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
+    setParkingName(parkingResult.data.name)
     setParkingPics(parkingResult.data.images)
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
@@ -235,11 +237,11 @@ const BookingForm = () => {
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="text-xl">
-          <b>{address}</b>
+          <b>{parkingName}</b>
         </div>
         <div className="mb-6 font-light text-s">
         
-          <a>{overallRating} ⭐ Rating from {reviewamount} reviews</a>
+          <b>{overallRating} ⭐ Rating from {reviewamount} reviews &nbsp; at &nbsp; {address}</b>
           
         </div>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
@@ -510,8 +512,8 @@ const BookingForm = () => {
               <TableBody>
                 {availability.map((date, i) => (  
                   <StyledTableRow key={i} >
-                    <StyledTableCell  component ="th" scope ="row">{date.from.substring(0,19)}</StyledTableCell>
-                    <StyledTableCell  align="right">{date.to.substring(0,19)}</StyledTableCell>
+                    <StyledTableCell  component ="th" scope ="row"> Date: <b>{date.from.substring(8,10)}{date.from.substring(4,8)}{date.from.substring(0,4)}</b>   &nbsp; &nbsp; Start time: <b>{date.from.substring(12,19)} </b></StyledTableCell>
+                    <StyledTableCell  align="right">Date: <b>{date.to.substring(8,10)}{date.to.substring(4,8)}{date.to.substring(0,4)}</b> &nbsp; &nbsp; End time:<b> {date.to.substring(12,19)}</b></StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
