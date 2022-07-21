@@ -83,6 +83,7 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
+  const [reviewNameAry, setReviewNameAry] = useState({});
  
   
   const { showSnack } = useErrorSnack()
@@ -165,7 +166,6 @@ const BookingForm = () => {
   // redirect with state: price, other stats,search for booking id and update as payed
   // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
   const handlePayment = (data) => {
-    console.log(totalPrice)
     var okDate = false
     for (let i = 0; i<availability.length;i++){
       if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
@@ -201,14 +201,11 @@ const BookingForm = () => {
   //   return firstname 
   // }
 
-  const reviewNameAry = []
-
-  const reviewName = async () => {
-    for (let i = 0; i<reviewsAry.length; i++) {
-      let name = await UserService.getUser(reviewsAry[i].reviewer) //id
-      let firstname = name.data.firstName
-      reviewNameAry[i] = firstname
-      console.log("i got triggered")
+  const reviewName = async (reviews) => {
+    for (let i = 0; i<reviews.length; i++) {
+      let name = await UserService.getUser(reviews[i].reviewer) //id
+      let firstname = name.data
+      reviewNameAry[i] = firstname.surname
     }
   }
 
@@ -216,60 +213,28 @@ const BookingForm = () => {
   useEffect(async () => {
     const parkingId = new URL(location.href).searchParams.get('parkingId')
     setParkingSpaceId(parkingId)
-    console.log("test")
+    console.log("Start")
 
-    console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
 
+   
     const resultOwner = await UserService.getUser(parkingResult.data.owner)
-    
-    console.log(parkingResult.data)
-    
-    //const resultGuest = await UserService.getUser(resultBooking.data.guest)
-    setOwner(resultOwner.data.surname)
-    console.log(resultOwner)
+    setOwner(resultOwner.data)
 
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
-    console.log("Hey")
     console.log(reviewResultlist.data)
 
-    
-    console.log(parkingResult)
-    console.log("hallo")
-    console.log(parkingResult.data.availability)
-    console.log(reviewResult.data)
-
-   reviewName()
-   console.log("schau hier") 
-   console.log(reviewNameAry)
-    
- 
-    
+    await reviewName(reviewResultlist.data.reviews)
+    console.log(reviewNameAry)
+    console.log(reviewNameAry[0])
 
     console.log (parkingResult.data.images[0])
-    // time and Price
-    // console.log("unformatted time dif: "+timeDif)
-    // console.log("totalTime: "+ totalTime)
-    // console.log("fromTimeEx: " + fromTime)
-    // console.log("fromTimeEx: " + fromTime)
-    // console.log("day:Price: " + dayPrice)
-    // console.log("hourPrice:" + basePrice)
-    // console.log("DayPrice:")
-    // console.log(parkingResult.data.dayPrice)
-    // console.log("hourPrice:")
-    // console.log(parkingResult.data.basePrice)
-    // console.log("Days :")
-    // console.log(days)
-    // console.log("this is hours: " + hours)
-    // console.log ("total day price: "+days*dayPrice)
-    // console.log ("total base price: "+hours*basePrice)
 
     
     
     // parkign space
     console.log("This is the desc: "+ parkingResult.data.description)
-    console.log("Owner: "+ owner)
     console.log("Here is the address: "+ parkingResult.data)
     
   
@@ -294,13 +259,13 @@ const BookingForm = () => {
     setAvailability(parkingResult.data.availability)
     setParkingSpaceSize(parkingResult.data.size)
     setReviewamount(reviewResult.data.amount || 0)
-    setOverallRating(reviewResult.data.averageOverallRating || 0)
-    setNR(reviewResult.data.averageNeighborhoodRating || 0)
-    setCR(reviewResult.data.averageCommunicationRating|| 0)
-    setAR(reviewResult.data.averageAccessRating || 0)
-    setACR(reviewResult.data.averageAccuracyRating || 0)
-    setLR(reviewResult.data.averageLocationRating || 0)
-    setVR(reviewResult.data.averageValueRating|| 0) 
+    setOverallRating(Number(reviewResult.data.averageOverallRating) || 0)
+    setNR(Number(reviewResult.data.averageNeighborhoodRating) || 0)
+    setCR(Number(reviewResult.data.averageCommunicationRating) || 0)
+    setAR(Number(reviewResult.data.averageAccessRating) || 0)
+    setACR(Number(reviewResult.data.averageAccuracyRating) || 0)
+    setLR(Number(reviewResult.data.averageLocationRating) || 0)
+    setVR(Number(reviewResult.data.averageValueRating) || 0) 
     setReviews(reviewResultlist.data.reviews)
    
     
@@ -340,8 +305,8 @@ const BookingForm = () => {
             </Grid>
           </Grid> */}
           <ImageList cols={2} rowHeight={400}>
-            {images.map((picture) => (
-              <ImageListItem >
+            {images.map((picture, i) => (
+              <ImageListItem key={1}>
                 <img
                   src={`http://localhost:3001/api/images/${picture}`}
                   loading="lazy"
@@ -608,10 +573,10 @@ const BookingForm = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {availability.map((date) => (  
-                  <StyledTableRow>
-                    <StyledTableCell component ="th" scope ="row">{date.from.substring(0,19)}</StyledTableCell>
-                    <StyledTableCell align="right">{date.to.substring(0,19)}</StyledTableCell>
+                {availability.map((date, i) => (  
+                  <StyledTableRow key={i} >
+                    <StyledTableCell  component ="th" scope ="row">{date.from.substring(0,19)}</StyledTableCell>
+                    <StyledTableCell  align="right">{date.to.substring(0,19)}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -668,8 +633,8 @@ const BookingForm = () => {
           
           <br></br>
           <Grid container spacing={2}>  
-            {reviewsAry.length <5 ? reviewsAry.map((aryitem) => (     
-              <Grid item xs={6}>
+            {reviewsAry.length <5 ? reviewsAry.map((aryitem, i) => (     
+              <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
                     <div style={{
                   margin: 'auto',
@@ -677,14 +642,14 @@ const BookingForm = () => {
                   justifyContent: 'begin',
                   textAlign: 'justify',
               }}>
-                <b>{aryitem.reviewer}</b>
+                <b>{reviewNameAry[0]}</b>
                 <br></br>
                 <a>{aryitem.description }</a>
                 </div>
             </Item> 
           </Grid>
-          )): reviewsAry.slice(0,4).map((aryitem) => (
-                <Grid item xs={6}>
+          )): reviewsAry.slice(0,4).map((aryitem, i) => (
+                <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
                       
                         <div style={{
@@ -741,7 +706,7 @@ const BookingForm = () => {
           }}>
 
             <h2>
-              <strong>Provided by {owner}</strong>
+              <strong>Provided by {owner.surname}</strong>
               <br></br>
               
             </h2>

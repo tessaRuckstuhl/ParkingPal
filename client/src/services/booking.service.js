@@ -5,7 +5,6 @@ const requestConfig = {headers: authHeader()}
 const BService = {
     
     create(body) {
-        console.log(requestConfig)
         return axios.post(`${process.env.REACT_APP_API_URL}booking`, body,requestConfig);
     },
     update(id,body) {

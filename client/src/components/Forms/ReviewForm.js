@@ -115,7 +115,6 @@ const ReviewForm = () => {
 
   const setReviewStats = async (id) => {
     const resultReview = await ReviewService.getReviewStats(id)
-    console.log(resultReview.data)
     setAmountParkingSpaceReviews(resultReview.data.amount)
     setAverageParkingSpaceReview(resultReview.data.averageOverallRating)
   }
@@ -133,12 +132,10 @@ const ReviewForm = () => {
 
   useEffect(async () => {
     const bookingId = new URL(location.href).searchParams.get('bookingId')
-    console.log(bookingId)
     const resultBooking = await BookingService.getBooking(bookingId);
     setBooking(resultBooking.data);
 
     const resultParkingSpace = await ParkingSpaceService.listParkingSpace(resultBooking.data.parkingSpace)
-    console.log(resultParkingSpace.data)
     setParkingSpace(resultParkingSpace.data)
     setParkingSpaceSize(resultParkingSpace.data.size)
 
@@ -148,7 +145,6 @@ const ReviewForm = () => {
 
     const resultOwner = await UserService.getUser(resultBooking.data.owner)
     setOwner(resultGuest.data)
-    console.log(resultBooking.data.parkingSpace)
     setReviewStats(resultBooking.data.parkingSpace)
 
   }, []);
