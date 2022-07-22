@@ -511,8 +511,8 @@ const BookingForm = () => {
               <TableBody>
                 {availability.map((date, i) => (  
                   <StyledTableRow key={i} >
-                    <StyledTableCell  component ="th" scope ="row"> Date: <b>{date.from.substring(8,10)}{date.from.substring(4,8)}{date.from.substring(0,4)}</b>   &nbsp; &nbsp; Start time: <b>{date.from.substring(12,19)} </b></StyledTableCell>
-                    <StyledTableCell  align="right">Date: <b>{date.to.substring(8,10)}{date.to.substring(4,8)}{date.to.substring(0,4)}</b> &nbsp; &nbsp; End time:<b> {date.to.substring(12,19)}</b></StyledTableCell>
+                    <StyledTableCell  component ="th" scope ="row"> Date: <b> {moment(date.from).format('DD.MM.YYYY,  HH:mm')}</b> </StyledTableCell>
+                    <StyledTableCell  align="right">Date: <b> {moment(date.to).format('DD.MM.YYYY,  HH:mm')}</b></StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
