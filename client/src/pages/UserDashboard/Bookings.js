@@ -75,7 +75,7 @@ const Bookings = () => {
             key={i}
             className="items-center border-lighterGray rounded-l shadow-bar p-2 flex justify-between"
           >
-            {`${moment(b.startDate).format('DD.MM.YYYY,  HH:MM')} to ${moment(b.endDate).format(
+            {`${moment(b.startDate).format('DD.MM.YYYY,  HH:mm')} to ${moment(b.endDate).format(
               'DD.MM.YYYY, HH:MM'
             )} in ${b.parkingSpaceProps?.name} at ${b.parkingSpaceProps?.formattedAddress}`}
             <Button onClick={() => reviewBooking(b._id)}>Review</Button>{' '}
