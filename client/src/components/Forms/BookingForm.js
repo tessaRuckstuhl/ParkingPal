@@ -78,6 +78,8 @@ const BookingForm = () => {
   const [fromTime,setFromTime] = useState (new Date(1));
   const [untilTime,setUntilTime] = useState (new Date(1));
   const [totalPrice,setTotalPrice] = useState(0);
+  const [parkingPrice,setParkingPrice] = useState();
+  const [fee,setFee] = useState();
   const [days,setDays] = useState(0);
   const [hours,setHours] = useState(0);
   const [parkingSpaceSize,setParkingSpaceSize] = useState();
@@ -365,7 +367,7 @@ const BookingForm = () => {
                   </Grid>
                   <br></br>
                 </div>
-                <div className="mb-6 font-regular  text-s">
+                <div className="mb-6 font-regular  text-s" >
                   <Grid container spacing={2}>
                     <Grid item xs={5}>
                       <Item style={{ height: 70 }} key={5} elevation={5}>
@@ -388,7 +390,10 @@ const BookingForm = () => {
                   </Grid>
                 </div>
                 
-                <div className="mt-2 font-bold">
+                <div className="mt-2 font-bold" style={{
+                  justifyContent: 'center',
+                  textAlign: 'justify',
+                }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                     Total Time
@@ -398,7 +403,37 @@ const BookingForm = () => {
                     </Grid>
                   </Grid>
                 </div>
-                <div className="mt-1 mb-8 font-bold">
+                <div className=" font-bold" style={{
+                  justifyContent: 'center',
+                  textAlign: 'justify',
+                }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                    Parking Price
+                    </Grid>
+                    <Grid item xs={6}>
+                      {parkingPrice} €
+                    </Grid>
+                  </Grid>
+                </div>
+                <div className=" font-bold" style={{
+                  justifyContent: 'center',
+                  textAlign: 'justify',
+                }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                    Fee
+                    </Grid>
+                    <Grid item xs={6}>
+                      {fee} €
+                    </Grid>
+                  </Grid>
+                </div>
+                
+                <div className="mt-2 mb-7 font-bold" style={{
+                  justifyContent: 'center',
+                  textAlign: 'justify',
+                }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                     Total Price
@@ -487,9 +522,12 @@ const BookingForm = () => {
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                       const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
+                      const myFee = (myDays*dayPrice + remainHourPrice)*0.05
                       setDays(myDays)
                       setHours(myHours)
-                      setTotalPrice((myDays*dayPrice + remainHourPrice))
+                      setFee(myFee)
+                      setParkingPrice (myDays*dayPrice + remainHourPrice)
+                      setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee)
                     }}
                   />
                 </LocalizationProvider> 
