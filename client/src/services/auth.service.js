@@ -13,7 +13,7 @@ const AuthService = {
   },
   getCurrentUser(token) {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64'));
-  },
+  }
 };
 
 export default AuthService;

@@ -1,24 +1,28 @@
 import axios from 'axios';
+import authHeader from './auth-header';
+
+const requestConfig = {headers: authHeader()}
 
 const PSService = {
-
     create(body) {
-        return axios.post(`${process.env.REACT_APP_API_URL}parkingSpace`, body);
+        return axios.post(`${process.env.REACT_APP_API_URL}parkingSpace`, body,requestConfig);
     },
-    update(body) {
-        return axios.patch(`${process.env.REACT_APP_API_URL}parkingSpace`, body);
+    update(id,body) {    
+        return axios.patch(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`, body,requestConfig);
     },
     delete(id) {
-        return axios.delete(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
+        return axios.delete(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`,requestConfig);
     },
     listParkingSpace(id) {
-        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`);
+        localStorage.removeItem('parkingSpace')
+        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace/${id}`,requestConfig);
     },
     listAllParkingSpaces(filters) {
-        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters});
+        
+        return axios.get(`${process.env.REACT_APP_API_URL}parkingSpace`, {params: filters},requestConfig);
     },
     listOwnedParkingSpaces(ownerId) {
-        return axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/listings/${ownerId}`);
+        return axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/listings/${ownerId}`,requestConfig);
     },
     filterParkingSpaces(filters){
         return  axios.get(`${process.env.REACT_APP_API_URL}helperParkingspace/filter`, {params: filters});
@@ -31,7 +35,7 @@ const PSService = {
         return axios.get(url)
     },
     deleteImage(id) {
-        return axios.delete(`${process.env.REACT_APP_API_URL}images/${id}`);
+        return axios.delete(`${process.env.REACT_APP_API_URL}images/${id}`,requestConfig);
     }
 };
 

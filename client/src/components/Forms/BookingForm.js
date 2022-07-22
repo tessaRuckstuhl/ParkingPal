@@ -25,7 +25,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
 import GarageIcon from '@mui/icons-material/Garage';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -62,6 +61,7 @@ const BookingForm = () => {
   const [parkingProp, setParkingProp] = useState('');
   const [parkingCandA, setParkingCandA] = useState('');
   const [address,setParkingAddress] = useState('');
+  const [parkingName, setParkingName] = useState('');
   const [images,setParkingPics] = useState([])
   const [desc,setParkingDesc] = useState('');
   const [owner, setOwner] = useState('');
@@ -85,7 +85,7 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
-  
+  const [reviewNameAry, setReviewNameAry] = useState({});
  
   
   const { showSnack } = useErrorSnack()
@@ -143,11 +143,8 @@ const BookingForm = () => {
       const user = parseJwt(localStorage.getItem('token'))
       const booking = {
         parkingSpace: parkingSpaceId,
-        // guest ist der, der ein Parkplatz bucht
         guest: user._id, 
-        // owner ist der Besitzer den ich über Parkplatz ID hole
         owner: owner,
-        // Was ist mit terms: gemeint?
         issueDate: todayDate,
         startDate: startValue,
         endDate: endValue, 
@@ -157,7 +154,6 @@ const BookingForm = () => {
       const createdBooking = await BookingService.create(booking);
       // first we create the booking with payed set to false, then we handle payment and update payed field to true
       handlePayment(createdBooking.data)
-
     } catch (error) {
       console.log(error)
     }
@@ -168,7 +164,6 @@ const BookingForm = () => {
   // redirect with state: price, other stats,search for booking id and update as payed
   // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
   const handlePayment = (data) => {
-    console.log(totalPrice)
     var okDate = false
     for (let i = 0; i<availability.length;i++){
       if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
@@ -179,39 +174,14 @@ const BookingForm = () => {
     if (okDate) {navigate('/pay', {state: data})}
     else {
       showSnack("Your selected dates are not available. Please choose another date","error")
-      console.log("its not available")
-      console.log (fromTime.toISOString())
-      console.log (untilTime.toISOString())
     }
   }
 
-
-  // const setReviewName = async (reviewsList) => {
-
-  //   reviewsList.map((review) => (
-  //     const resultOwner = await UserService.getUser(review.owner)
-  //     review.ownername = resultOwner.data.name
-  //   )
-    
-  //   )}
-  // }
-
-  
-
-  // const reviewName = async (reviewId) => {
-  //   let name = await UserService.getUser(reviewId)
-  //   firstname = name.data.firstName 
-  //   return firstname 
-  // }
-
-  const reviewNameAry = []
-
-  const reviewName = async () => {
-    for (let i = 0; i<reviewsAry.length; i++) {
-      let name = await UserService.getUser(reviewsAry[i].reviewer) //id
-      let firstname = name.data.firstName
-      reviewNameAry[i] = firstname
-      console.log("i got triggered")
+  const reviewName = async (reviews) => {
+    for (let i = 0; i<reviews.length; i++) {
+      let name = await UserService.getUser(reviews[i].reviewer) //id
+      let firstname = name.data
+      reviewNameAry[i] = firstname.surname
     }
   }
 
@@ -219,66 +189,19 @@ const BookingForm = () => {
   useEffect(async () => {
     const parkingId = new URL(location.href).searchParams.get('parkingId')
     setParkingSpaceId(parkingId)
-    console.log("test")
+    console.log("Start")
 
-    console.log(parkingId)
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
-
-    const resultOwner = await UserService.getUser(parkingResult.data.owner)
-    
-    console.log(parkingResult.data)
-    
-    //const resultGuest = await UserService.getUser(resultBooking.data.guest)
-    setOwner(resultOwner.data.surname)
-    console.log(resultOwner)
-
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
-    console.log("Hey")
-    console.log(reviewResultlist.data)
-
     
-    console.log(parkingResult)
-    console.log("hallo")
-    console.log(parkingResult.data.availability)
-    console.log(reviewResult.data)
-
-   reviewName()
-   console.log("schau hier") 
-   console.log(reviewNameAry)
+    //Owner Name
+    const resultOwner = await UserService.getUser(parkingResult.data.owner)
+    setOwner(resultOwner.data)
+    //Reviewer Names
+    await reviewName(reviewResultlist.data.reviews)
     
- 
-    
-
-    console.log (parkingResult.data.images[0])
-    // time and Price
-    // console.log("unformatted time dif: "+timeDif)
-    // console.log("totalTime: "+ totalTime)
-    // console.log("fromTimeEx: " + fromTime)
-    // console.log("fromTimeEx: " + fromTime)
-    // console.log("day:Price: " + dayPrice)
-    // console.log("hourPrice:" + basePrice)
-    // console.log("DayPrice:")
-    // console.log(parkingResult.data.dayPrice)
-    // console.log("hourPrice:")
-    // console.log(parkingResult.data.basePrice)
-    // console.log("Days :")
-    // console.log(days)
-    // console.log("this is hours: " + hours)
-    // console.log ("total day price: "+days*dayPrice)
-    // console.log ("total base price: "+hours*basePrice)
-
-    
-    
-    // parkign space
-    console.log("This is the desc: "+ parkingResult.data.description)
-    console.log("Owner: "+ owner)
-    console.log("Here is the address: "+ parkingResult.data)
-    
-  
-  
-    // review
-    //console.log(reviewResult.data.rating)
+    // Parking Space related
     const formattedParkingSpaces = {...parkingResult.data, lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1]}
     setParkingSpace([...parkingSpace,formattedParkingSpaces])
     setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
@@ -287,23 +210,24 @@ const BookingForm = () => {
     setParkingProp(parkingResult.data.properties.parking)
     setParkingCandA(parkingResult.data.properties.cancellation_and_access)
     setParkingAddress(parkingResult.data.formattedAddress)
-    
+    setParkingName(parkingResult.data.name)
     setParkingPics(parkingResult.data.images)
-    
     setParkingDesc(parkingResult.data.description)
     setDayPrice(parkingResult.data.dayPrice)
     setBasePrice(parkingResult.data.basePrice)
     setLongPrice(parkingResult.data.longTermStayPrice)
     setAvailability(parkingResult.data.availability)
     setParkingSpaceSize(parkingResult.data.size)
+
+    //Review Related
     setReviewamount(reviewResult.data.amount || 0)
-    setOverallRating(reviewResult.data.averageOverallRating || 0)
-    setNR(reviewResult.data.averageNeighborhoodRating || 0)
-    setCR(reviewResult.data.averageCommunicationRating|| 0)
-    setAR(reviewResult.data.averageAccessRating || 0)
-    setACR(reviewResult.data.averageAccuracyRating || 0)
-    setLR(reviewResult.data.averageLocationRating || 0)
-    setVR(reviewResult.data.averageValueRating|| 0) 
+    setOverallRating(Number(reviewResult.data.averageOverallRating) || 0)
+    setNR(Number(reviewResult.data.averageNeighborhoodRating) || 0)
+    setCR(Number(reviewResult.data.averageCommunicationRating) || 0)
+    setAR(Number(reviewResult.data.averageAccessRating) || 0)
+    setACR(Number(reviewResult.data.averageAccuracyRating) || 0)
+    setLR(Number(reviewResult.data.averageLocationRating) || 0)
+    setVR(Number(reviewResult.data.averageValueRating) || 0) 
     setReviews(reviewResultlist.data.reviews)
    
     
@@ -313,38 +237,17 @@ const BookingForm = () => {
     <div className="flex flex-col items-center ">
       <div className="w-3/4">
         <div className="text-xl">
-          <b>{address}</b>
+          <b>{parkingName}</b>
         </div>
         <div className="mb-6 font-light text-s">
         
-          <a>{overallRating} ⭐ Rating from {reviewamount} reviews</a>
+          <b>{overallRating} ⭐ Rating from {reviewamount} reviews &nbsp; at &nbsp; {address}</b>
           
         </div>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
-          {/* <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Box style={{ height: 300 }}>
-                <img
-                  className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics}`}
-                  style={{ height: 300, width: 375 }}
-                  height={300}
-                ></img>
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box style={{ height: 300 }}>
-                <img
-                  className="rounded object-contain"
-                  src={`http://localhost:3001/api/images/${pics2}`}
-                  style={{ height: 300, width: 375 }}
-                ></img>
-              </Box>
-            </Grid>
-          </Grid> */}
           <ImageList cols={2} rowHeight={400}>
-            {images.map((picture) => (
-              <ImageListItem >
+            {images.map((picture, i) => (
+              <ImageListItem key={1}>
                 <img
                   src={`http://localhost:3001/api/images/${picture}`}
                   loading="lazy"
@@ -356,13 +259,10 @@ const BookingForm = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Item style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
-                
-                
                 <div
                   style={{
                     justifyContent: 'begin',
                     textAlign: 'justify',
-
                   }}
                 >
                   <br></br>
@@ -448,7 +348,6 @@ const BookingForm = () => {
                   style={{
                     justifyContent: 'center',
                     textAlign: 'justify',
-                    //display: 'flex',
                   }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -620,8 +519,7 @@ const BookingForm = () => {
                       const myTimeDif = (end-fromTime)
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
-                      const remainHourPrice = (myHours > 5 ? longPrice : (myHours)* basePrice)
-                      const fee = (myDays*dayPrice + remainHourPrice)*0.05
+                      const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
                       setDays(myDays)
                       setHours(myHours)
                       setFee(fee)
@@ -647,10 +545,10 @@ const BookingForm = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {availability.map((date) => (  
-                  <StyledTableRow>
-                    <StyledTableCell component ="th" scope ="row">{date.from.substring(0,19)}</StyledTableCell>
-                    <StyledTableCell align="right">{date.to.substring(0,19)}</StyledTableCell>
+                {availability.map((date, i) => (  
+                  <StyledTableRow key={i} >
+                    <StyledTableCell  component ="th" scope ="row"> Date: <b> {moment(date.from).format('DD.MM.YYYY,  HH:mm')}</b> </StyledTableCell>
+                    <StyledTableCell  align="right">Date: <b> {moment(date.to).format('DD.MM.YYYY,  HH:mm')}</b></StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -707,8 +605,8 @@ const BookingForm = () => {
           
           <br></br>
           <Grid container spacing={2}>  
-            {reviewsAry.length <5 ? reviewsAry.map((aryitem) => (     
-              <Grid item xs={6}>
+            {reviewsAry.length <5 ? reviewsAry.map((aryitem, i) => (     
+              <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
                     <div style={{
                   margin: 'auto',
@@ -716,14 +614,14 @@ const BookingForm = () => {
                   justifyContent: 'begin',
                   textAlign: 'justify',
               }}>
-                <b>{aryitem.reviewer}</b>
+                <b>{reviewNameAry[0]}</b>
                 <br></br>
                 <a>{aryitem.description }</a>
                 </div>
             </Item> 
           </Grid>
-          )): reviewsAry.slice(0,4).map((aryitem) => (
-                <Grid item xs={6}>
+          )): reviewsAry.slice(0,4).map((aryitem, i) => (
+                <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
                       
                         <div style={{
@@ -752,16 +650,11 @@ const BookingForm = () => {
           ))}
           </Grid>
           <br></br>
-          
-    
-          {/* <Divider /> */}
           <br></br>
           <br></br>
           <h2>Where you'll be parking</h2>
           <br></br>
-          <br></br>
-          
-        
+          <br></br>  
           <div className="w-full">
             <MapWrapper results={parkingSpace} center={parkingMapCenter} setCenter={setParkingMapCenter} selected={true} />
           </div>
@@ -780,7 +673,7 @@ const BookingForm = () => {
           }}>
 
             <h2>
-              <strong>Provided by {owner}</strong>
+              <strong>Provided by {owner.firstName}</strong>
               <br></br>
               
             </h2>
@@ -791,6 +684,7 @@ const BookingForm = () => {
             type="submit"
             variant="outlined"
             color="primary"
+            onClick={() => { window.location = "mailto:" + owner.username; }}
           >
             Contact Host
           </Button>
@@ -836,7 +730,6 @@ const BookingForm = () => {
           </div>
           <br></br>
           <br></br>
-
         </form>
       </div>
     </div>

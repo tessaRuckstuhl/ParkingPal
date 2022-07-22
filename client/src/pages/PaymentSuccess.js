@@ -30,11 +30,11 @@ const PaymentSuccess = () => {
           <span className="font-bold ">{bookedParking?.formattedAddress}</span>
           <br />
           <span className="font-bold">
-            {moment(state.booking.startDate).format('DD.MM.YYYY,  HH:MM')}
+            {moment(state.booking.startDate).format('DD.MM.YYYY,  HH:mm')}
           </span>{' '}
           to{' '}
           <span className="font-bold">
-            {moment(state.booking.endDate).format('DD.MM.YYYY,  HH:MM')}
+            {moment(state.booking.endDate).format('DD.MM.YYYY,  HH:mm')}
           </span>
         </div>
       </div>

@@ -16,13 +16,15 @@ module.exports = {
   },
   //not tested but should work
   async updateParkingSpace(req, res) {
+    const { id } = req.params;
+    const update = req.body;
     try {
-      console.log(req.body);
-      const parkingSpace = await ParkingSpace.update(
-        { name: req.body.parkingSpaceName },
-        { $set: req.body }
+      const parkingSpace = await ParkingSpace.findOneAndUpdate(
+        { _id: id },
+        { ...update },
+        { new: true }
       );
-      return res.send(parkingSpace.toJSON());
+      return res.send(parkingSpace);
     } catch (error) {
       console.log(error);
       return res.status(400).send({ error: 'Error when updating a Parking Space' });
@@ -116,7 +118,7 @@ module.exports = {
           $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
         };
       }
-      // build parking space features filter
+      // build parking space features filter from remaining keys...
       Object.keys(query).map((key, index) => {
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
@@ -128,7 +130,6 @@ module.exports = {
       }).sort({ _id: -1 });
       return res.send(allParkingSpaces);
     } catch (error) {
-      console.log('hi', error);
       return res
         .status(400)
         .send({ error: error || 'There was an error trying to get all parkingSpaces' });

@@ -12,29 +12,25 @@ import { useErrorSnack } from '../../contexts/ErrorContext'
 import { ImageContext } from '../../contexts/ImageContext'
 import Info from '@mui/icons-material/Info';
 import moment from 'moment';
+import { useLocation ,useNavigate} from 'react-router-dom';
 
 //https://mui.com/material-ui/react-stepper/ maybe add
 
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const { imageIDs, setImageIDs } = useContext(ImageContext)
-
   const [description, setDescription] = useState('');
-
-  const [size, setSize] = useState('');
+  const [size, setSize] = useState(0);
   const [basePrice, setBasePrice] = useState('');
   const [dayPrice, setDayPrice] = useState('');
   const [longTermStayPrice, setLongTermStayPrice] = useState('');
-
   const [fromValue, setFromValue] = React.useState('');
   const [toValue, setToValue] = React.useState('');
   const [availability, setAvailability] = useState([]);
-
   const [street, setStreet] = useState('');
   const [houseNumber, setHouseNumber] = useState('');
   const [postalCode, setPostalCode] = useState('')
   const [city, setCity] = useState('')
-
   const [e_charging, setE_Charging] = useState(false)
   const [streetside, setStreetside] = useState(false)
   const [illuminated, setIlluminated] = useState(false)
@@ -46,7 +42,11 @@ const ParkingSpaceForm = () => {
   const [formIncomplete, setFormIncomplete] = useState(true)
 
   const [missingFileds,setMissingFields] = useState([])
+  const [updateID,setUpdateID] = useState("") 
+  const [loadUpdateData,setLoadUpdateData] = useState(true) 
 
+  const navigate = useNavigate();
+  
   const Item = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -55,12 +55,8 @@ const ParkingSpaceForm = () => {
     color: theme.palette.text.secondary,
   }));
   const { showSnack } = useErrorSnack()
+  const {state} = useLocation()
 
-  //TODO:
-  /*
-  delete photos on no submit - does it work?
-  update parkimg space
-  */
   const clearAll = () => {
     setParkingSpaceName("")
     setImageIDs([])
@@ -82,7 +78,8 @@ const ParkingSpaceForm = () => {
     setNo_Meetup(false)
     setPin(false)
     setSecurityGate(false)
-
+    setFromValue("")
+    setToValue("")
   }
 
   const handleChange = (event) => {
@@ -162,7 +159,6 @@ const ParkingSpaceForm = () => {
           coordinates: [response.data.results[0].geometry.location.lat, response.data.results[0].geometry.location.lng]
         },
         availability: availability,
-        size: size,
         basePrice: basePrice,
         dayPrice: dayPrice,
         longTermStayPrice: longTermStayPrice,
@@ -175,6 +171,7 @@ const ParkingSpaceForm = () => {
             e_charging: e_charging,
             illuminated: illuminated
           },
+          size: Number(size),
           cancellation_and_access: {
             free_24h_before: free_24h_before,
             no_meetup: no_meetup,
@@ -182,10 +179,11 @@ const ParkingSpaceForm = () => {
             security_gate: securityGate
           }
         },
+        status: "available"
       };
-      console.log(parkingSpace)
-      await ParkingSpaceService.create(parkingSpace);
+      location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
       clearAll()
+      navigate("/personal/listings")
     } catch (error) {
       for (var i = 0; i < imageIDs.length; i++) {
         await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
@@ -201,14 +199,44 @@ const ParkingSpaceForm = () => {
     }
   };
 
-  useEffect(() => {
+  useEffect( () => {
+  try{
+    if(location.pathname === "/parking/update" && loadUpdateData){
+      const updateParkingSpace = state
+      setUpdateID(updateParkingSpace._id)
+      setParkingSpaceName(updateParkingSpace.name)
+      //setImageIDs(updateParkingSpace.images)
+      setDescription(updateParkingSpace.description)
+      setSize(updateParkingSpace.properties.size)
+      setBasePrice(updateParkingSpace.basePrice)
+      setDayPrice(updateParkingSpace.dayPrice)
+      setLongTermStayPrice(updateParkingSpace.longTermStayPrice)
+      setAvailability(updateParkingSpace.availability)
+      setStreet(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[0])
+      setHouseNumber(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[1])
+      setPostalCode(updateParkingSpace.formattedAddress.split(',')[1].split(' ')[1])
+      setCity(updateParkingSpace.formattedAddress.split(',')[1].split(' ')[2])
+      setE_Charging(updateParkingSpace.properties.parking.e_charging)
+      setStreetside(updateParkingSpace.properties.parking.streetside)
+      setIlluminated(updateParkingSpace.properties.parking.illuminated)
+      setGarage(updateParkingSpace.properties.parking.garage)
+      setFree_24h_before(updateParkingSpace.properties.cancellation_and_access.free_24h_before)
+      setNo_Meetup(updateParkingSpace.properties.cancellation_and_access.no_meetup)
+      setPin(updateParkingSpace.properties.cancellation_and_access.pin)
+      setSecurityGate(updateParkingSpace.properties.cancellation_and_access.pin)
+      setLoadUpdateData(false)
+    } 
     if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
       setFormIncomplete(false)
     else {
       setFormIncomplete(true)
-      setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value !== (""||null)).map(item => item.label) )
+      //setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value == (""||null)).map(item => item.label) )
     }
-  }, [parkingSpaceName, size, availability, basePrice, street, houseNumber, postalCode, city]);
+  } catch (error) {
+    console.log(error);
+    return navigate('/login');
+  }
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city]);
 
   return (
     <div className="flex flex-col items-center ">
@@ -257,14 +285,14 @@ const ParkingSpaceForm = () => {
               <FormControl>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="S"
+                  value={size}
                   name="radio-buttons-size"
                   onChange={(e) => handleChange(e)}
                 >
-                  <FormControlLabel value="0" control={<Radio />} label="S" />
-                  <FormControlLabel value="1" control={<Radio />} label="M" />
-                  <FormControlLabel value="2" control={<Radio />} label="L" />
-                  <FormControlLabel value="3" control={<Radio />} label="XL" />
+                  <FormControlLabel value={0} control={<Radio />} label="S" />
+                  <FormControlLabel value={1} control={<Radio />} label="M" />
+                  <FormControlLabel value={2} control={<Radio />} label="L" />
+                  <FormControlLabel value={3} control={<Radio />} label="XL" />
                 </RadioGroup>
               </FormControl>
             </Grid>
@@ -296,6 +324,7 @@ const ParkingSpaceForm = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label="From"
+                disablePast = {true} 
                 value={fromValue || null}
                 onChange={(newValue) => {
                   setFromValue(newValue);
@@ -305,13 +334,14 @@ const ParkingSpaceForm = () => {
               <DateTimePicker
                 label="To"
                 value={toValue || null}
+                minDate={fromValue || null}
                 onChange={(newValue) => {
                   setToValue(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
-              {availability.length > 0 ? availability.map((slot) => {
-                return <div key={slot}>{moment(slot.from).format("DD-MM-YYYY HH:MM")} until {moment(slot.to).format("DD-MM-YYYY HH:MM")}</div>
+              {availability.length > 0 ? availability.map((slot,k) => {
+                return <div key={k}>{moment(slot.from).format("DD-MM-YYYY HH:mm")} until {moment(slot.to).format("DD-MM-YYYY HH:mm")}</div>
               }) : null}
               <Button style={{ marginTop: 10 }} variant="contained" color="primary" onClick={() => {
                 if (fromValue >= toValue) {
@@ -323,7 +353,6 @@ const ParkingSpaceForm = () => {
                     to: toValue.toISOString()
                   }
                   setAvailability(state => [...state, available]);
-
                   setToValue(null);
                   setFromValue(null);
                 }
@@ -351,6 +380,19 @@ const ParkingSpaceForm = () => {
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
+              <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
+            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="longTermStayPrice"
+                label="Long Term Stay Price"
+                id="longTermStayPrice"
+                value={longTermStayPrice}
+                onChange={(e) => handleChange(e)}
+              />
+            </Tooltip>
             <p className="text-[#9f9a9a] text-sm">This ist the price, for a full day</p>
             <Tooltip title="This ist the price, for a full day" placement="top" arrow >
               <TextField
@@ -361,19 +403,6 @@ const ParkingSpaceForm = () => {
                 label="Day Price"
                 id="dayPrice"
                 value={dayPrice}
-                onChange={(e) => handleChange(e)}
-              />
-            </Tooltip>
-            <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
-            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="longTermStayPrice"
-                label="Long Term Stay Price"
-                id="longTermStayPrice"
-                value={longTermStayPrice}
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
@@ -428,14 +457,22 @@ const ParkingSpaceForm = () => {
             />
           </div>
           <div className="my-4">
-            <Button
+            {location.pathname === "/parking/create" ? <Button
               disabled={formIncomplete}
               type="submit"
               variant="contained"
               color="primary"
             >
               Create Parking Space
-            </Button>
+            </Button> :
+            <Button
+              disabled={formIncomplete}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Update Parking Space
+            </Button>}
             {formIncomplete?
             <IconButton onClick={() => showSnack("You need to fill out" +  missingFileds, 'warning')}>
               <Info sx={{ fontSize: 20 }} color="secondary" />

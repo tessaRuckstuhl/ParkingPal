@@ -100,7 +100,7 @@ const MoreFilters = (props) => {
       <Badge badgeContent={filterCount} color="secondary">
         <div
           onClick={handleClick}
-          className="ml-2.5 text-xs font-bold whitespace-nowrap pr-1 py-1 text-[#949494] cursor-pointer"
+          className="ml-2 text-xs font-bold whitespace-nowrap sm:overflow-hidden pr-1 py-1 text-[#949494] cursor-pointer sm:w-[40px] lg:w-full"
         >
           Add more filters
         </div>

@@ -49,7 +49,6 @@ const SignupForm = () => {
       const { token } = response?.data;
       localStorage.setItem('token', token);
       setJwt(token);
-      navigate('/dashboard');
     } catch (error) {
       alertToggle(error?.response?.data?.error || error.message);
     }
@@ -57,7 +56,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (jwt || jwt !== '') {
-      return navigate('/dashboard');
+      return navigate('/personal');
     }
   }, [jwt, navigate]);
 
