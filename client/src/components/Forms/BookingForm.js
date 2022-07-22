@@ -621,12 +621,12 @@ const BookingForm = () => {
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                       const remainHourPrice = (myHours > 5 ? longPrice : (myHours)* basePrice)
-                      const fee = (myDays*dayPrice + remainHourPrice)*0.05
+                      const myFee = (myDays*dayPrice + remainHourPrice)*0.05
                       setDays(myDays)
                       setHours(myHours)
-                      setFee(fee)
+                      setFee(myFee)
                       setParkingPrice (myDays*dayPrice + remainHourPrice)
-                      setTotalPrice((myDays*dayPrice + remainHourPrice)+fee)
+                      setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee)
                     }}
                   />
                 </LocalizationProvider> 
