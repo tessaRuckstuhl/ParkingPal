@@ -153,7 +153,6 @@ const BookingForm = () => {
       const createdBooking = await BookingService.create(booking);
       // first we create the booking with payed set to false, then we handle payment and update payed field to true
       handlePayment(createdBooking.data)
-      setTimeout(() => {  navigate("/personal"); }, 1500);
     } catch (error) {
       console.log(error)
     }
