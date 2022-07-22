@@ -25,6 +25,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import moment from 'moment';
+
 import GarageIcon from '@mui/icons-material/Garage';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -520,11 +522,12 @@ const BookingForm = () => {
                       const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                       const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                       const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
+                      const myFee = (myDays*dayPrice + remainHourPrice)*0.05
                       setDays(myDays)
                       setHours(myHours)
-                      setFee(fee)
+                      setFee(myFee)
                       setParkingPrice (myDays*dayPrice + remainHourPrice)
-                      setTotalPrice((myDays*dayPrice + remainHourPrice)+fee)
+                      setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee)
                     }}
                   />
                 </LocalizationProvider> 
