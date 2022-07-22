@@ -118,7 +118,7 @@ module.exports = {
           $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
         };
       }
-      // build parking space features filter
+      // build parking space features filter from remaining keys...
       Object.keys(query).map((key, index) => {
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
@@ -130,7 +130,6 @@ module.exports = {
       }).sort({ _id: -1 });
       return res.send(allParkingSpaces);
     } catch (error) {
-      console.log('hi', error);
       return res
         .status(400)
         .send({ error: error || 'There was an error trying to get all parkingSpaces' });
