@@ -65,7 +65,6 @@ const Paypal = () => {
     <div className="flex flex-col items-center justify-center mt-10 p-5">
       <div className="text-3xl font-semibold ">How would you like to pay?</div>
       <div className=" text-lg mb-10"> Choose a payment method.</div>
-      <button onClick={updateBooking}>Hi</button>
       <div className="w-[60%] text-center">
         <PayPalScriptProvider options={initialOptions}>
           <PayPalButtons
