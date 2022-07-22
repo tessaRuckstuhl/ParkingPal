@@ -107,7 +107,7 @@ const Bar = () => {
           placeholder="Check in"
           inputProps={{ 'aria-label': 'Check in' }}
         />
-        <MyFormHelperText text="When?" />
+        <MyFormHelperText text="From?" />
       </FormControl>
       {/* Check out */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -127,7 +127,7 @@ const Bar = () => {
           placeholder="Check out"
           inputProps={{ 'aria-label': 'Check out' }}
         />
-        <MyFormHelperText text="When?" />
+        <MyFormHelperText text="To?" />
       </FormControl>
       {/* More filters */}
       <MoreFilters handleFilterChange={handleFilterChange} />
