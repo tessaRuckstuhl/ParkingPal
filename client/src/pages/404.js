@@ -2,9 +2,10 @@ import React from 'react';
 
 const PageNotFound = () => {
   return (
-    <div>
-      <h1>404 Error</h1>
-      <h1>Page Not Found</h1>
+    <div className="flex flex-col items-center" >
+       <img
+          src={`/resources/404.png`}
+        ></img>
     </div>
   );
 };
