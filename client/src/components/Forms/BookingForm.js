@@ -75,8 +75,8 @@ const BookingForm = () => {
   const [acr, setACR] = useState(5);
   const [lr, setLR] = useState(5);
   const [vr, setVR] = useState(5);
-  const [fromTime,setFromTime] = useState (new Date(1));
-  const [untilTime,setUntilTime] = useState (new Date(1));
+  const [fromTime,setFromTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
+  const [untilTime,setUntilTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
   const [totalPrice,setTotalPrice] = useState(0);
   const [parkingPrice,setParkingPrice] = useState();
   const [fee,setFee] = useState();
@@ -126,8 +126,6 @@ const BookingForm = () => {
   }))(TableRow);
 
 
-  
-
 
   const today = new Date()
 
@@ -143,22 +141,28 @@ const BookingForm = () => {
     event.preventDefault();
     try {
       const user = parseJwt(localStorage.getItem('token'))
-      const booking = {
-        parkingSpace: parkingSpaceId,
-        guest: user._id, 
-        owner: owner,
-        issueDate: todayDate,
-        startDate: startValue,
-        endDate: endValue, 
-        price: totalPrice,
-        payed:false
-      };
-      const createdBooking = await BookingService.create(booking);
-      // first we create the booking with payed set to false, then we handle payment and update payed field to true
-      handlePayment(createdBooking.data)
-    } catch (error) {
-      console.log(error)
+      if (user){
+        const booking = {
+          parkingSpace: parkingSpaceId,
+          guest: user._id, 
+          owner: owner,
+          issueDate: todayDate,
+          startDate: startValue,
+          endDate: endValue, 
+          price: totalPrice,
+          payed:false
+        };
+        const createdBooking = await BookingService.create(booking);
+        // first we create the booking with payed set to false, then we handle payment and update payed field to true
+        handlePayment(createdBooking.data)
+      }
+      else{
+        showSnack("Please login first","error")
+      }
     }
+    catch (error) {
+      console.log(error)
+      }
   };
   
   
@@ -187,12 +191,9 @@ const BookingForm = () => {
     }
   }
 
-
   useEffect(async () => {
     const parkingId = new URL(location.href).searchParams.get('parkingId')
     setParkingSpaceId(parkingId)
-    console.log("Start")
-
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
@@ -259,7 +260,7 @@ const BookingForm = () => {
           </ImageList>
           <br></br>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={7}>
               <Item style={{ height: 400, justifyContent: 'begin', textAlign: 'justify' }}>
                 <div
                   style={{
@@ -343,7 +344,7 @@ const BookingForm = () => {
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <Item style={{ height: 400 }}>
 
                 <div className=" font-regular  text-s"  
@@ -357,17 +358,17 @@ const BookingForm = () => {
                       <br></br>
                       <b>↠ {dayPrice} € / day</b>
                       <br></br>
-                      <a>Staying longer than 5h?</a>
-                      <br></br>
-                      it's only <b>{longPrice}€ </b>for the rest of the day
+                      
                     </Grid>
                     <Grid item xs={6}>
                     <b>Rating:</b> ⭐  {overallRating} ({reviewamount})
                     </Grid>
                   </Grid>
+                  
+                  <a>Staying longer than 5h?</a> It's only <b>{longPrice}€ </b>for the rest of the day
                   <br></br>
                 </div>
-                <div className="mb-6 font-regular  text-s" >
+                <div className="mb-6 mt-3 font-regular  text-s" >
                   <Grid container spacing={2}>
                     <Grid item xs={5}>
                       <Item style={{ height: 70 }} key={5} elevation={5}>
@@ -521,20 +522,31 @@ const BookingForm = () => {
               </Grid>
               <Grid item xs={4}>
               <Button
-                type="submit"
                 variant="contained"
                 color="primary"
                 onClick={() => { 
-                  const myTimeDif = (end-fromTime)
+                  const myTimeDif = (untilTime-fromTime)
                   const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                   const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                   const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
                   const myFee = (myDays*dayPrice + remainHourPrice)*0.05
-                  setDays(myDays)
-                  setHours(myHours)
-                  setFee(myFee)
-                  setParkingPrice (myDays*dayPrice + remainHourPrice)
-                  setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee) }}
+                  var okDate = false
+                  for (let i = 0; i<availability.length;i++){
+                    if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
+                      okDate = true
+                      break;
+                    }
+                  }
+                  if (okDate) {
+                    setDays(myDays)
+                    setHours(myHours)
+                    setFee(myFee)
+                    setParkingPrice (myDays*dayPrice + remainHourPrice)
+                    setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee) 
+                  }
+                  else {
+                    showSnack("Your selected dates are not available. Please choose another date","error")
+                  }}}
               >
                 Calculate Price
               </Button>
@@ -692,7 +704,7 @@ const BookingForm = () => {
           </div>
           <br></br>
           <Button
-            type="submit"
+            
             variant="outlined"
             color="primary"
             onClick={() => { window.location = "mailto:" + owner.username; }}
