@@ -341,7 +341,7 @@ const ParkingSpaceForm = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
               {availability.length > 0 ? availability.map((slot,k) => {
-                return <div key={k}>{moment(slot.from).format("DD-MM-YYYY HH:mm")} until {moment(slot.to).format("DD-MM-YYYY HH:mm")}</div>
+                return <div key={k}>{moment(slot.from).format("DD.MM.YYYY HH:mm")} until {moment(slot.to).format("DD.MM.YYYY HH:mm")}</div>
               }) : null}
               <Button style={{ marginTop: 10 }} variant="contained" color="primary" onClick={() => {
                 if (fromValue >= toValue) {
