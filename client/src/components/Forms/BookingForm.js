@@ -488,7 +488,7 @@ const BookingForm = () => {
           >
             <br></br>
             <Grid container spacing={2}>
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
@@ -503,11 +503,7 @@ const BookingForm = () => {
                   />
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={1}>
-                <br></br>
-                
-              </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
@@ -518,19 +514,31 @@ const BookingForm = () => {
                     onChange={(end) => {
                       setEndValue(end);
                       setUntilTime(end)
-                      const myTimeDif = (end-fromTime)
-                      const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
-                      const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
-                      const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
-                      const myFee = (myDays*dayPrice + remainHourPrice)*0.05
-                      setDays(myDays)
-                      setHours(myHours)
-                      setFee(myFee)
-                      setParkingPrice (myDays*dayPrice + remainHourPrice)
-                      setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee)
+                      
                     }}
                   />
                 </LocalizationProvider> 
+              </Grid>
+              <Grid item xs={4}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={() => { 
+                  const myTimeDif = (end-fromTime)
+                  const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
+                  const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
+                  const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
+                  const myFee = (myDays*dayPrice + remainHourPrice)*0.05
+                  setDays(myDays)
+                  setHours(myHours)
+                  setFee(myFee)
+                  setParkingPrice (myDays*dayPrice + remainHourPrice)
+                  setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee) }}
+              >
+                Calculate Price
+              </Button>
+                
               </Grid>
             </Grid> 
           </div>
