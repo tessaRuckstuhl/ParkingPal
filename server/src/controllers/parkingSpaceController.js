@@ -61,7 +61,7 @@ module.exports = {
   },
   async filterParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to, size } =
         req.query;
 
       // console.log('REQUEST QUERY', req.query);
@@ -118,12 +118,22 @@ module.exports = {
           $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
         };
       }
+
+      if (size) {
+        mongoQuery.size = {
+          $gte: parseInt(size[0]),
+          $lte: parseInt(size[1]),
+        };
+      }
       // build parking space features filter from remaining keys...
       Object.keys(query).map((key, index) => {
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
         }
       });
+      console.log('DB QUERY', JSON.stringify(mongoQuery));
+      console.log('***\n***');
+      console.log(JSON.stringify(query));
       // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
