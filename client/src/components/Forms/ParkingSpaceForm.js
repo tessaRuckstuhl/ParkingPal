@@ -41,7 +41,7 @@ const ParkingSpaceForm = () => {
   const [securityGate, setSecurityGate] = useState(false)
   const [formIncomplete, setFormIncomplete] = useState(true)
 
-  const [missingFileds,setMissingFields] = useState([])
+  const required = [" Parking Space Name"," Size"," Availability", " Base Price"," House Number"," City", " Postal Code"]
   const [updateID,setUpdateID] = useState("") 
   const [loadUpdateData,setLoadUpdateData] = useState(true) 
 
@@ -184,6 +184,7 @@ const ParkingSpaceForm = () => {
       location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
       clearAll()
       navigate("/personal/listings")
+      showSnack("Parking space created successfully!", "success")
     } catch (error) {
       for (var i = 0; i < imageIDs.length; i++) {
         await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
@@ -226,11 +227,10 @@ const ParkingSpaceForm = () => {
       setSecurityGate(updateParkingSpace.properties.cancellation_and_access.pin)
       setLoadUpdateData(false)
     } 
-    if (parkingSpaceName !== "" && size !== "" && availability !== [] && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
+    if (parkingSpaceName !== "" && size !== "" && availability.length !== 0 && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
       setFormIncomplete(false)
     else {
       setFormIncomplete(true)
-      //setMissingFields([{label: " Parking Space Name", value: parkingSpaceName},{label: " Size", value: size},{label: " Availability", value: availability},{label: " Base Price", value: basePrice},{label: " House Number", value: houseNumber},{label: " City", value: city}].filter(item=> item.value == (""||null)).map(item => item.label) )
     }
   } catch (error) {
     console.log(error);
@@ -341,7 +341,7 @@ const ParkingSpaceForm = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
               {availability.length > 0 ? availability.map((slot,k) => {
-                return <div key={k}>{moment(slot.from).format("DD-MM-YYYY HH:mm")} until {moment(slot.to).format("DD-MM-YYYY HH:mm")}</div>
+                return <div key={k}>{moment(slot.from).format("DD.MM.YYYY, HH:mm")} until {moment(slot.to).format("DD.MM.YYYY, HH:mm")}</div>
               }) : null}
               <Button style={{ marginTop: 10 }} variant="contained" color="primary" onClick={() => {
                 if (fromValue >= toValue) {
@@ -380,8 +380,8 @@ const ParkingSpaceForm = () => {
                 onChange={(e) => handleChange(e)}
               />
             </Tooltip>
-              <p className="text-[#9f9a9a] text-sm">This will be the price per hour, for when the parking space is booked for more than 5 hours</p>
-            <Tooltip title="This will be the price per hour, for when the parking space is booked for more than 5 hours" placement="top" arrow >
+              <p className="text-[#9f9a9a] text-sm">This will be the price per hour, when the parking space is booked for more than 5 hours</p>
+            <Tooltip title="This will be the price per hour, when the parking space is booked for more than 5 hours" placement="top" arrow >
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -474,7 +474,7 @@ const ParkingSpaceForm = () => {
               Update Parking Space
             </Button>}
             {formIncomplete?
-            <IconButton onClick={() => showSnack("You need to fill out" +  missingFileds, 'warning')}>
+            <IconButton onClick={() => showSnack("Please fill out" +  required, 'warning')}>
               <Info sx={{ fontSize: 20 }} color="secondary" />
             </IconButton>
             :null}
