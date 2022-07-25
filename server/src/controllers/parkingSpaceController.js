@@ -87,17 +87,17 @@ module.exports = {
       }
       // build price filter
       if (basePrice) {
-        mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
+        mongoQuery.basePrice = { $gte: parseInt(basePrice[0]), $lte: parseInt(basePrice[1]) };
         delete query.basePrice;
       }
       if (dayPrice) {
-        mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
+        mongoQuery.dayPrice = { $gte: parseInt(dayPrice[0]), $lte: parseInt(dayPrice[1]) };
         delete query.dayPrice;
       }
       if (longTermStayPrice) {
         mongoQuery.longTermStayPrice = {
-          $gt: parseInt(longTermStayPrice[0]),
-          $lt: parseInt(longTermStayPrice[1]),
+          $gte: parseInt(longTermStayPrice[0]),
+          $lte: parseInt(longTermStayPrice[1]),
         };
         delete query.longTermStayPrice;
       }
