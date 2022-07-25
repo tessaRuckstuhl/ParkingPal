@@ -220,7 +220,7 @@ const BookingForm = () => {
     setBasePrice(parkingResult.data.basePrice)
     setLongPrice(parkingResult.data.longTermStayPrice)
     setAvailability(parkingResult.data.availability)
-    setParkingSpaceSize(parkingResult.data.size)
+    setParkingSpaceSize(parkingResult.data.properties.size)
 
     //Review Related
     setReviewamount(reviewResult.data.amount || 0)
@@ -302,11 +302,11 @@ const BookingForm = () => {
                       <h2>
                         {
                           {
-                            '1': <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
-                            '2': <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
-                            '3': <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
-                            '4': <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
-                            '5': <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
+                            1: <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
+                            2: <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
+                            3: <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
+                            4: <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
+                            5: <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
                           }[parkingSpaceSize]
                         } Size
                       </h2>

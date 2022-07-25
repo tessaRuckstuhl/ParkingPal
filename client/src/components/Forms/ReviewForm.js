@@ -137,7 +137,7 @@ const ReviewForm = () => {
 
     const resultParkingSpace = await ParkingSpaceService.listParkingSpace(resultBooking.data.parkingSpace)
     setParkingSpace(resultParkingSpace.data)
-    setParkingSpaceSize(resultParkingSpace.data.size)
+    setParkingSpaceSize(resultParkingSpace.data.properties.size)
 
 
     const resultGuest = await UserService.getUser(resultBooking.data.guest)
@@ -165,7 +165,7 @@ const ReviewForm = () => {
           <Divider />
           <br />
           <div className="text-3x2 font-bold mb-1">
-            <p>You booked this parking place provides by {guest.firstName}, from {moment(booking.startDate).format('Do MMMM YYYY, h:mm:ss')}  to {moment(booking.endDate).format('Do MMMM YYYY, h:mm:ss')} </p>
+            <p>You booked this parking place provides by {guest.firstName}, from {moment(booking.startDate).format("DD.MM.YYYY, HH:mm")}  to {moment(booking.endDate).format("DD.MM.YYYY, HH:mm")} </p>
             {/* momentan sind die dates als string gespeichert - das wird sich noch ändern --> dann nehme ich die toDateString()  */}
           </div>
 
@@ -243,11 +243,11 @@ const ReviewForm = () => {
                       <h2>
                         {
                           {
-                            '1': <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
-                            '2': <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
-                            '3': <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
-                            '4': <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
-                            '5': <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
+                            1: <LooksOneIcon color="primary" fontSize="large"></LooksOneIcon>,
+                            2: <LooksTwoIcon color="primary" fontSize="large"></LooksTwoIcon>,
+                            3: <Looks3Icon color="primary" fontSize="large"></Looks3Icon>,
+                            4: <Looks4Icon color="primary" fontSize="large"></Looks4Icon>,
+                            5: <Looks5Icon color="primary" fontSize="large"></Looks5Icon>
                           }[parkingSpaceSize]
                         } Size
                       </h2>
