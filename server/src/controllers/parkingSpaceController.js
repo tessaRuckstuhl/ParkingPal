@@ -131,9 +131,7 @@ module.exports = {
           return (mongoQuery[key] = true);
         }
       });
-      console.log('DB QUERY', JSON.stringify(mongoQuery));
-      console.log('***\n***');
-      console.log(JSON.stringify(query));
+      console.log('DEBUG filter - Querying for following:', JSON.stringify(mongoQuery));
       // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
