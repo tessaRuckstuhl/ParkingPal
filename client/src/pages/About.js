@@ -22,7 +22,7 @@ const About = () => {
             <div className="w-3/4">
                 <div className="mb-6 mt-6 text-xl"><b>Hello, nice to meet you!</b></div>
 
-                <div className="mb-6 mt-6 text-xl"> <b>We are Team 47 and by far the best looking team in SEBA</b> </div>
+                <div className="mb-6 mt-6 text-xl"> <b>We are Team 47 and will help you stop wasting time looking for parking spaces</b> </div>
                 <Divider />
                 <br />
 
