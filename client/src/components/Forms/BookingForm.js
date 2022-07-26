@@ -529,7 +529,7 @@ const BookingForm = () => {
                   const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                   const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                   const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
-                  const myFee = (myDays*dayPrice + remainHourPrice)*0.05
+                  const myFee = ((myDays*dayPrice + remainHourPrice)*0.05).toFixed(2)
                   var okDate = false
                   for (let i = 0; i<availability.length;i++){
                     if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
