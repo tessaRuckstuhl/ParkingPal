@@ -694,39 +694,37 @@ const BookingForm = () => {
             textAlign: 'justify',
             display: 'flex',
           }}>
+         </div>
 
-            <h2>
-              <strong>Provided by {owner.firstName}</strong>
+          <Grid container spacing={2}>  
+            <Grid item xs={7}>
+            <p>Parking Rules</p>
+            <div className="mb-6 font-light text-s">
+                  <br></br>
+                  <a>•  Please treat the parking space as if its yours</a>
+                  <br></br>
+                  <a>•  Refrain from destroying others properties</a>
+                  <br></br>
+                  <a>•  Comply with the owners rules regarding the parking place</a>
+                  <br></br>
+                  <a>•  Do not misuse the parking space </a>
+            </div>
+            </Grid>
+            <Grid item xs={2}>
+              </Grid>
+            <Grid item xs={3}>
+            <strong>Provided by {owner.firstName}</strong>
               <br></br>
-              
-            </h2>
-
-          </div>
-          <br></br>
-          <Button
-            
-            variant="outlined"
-            color="primary"
-            onClick={() => { window.location = "mailto:" + owner.username; }}
-          >
-            Contact Host
-          </Button>
-
-          <br></br>
-          <br></br>
-          <Divider />
-          <br></br>
-          <p>Parking Rules</p>
-          <div className="mb-6 font-light text-s">
-                <br></br>
-                <a>•  Please treat the parking space as if its yours</a>
-                <br></br>
-                <a>•  Refrain from destroying others properties</a>
-                <br></br>
-                <a>•  Comply with the owners rules regarding the parking place</a>
-                <br></br>
-                <a>•  Do not misuse the parking space </a>
-          </div>
+              <br></br>
+                <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => { window.location = "mailto:" + owner.username; }}
+                >
+                Contact Host
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </div>
     </div>
