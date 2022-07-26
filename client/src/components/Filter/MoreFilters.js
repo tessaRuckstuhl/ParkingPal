@@ -77,6 +77,16 @@ const MoreFilters = (props) => {
     }
   };
 
+  const handleSliderChange = (e, max) => {
+    if (e.target.value[1] == max && e.target.value[0]== 0) {
+      const copy = { ...filters };
+      delete copy[e.target.name];
+      setFilters({ ...copy });
+    } else {
+      setFilters({ ...filters, [e.target.name]: e.target.value });
+    }
+  };
+
   const setInitialFilterContraints = async () => {
     const res = await PSService.filterConstraints();
     const constraints = res.data;
@@ -127,7 +137,7 @@ const MoreFilters = (props) => {
             <div className="font-bold">Hour Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price by hour</div>
             <Slider
-              onChange={handleFilterChange}
+              onChange={(e) => handleSliderChange(e, priceConstraints.maxBasePrice)}
               name="basePrice"
               value={filters?.basePrice || [0, priceConstraints.maxBasePrice]}
               valueLabelDisplay="auto"
@@ -148,7 +158,7 @@ const MoreFilters = (props) => {
             <div className="font-bold">Day Stay Price Range</div>
             <div className="text-xs font-darkGray mb-5">Set a price per day</div>
             <Slider
-              onChange={handleFilterChange}
+              onChange={(e) => handleSliderChange(e, priceConstraints.maxDayPrice)}
               name="dayPrice"
               value={filters?.dayPrice || [0, priceConstraints.maxDayPrice]}
               valueLabelDisplay="auto"
@@ -168,7 +178,7 @@ const MoreFilters = (props) => {
               Set a price for a longterm stay (&gt; 5 hours){' '}
             </div>
             <Slider
-              onChange={handleFilterChange}
+              onChange={(e) => handleSliderChange(e, priceConstraints.maxLongTermStayPrice)}
               name="longTermStayPrice"
               value={filters?.longTermStayPrice || [0, priceConstraints.maxLongTermStayPrice]}
               valueLabelDisplay="auto"
@@ -196,7 +206,7 @@ const MoreFilters = (props) => {
               Park a smart, a family car or a truck - we offer a parking place for every car
             </div>
             <Slider
-              onChange={handleFilterChange}
+              onChange={(e) => handleSliderChange(e, 3)}
               name="size"
               value={filters?.size || [0, 3]}
               valueLabelDisplay="auto"
@@ -209,7 +219,6 @@ const MoreFilters = (props) => {
                 { value: 1, label: 'M' },
                 { value: 2, label: 'L' },
                 { value: 3, label: 'XL' },
-
               ]}
             />
           </DialogContent>

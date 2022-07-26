@@ -61,7 +61,7 @@ module.exports = {
   },
   async filterParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to, size } =
         req.query;
 
       // console.log('REQUEST QUERY', req.query);
@@ -87,17 +87,17 @@ module.exports = {
       }
       // build price filter
       if (basePrice) {
-        mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
+        mongoQuery.basePrice = { $gte: parseInt(basePrice[0]), $lte: parseInt(basePrice[1]) };
         delete query.basePrice;
       }
       if (dayPrice) {
-        mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
+        mongoQuery.dayPrice = { $gte: parseInt(dayPrice[0]), $lte: parseInt(dayPrice[1]) };
         delete query.dayPrice;
       }
       if (longTermStayPrice) {
         mongoQuery.longTermStayPrice = {
-          $gt: parseInt(longTermStayPrice[0]),
-          $lt: parseInt(longTermStayPrice[1]),
+          $gte: parseInt(longTermStayPrice[0]),
+          $lte: parseInt(longTermStayPrice[1]),
         };
         delete query.longTermStayPrice;
       }
@@ -118,12 +118,20 @@ module.exports = {
           $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
         };
       }
+
+      if (size) {
+        mongoQuery.size = {
+          $gte: parseInt(size[0]),
+          $lte: parseInt(size[1]),
+        };
+      }
       // build parking space features filter from remaining keys...
       Object.keys(query).map((key, index) => {
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
         }
       });
+      console.log('DEBUG filter - Querying for following:', JSON.stringify(mongoQuery));
       // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
