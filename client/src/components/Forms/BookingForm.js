@@ -716,43 +716,17 @@ const BookingForm = () => {
           <br></br>
           <Divider />
           <br></br>
-          <br></br>
-          <p>Things to know</p>
-          <br></br>
-          <br></br>
+          <p>Parking Rules</p>
           <div className="mb-6 font-light text-s">
-            <Grid container space={2}>
-              <Grid item xs={4}>
-                <p>Parking rules</p>
                 <br></br>
-                <a>• Self check-in with lockbox</a>
+                <a>•  Please treat the parking space as if its yours</a>
                 <br></br>
-                <a>• No smoking</a>
+                <a>•  Refrain from destroying others properties</a>
                 <br></br>
-                <a>• No parties or events</a>
-              </Grid>
-              <Grid item xs={4}>
-                <p>Health & safety </p>
+                <a>•  Comply with the owners rules regarding the parking place</a>
                 <br></br>
-                <a>• Smoke Alarm</a>
-                <br></br>
-                <a>• Safety Camera</a>
-                <br></br>
-                <a>• ...</a>
-              </Grid>
-              <Grid item xs={4}>
-                <p>Cancellation policy </p>
-                <br></br>
-                <a>• Free cancellation within 24h before </a>
-                <br></br>
-                <a>• No smoking</a>
-                <br></br>
-                <a>• No parties or events</a>
-              </Grid>
-            </Grid>
+                <a>•  Do not misuse the parking space </a>
           </div>
-          <br></br>
-          <br></br>
         </form>
       </div>
     </div>
