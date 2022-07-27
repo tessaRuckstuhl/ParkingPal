@@ -2,11 +2,32 @@ const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
 const { toIsoString } = require('../services/toIsoString');
 const mongoose = require('mongoose');
+const validator = require('validator')
+
 
 module.exports = {
   async createParkingSpace(req, res) {
     try {
-      console.log(req.body);
+      // request validation
+      let { basePrice, dayPrice, longTermStayPrice, description, properties } = req.body
+
+      if (
+        !validator.isFloat(basePrice.toString()) ||
+        !validator.isFloat(dayPrice.toString()) ||
+        !validator.isFloat(longTermStayPrice.toString()) ||
+        !typeof description == 'string' ||
+        !validator.isBoolean(properties.parking.streetside.toString()) ||
+        !validator.isBoolean(properties.parking.garage.toString()) ||
+        !validator.isBoolean(properties.parking.e_charging.toString()) ||
+        !validator.isBoolean(properties.parking.illuminated.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.free_24h_before.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.no_meetup.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.pin.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.security_gate.toString()) ||
+        !validator.isFloat(properties.size.toString()))
+        return res.status(406).send({ error: 'input is wrong' });
+
+
       const parkingSpace = await ParkingSpace.create(req.body);
       return res.send(parkingSpace.toJSON());
     } catch (error) {

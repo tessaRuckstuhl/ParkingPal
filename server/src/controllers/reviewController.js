@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 const { Review } = require('../models');
+const validator = require('validator')
+
 
 module.exports = {
     async findByID(req, res) {
@@ -34,13 +36,30 @@ module.exports = {
     },
     async createReview(req, res) {
         try {
+            // request validation
+            let { description, reviewer, overallRating, neighborhoodRating, accessRating, locationRating, communicationRating, accuracyRating, valueRating, booking, parkingSpace } = req.body
+
+            if (
+                !validator.isFloat(overallRating.toString()) ||
+                !validator.isFloat(neighborhoodRating.toString()) ||
+                !validator.isFloat(accessRating.toString()) ||
+                !validator.isFloat(locationRating.toString()) ||
+                !validator.isFloat(communicationRating.toString()) ||
+                !validator.isFloat(accuracyRating.toString()) ||
+                !validator.isFloat(valueRating.toString()) ||
+                !validator.isMongoId(reviewer._id) ||
+                !validator.isMongoId(parkingSpace._id) ||
+                !typeof description == 'string' ||
+                !validator.isMongoId(booking._id))
+                return res.status(406).send({ error: 'input is wrong' });
+
+
             const review = await Review.create(req.body);
             const reviewObjJson = review.toJSON();
             return res.send({
                 review: reviewObjJson
             });
         } catch (error) {
-            // TODO Error, for duplicate key error
             console.log(error)
             return res.status(400).send({ error: 'something is wrong' });
         }
@@ -54,7 +73,7 @@ module.exports = {
             return res.status(400).send({ error: 'something is wrong' });
         }
     },
-    async getReviewsForParkingSpace(req,res) {
+    async getReviewsForParkingSpace(req, res) {
         const { id } = req.params
         try {
 
@@ -80,10 +99,10 @@ module.exports = {
                 });
             }
             let sumOverallRating = 0
-            let sumNeighborhoodRating = 0
+            let sumNeighborhoodRating = 0 
             let sumAccessRating = 0
-            let sumLocationRating = 0
-            let sumCommunicationRating = 0
+            let sumLocationRating = 0 
+            let sumCommunicationRating = 0 
             let sumAccuracyRating = 0
             let sumValueRating = 0
 
@@ -96,16 +115,14 @@ module.exports = {
                 sumAccuracyRating += review.accuracyRating
                 sumValueRating += review.valueRating
             })
-
-            
             return res.send({
-                averageOverallRating: (sumOverallRating/reviews.length).toFixed(2),
-                averageNeighborhoodRating: (sumNeighborhoodRating/reviews.length).toFixed(2),
-                averageAccessRating: (sumAccessRating/reviews.length).toFixed(2),
-                averageLocationRating: (sumLocationRating/reviews.length).toFixed(2),
-                averageCommunicationRating: (sumCommunicationRating/reviews.length).toFixed(2),
-                averageAccuracyRating: (sumAccuracyRating/reviews.length).toFixed(2),
-                averageValueRating: (sumValueRating/reviews.length).toFixed(2),
+                averageOverallRating: (sumOverallRating / reviews.length).toFixed(2),
+                averageNeighborhoodRating: (sumNeighborhoodRating / reviews.length).toFixed(2),
+                averageAccessRating: (sumAccessRating / reviews.length).toFixed(2),
+                averageLocationRating: (sumLocationRating / reviews.length).toFixed(2),
+                averageCommunicationRating: (sumCommunicationRating / reviews.length).toFixed(2),
+                averageAccuracyRating: (sumAccuracyRating / reviews.length).toFixed(2),
+                averageValueRating: (sumValueRating / reviews.length).toFixed(2),
                 amount: reviews.length
             });
 
