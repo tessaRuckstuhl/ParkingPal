@@ -77,7 +77,7 @@ const BookingForm = () => {
   const [vr, setVR] = useState(5);
   const [fromTime,setFromTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
   const [untilTime,setUntilTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
-  const [totalPrice,setTotalPrice] = useState(0);
+  const [totalPrice,setTotalPrice] = useState();
   const [parkingPrice,setParkingPrice] = useState();
   const [fee,setFee] = useState();
   const [days,setDays] = useState(0);
@@ -234,6 +234,7 @@ const BookingForm = () => {
     setReviews(reviewResultlist.data.reviews)
    
     console.log(reviewNameAry)
+    console.log(reviewsAry)
     
   }, []);
   return (
@@ -542,7 +543,7 @@ const BookingForm = () => {
                     setHours(myHours)
                     setFee(myFee)
                     setParkingPrice (myDays*dayPrice + remainHourPrice)
-                    setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee) 
+                    setTotalPrice(parseFloat(myDays*dayPrice + remainHourPrice) + parseFloat(myFee))
                   }
                   else {
                     showSnack("Your selected dates are not available. Please choose another date","error")
@@ -628,25 +629,24 @@ const BookingForm = () => {
           
           <br></br>
           <Grid container spacing={2}>  
-            {reviewsAry.length <5 ? reviewsAry.map((aryitem, i) => (     
+            {reviewsAry.length <5 ? reviewsAry?.map((aryitem, i) => ( 
               <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
-                    <div style={{
-                  margin: 'auto',
-                  fontSize: 15,
-                  justifyContent: 'begin',
-                  textAlign: 'justify',
-              }}>
-                <b>{reviewNameAry[i]}</b>
-                <br></br>
-                <a>{aryitem.description }</a>
-                </div>
-            </Item> 
-          </Grid>
-          )): reviewsAry.slice(0,4).map((aryitem, i) => (
+                      <div style={{
+                        margin: 'auto',
+                        fontSize: 15,
+                        justifyContent: 'begin',
+                        textAlign: 'justify',
+                      }}>
+                        <b>{reviewNameAry[i]}</b>
+                        <br></br>
+                        <a>{aryitem?.description}</a>
+                      </div>
+                    </Item> 
+              </Grid>
+            )): reviewsAry.slice(0,4).map((aryitem, i) => (
                 <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
-                      
                         <div style={{
                           margin: 'auto',
                           fontSize: 15,
