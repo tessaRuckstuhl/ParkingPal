@@ -233,7 +233,7 @@ const BookingForm = () => {
     setVR(Number(reviewResult.data.averageValueRating) || 0) 
     setReviews(reviewResultlist.data.reviews)
    
-    
+    console.log(reviewNameAry)
     
   }, []);
   return (
@@ -637,7 +637,7 @@ const BookingForm = () => {
                   justifyContent: 'begin',
                   textAlign: 'justify',
               }}>
-                <b>{reviewNameAry[0]}</b>
+                <b>{reviewNameAry[i]}</b>
                 <br></br>
                 <a>{aryitem.description }</a>
                 </div>
