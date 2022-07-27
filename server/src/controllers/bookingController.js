@@ -3,9 +3,27 @@ const mongoose = require('mongoose');
 const { User } = require('../models');
 const { Booking } = require('../models');
 
+const validator = require('validator')
+const moment = require('moment')
+
 module.exports = {
   async createBooking(req, res) {
     try {
+      // validate request
+      let { parkingSpace, guest, owner, issueDate, startDate, endDate, price, payed } = req.body
+
+      if (
+        !validator.isMongoId(parkingSpace) ||
+        !validator.isMongoId(guest) ||
+        !validator.isMongoId(owner._id) ||
+        !moment(issueDate,"YYYY-MM-DDTHH:mm:ss.sssZ", true).isValid() ||
+        !moment(startDate,"YYYY-MM-DDTHH:mm:ss.sssZ", true).isValid() ||
+        !moment(endDate,"YYYY-MM-DDTHH:mm:ss.sssZ", true).isValid() ||
+        !validator.isFloat(price.toString()) ||
+        !validator.isBoolean(payed.toString()))
+        return res.status(406).send({ error: 'input is wrong' });
+
+
       const booking = await Booking.create(req.body);
       return res.send(booking.toJSON());
     } catch (error) {

@@ -104,6 +104,8 @@ const ReviewForm = () => {
         booking: booking,
         parkingSpace: parkingSpace
       };
+
+
       const response = await ReviewService.create(review);
       showSnack('Review created.', 'success')
       setTimeout(() => {  navigate("/personal"); }, 1500);
@@ -144,7 +146,7 @@ const ReviewForm = () => {
     setGuest(resultGuest.data)
 
     const resultOwner = await UserService.getUser(resultBooking.data.owner)
-    setOwner(resultGuest.data)
+    setOwner(resultOwner.data)
     setReviewStats(resultBooking.data.parkingSpace)
 
   }, []);
