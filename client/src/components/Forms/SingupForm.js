@@ -10,7 +10,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
-
+import moment from 'moment'
 const SignupForm = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -111,6 +111,7 @@ const SignupForm = () => {
 
           <TextField
             {...textFieldConfigs}
+            InputProps={{inputProps: { max: moment(new Date()).format('YYYY-MM-DD') } }}
             name="birthdate"
             label="Birthdate"
             id="birthdate"

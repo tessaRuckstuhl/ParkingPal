@@ -79,13 +79,13 @@ const Listing = (props) => {
             </div>
           </div>
           <div>
-            <IconButton
+            {/* <IconButton
               onClick={() => {
                 setLiked(!liked);
               }}
             >
               {liked ? <Favorite color="primary" /> : <FavoriteBorderOutlined />}
-            </IconButton>
+            </IconButton> */}
           </div>
         </div>
         <Divider sx={{ width: '30%' }} />

@@ -77,7 +77,7 @@ const BookingForm = () => {
   const [vr, setVR] = useState(5);
   const [fromTime,setFromTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
   const [untilTime,setUntilTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
-  const [totalPrice,setTotalPrice] = useState(0);
+  const [totalPrice,setTotalPrice] = useState();
   const [parkingPrice,setParkingPrice] = useState();
   const [fee,setFee] = useState();
   const [days,setDays] = useState(0);
@@ -233,7 +233,8 @@ const BookingForm = () => {
     setVR(Number(reviewResult.data.averageValueRating) || 0) 
     setReviews(reviewResultlist.data.reviews)
    
-    
+    console.log(reviewNameAry)
+    console.log(reviewsAry)
     
   }, []);
   return (
@@ -529,7 +530,7 @@ const BookingForm = () => {
                   const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
                   const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
                   const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
-                  const myFee = (myDays*dayPrice + remainHourPrice)*0.05
+                  const myFee = ((myDays*dayPrice + remainHourPrice)*0.05).toFixed(2)
                   var okDate = false
                   for (let i = 0; i<availability.length;i++){
                     if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
@@ -542,7 +543,7 @@ const BookingForm = () => {
                     setHours(myHours)
                     setFee(myFee)
                     setParkingPrice (myDays*dayPrice + remainHourPrice)
-                    setTotalPrice((myDays*dayPrice + remainHourPrice)+myFee) 
+                    setTotalPrice(parseFloat(myDays*dayPrice + remainHourPrice) + parseFloat(myFee))
                   }
                   else {
                     showSnack("Your selected dates are not available. Please choose another date","error")
@@ -628,48 +629,36 @@ const BookingForm = () => {
           
           <br></br>
           <Grid container spacing={2}>  
-            {reviewsAry.length <5 ? reviewsAry.map((aryitem, i) => (     
+            {reviewsAry.length <5 ? reviewsAry?.map((aryitem, i) => ( 
               <Grid key={i} item xs={6}>
                     <Item style={{ height: 100 }}>
-                    <div style={{
-                  margin: 'auto',
-                  fontSize: 15,
-                  justifyContent: 'begin',
-                  textAlign: 'justify',
-              }}>
-                <b>{reviewNameAry[0]}</b>
-                <br></br>
-                <a>{aryitem.description }</a>
-                </div>
-            </Item> 
-          </Grid>
-          )): reviewsAry.slice(0,4).map((aryitem, i) => (
-                <Grid key={i} item xs={6}>
-                    <Item style={{ height: 100 }}>
-                      
-                        <div style={{
-                          margin: 'auto',
-                          fontSize: 15,
-                          justifyContent: 'begin',
-                          textAlign: 'justify',
-                          display: 'flex',
-                        }}>
-                          <p>Reviewer's Name</p>
-                        </div>
+                      <div style={{
+                        margin: 'auto',
+                        fontSize: 15,
+                        justifyContent: 'begin',
+                        textAlign: 'justify',
+                      }}>
+                        <b>{reviewNameAry[i]}</b>
                         <br></br>
-                        <div style={{
-                          margin: 'auto',
-                          fontSize: 15,
-                          justifyContent: 'begin',
-                          textAlign: 'justify',
-                          display: 'flex',
-                        }}>
-                          <b>{aryitem.reviewer}</b>
-                          <br></br>
-                          <a>{aryitem.description }</a>
-                        </div>
-                    </Item>
-               </Grid>
+                        <a>{aryitem?.description}</a>
+                      </div>
+                    </Item> 
+              </Grid>
+            )): reviewsAry.slice(0,4).map((aryitem, i) => (
+              <Grid key={i} item xs={6}>
+                <Item style={{ height: 100 }}>
+                  <div style={{
+                    margin: 'auto',
+                    fontSize: 15,
+                    justifyContent: 'begin',
+                    textAlign: 'justify',
+                  }}>
+                    <b>{reviewNameAry[i]}</b>
+                    <br></br>
+                    <a>{aryitem?.description}</a>
+                  </div>
+                </Item> 
+              </Grid>
           ))}
           </Grid>
           <br></br>
@@ -694,65 +683,37 @@ const BookingForm = () => {
             textAlign: 'justify',
             display: 'flex',
           }}>
+         </div>
 
-            <h2>
-              <strong>Provided by {owner.firstName}</strong>
-              <br></br>
-              
-            </h2>
-
-          </div>
-          <br></br>
-          <Button
-            
-            variant="outlined"
-            color="primary"
-            onClick={() => { window.location = "mailto:" + owner.username; }}
-          >
-            Contact Host
-          </Button>
-
-          <br></br>
-          <br></br>
-          <Divider />
-          <br></br>
-          <br></br>
-          <p>Things to know</p>
-          <br></br>
-          <br></br>
-          <div className="mb-6 font-light text-s">
-            <Grid container space={2}>
-              <Grid item xs={4}>
-                <p>Parking rules</p>
-                <br></br>
-                <a>• Self check-in with lockbox</a>
-                <br></br>
-                <a>• No smoking</a>
-                <br></br>
-                <a>• No parties or events</a>
-              </Grid>
-              <Grid item xs={4}>
-                <p>Health & safety </p>
-                <br></br>
-                <a>• Smoke Alarm</a>
-                <br></br>
-                <a>• Safety Camera</a>
-                <br></br>
-                <a>• ...</a>
-              </Grid>
-              <Grid item xs={4}>
-                <p>Cancellation policy </p>
-                <br></br>
-                <a>• Free cancellation within 24h before </a>
-                <br></br>
-                <a>• No smoking</a>
-                <br></br>
-                <a>• No parties or events</a>
-              </Grid>
+          <Grid container spacing={2}>  
+            <Grid item xs={7}>
+            <p>Parking Rules</p>
+            <div className="mb-6 font-light text-s">
+                  <br></br>
+                  <a>•  Please treat the parking space as if its yours</a>
+                  <br></br>
+                  <a>•  Refrain from destroying others properties</a>
+                  <br></br>
+                  <a>•  Comply with the owners rules regarding the parking place</a>
+                  <br></br>
+                  <a>•  Do not misuse the parking space </a>
+            </div>
             </Grid>
-          </div>
-          <br></br>
-          <br></br>
+            <Grid item xs={2}>
+              </Grid>
+            <Grid item xs={3}>
+            <strong>Provided by {owner.firstName}</strong>
+              <br></br>
+              <br></br>
+                <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => { window.location = "mailto:" + owner.username; }}
+                >
+                Contact Host
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </div>
     </div>

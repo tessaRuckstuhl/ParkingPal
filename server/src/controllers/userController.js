@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const validator = require('validator')
+const moment = require('moment')
+
+
 
 function jwtSignUser(user) {
   const ONE_WEEK = 7 * 24 * 60 * 60;
@@ -9,13 +13,13 @@ function jwtSignUser(user) {
 }
 
 module.exports = {
-  async findByID (req, res) {
+  async findByID(req, res) {
     const { id } = req.params;
     try {
       const user = await User.findById(id)
       const userObjJson = user.toJSON();
       return res.send({
-       ...userObjJson,
+        ...userObjJson,
       });
     } catch (error) {
       return res.status(400).send({ error: 'user does not exist or something else is wrong' });
@@ -23,20 +27,21 @@ module.exports = {
   },
 
   async deleteById(req, res) {
-    const {id} = req.params
+    const { id } = req.params
     try {
-      await User.deleteOne({_id: id})
-      return res.status(200).send({success: 'User was deleted'})
+      await User.deleteOne({ _id: id })
+      return res.status(200).send({ success: 'User was deleted' })
     } catch (error) {
       return res.status(400).send({ error: 'something is wrong' });
     }
   },
 
   async updateById(req, res) {
-    const {id} = req.params;
+    const { id } = req.params;
     const update = req.body;
     try {
-      const updatedUser = await User.findOneAndUpdate({_id: id}, {...update}, {new:true})
+
+      const updatedUser = await User.findOneAndUpdate({ _id: id }, { ...update }, { new: true })
       const userObjJson = updatedUser.toJSON();
       return res.send({
         user: userObjJson,
@@ -48,6 +53,17 @@ module.exports = {
 
   async signup(req, res) {
     try {
+      // request validation
+      let { username, password, surname, firstName, birthdate } = req.body
+
+      if (
+        !moment(birthdate, "YYYY-MM-DDTHH:mm:ss.sssZ", true).isValid() ||
+        !validator.isEmail(username) ||
+        !validator.isAlpha(surname) ||
+        !validator.isAlpha(firstName) ||
+        !typeof password == 'string')
+        return res.status(406).send({ error: 'input is wrong' });
+
       const user = await User.create(req.body);
       const userObjJson = user.toJSON();
 
@@ -64,7 +80,14 @@ module.exports = {
   },
   async login(req, res) {
     try {
+      // request validation#      
       const { username, password } = req.body;
+
+      if (
+        !validator.isEmail(username) ||
+        !typeof password == 'string')
+        return res.status(406).send({ error: 'input is wrong' });
+
       const user = await User.findOne({ username });
       if (!user) {
         return res.status(403).send({ error: 'the login information is wrong' });

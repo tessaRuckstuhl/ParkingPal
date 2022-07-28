@@ -2,11 +2,32 @@ const { ParkingSpace } = require('../models');
 const { getLatLngByString } = require('../services/location');
 const { toIsoString } = require('../services/toIsoString');
 const mongoose = require('mongoose');
+const validator = require('validator')
+
 
 module.exports = {
   async createParkingSpace(req, res) {
     try {
-      console.log(req.body);
+      // request validation
+      let { basePrice, dayPrice, longTermStayPrice, description, properties } = req.body
+
+      if (
+        !validator.isFloat(basePrice.toString()) ||
+        !validator.isFloat(dayPrice.toString()) ||
+        !validator.isFloat(longTermStayPrice.toString()) ||
+        !typeof description == 'string' ||
+        !validator.isBoolean(properties.parking.streetside.toString()) ||
+        !validator.isBoolean(properties.parking.garage.toString()) ||
+        !validator.isBoolean(properties.parking.e_charging.toString()) ||
+        !validator.isBoolean(properties.parking.illuminated.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.free_24h_before.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.no_meetup.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.pin.toString()) ||
+        !validator.isBoolean(properties.cancellation_and_access.security_gate.toString()) ||
+        !validator.isFloat(properties.size.toString()))
+        return res.status(406).send({ error: 'input is wrong' });
+
+
       const parkingSpace = await ParkingSpace.create(req.body);
       return res.send(parkingSpace.toJSON());
     } catch (error) {
@@ -61,7 +82,7 @@ module.exports = {
   },
   async filterParkingSpaces(req, res) {
     try {
-      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to } =
+      const { formattedAddress, basePrice, dayPrice, longTermStayPrice, radius, from, to, size } =
         req.query;
 
       // console.log('REQUEST QUERY', req.query);
@@ -87,17 +108,17 @@ module.exports = {
       }
       // build price filter
       if (basePrice) {
-        mongoQuery.basePrice = { $gt: parseInt(basePrice[0]), $lt: parseInt(basePrice[1]) };
+        mongoQuery.basePrice = { $gte: parseInt(basePrice[0]), $lte: parseInt(basePrice[1]) };
         delete query.basePrice;
       }
       if (dayPrice) {
-        mongoQuery.dayPrice = { $gt: parseInt(dayPrice[0]), $lt: parseInt(dayPrice[1]) };
+        mongoQuery.dayPrice = { $gte: parseInt(dayPrice[0]), $lte: parseInt(dayPrice[1]) };
         delete query.dayPrice;
       }
       if (longTermStayPrice) {
         mongoQuery.longTermStayPrice = {
-          $gt: parseInt(longTermStayPrice[0]),
-          $lt: parseInt(longTermStayPrice[1]),
+          $gte: parseInt(longTermStayPrice[0]),
+          $lte: parseInt(longTermStayPrice[1]),
         };
         delete query.longTermStayPrice;
       }
@@ -118,12 +139,20 @@ module.exports = {
           $elemMatch: { to: { $gte: toIsoString(new Date(to)) } },
         };
       }
+
+      if (size) {
+        mongoQuery.size = {
+          $gte: parseInt(size[0]),
+          $lte: parseInt(size[1]),
+        };
+      }
       // build parking space features filter from remaining keys...
       Object.keys(query).map((key, index) => {
         if (query[key] === 'true') {
           return (mongoQuery[key] = true);
         }
       });
+      // console.log('DEBUG filter - Querying for following:', JSON.stringify(mongoQuery));
       // sorting by id so results appear in same order, also after filtering...
       const allParkingSpaces = await ParkingSpace.find({
         ...mongoQuery,
