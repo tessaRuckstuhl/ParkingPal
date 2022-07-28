@@ -645,31 +645,20 @@ const BookingForm = () => {
                     </Item> 
               </Grid>
             )): reviewsAry.slice(0,4).map((aryitem, i) => (
-                <Grid key={i} item xs={6}>
-                    <Item style={{ height: 100 }}>
-                        <div style={{
-                          margin: 'auto',
-                          fontSize: 15,
-                          justifyContent: 'begin',
-                          textAlign: 'justify',
-                          display: 'flex',
-                        }}>
-                          <p>Reviewer's Name</p>
-                        </div>
-                        <br></br>
-                        <div style={{
-                          margin: 'auto',
-                          fontSize: 15,
-                          justifyContent: 'begin',
-                          textAlign: 'justify',
-                          display: 'flex',
-                        }}>
-                          <b>{aryitem.reviewer}</b>
-                          <br></br>
-                          <a>{aryitem.description }</a>
-                        </div>
-                    </Item>
-               </Grid>
+              <Grid key={i} item xs={6}>
+                <Item style={{ height: 100 }}>
+                  <div style={{
+                    margin: 'auto',
+                    fontSize: 15,
+                    justifyContent: 'begin',
+                    textAlign: 'justify',
+                  }}>
+                    <b>{reviewNameAry[i]}</b>
+                    <br></br>
+                    <a>{aryitem?.description}</a>
+                  </div>
+                </Item> 
+              </Grid>
           ))}
           </Grid>
           <br></br>
