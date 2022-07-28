@@ -93,11 +93,6 @@ const ParkingSpaceSchema = new Schema({
   longTermStayPrice: {
     type: Number,
     required: false
-  },
-  status: {
-    type: String,
-    enum: ['available', 'booked','pending'],
-    required: false
   }
 }, {
   timestamps: true

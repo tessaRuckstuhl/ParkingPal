@@ -14,8 +14,6 @@ import Info from '@mui/icons-material/Info';
 import moment from 'moment';
 import { useLocation ,useNavigate} from 'react-router-dom';
 
-//https://mui.com/material-ui/react-stepper/ maybe add
-
 const ParkingSpaceForm = () => {
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const { imageIDs, setImageIDs } = useContext(ImageContext)
@@ -178,16 +176,22 @@ const ParkingSpaceForm = () => {
             pin: pin,
             security_gate: securityGate
           }
-        },
-        status: "available"
+        }
       };
-      location.pathname === "/parking/create" ? await ParkingSpaceService.create(parkingSpace): await ParkingSpaceService.update(updateID,parkingSpace)
+      if(location.pathname === "/parking/create"){
+        await ParkingSpaceService.create(parkingSpace)
+        showSnack("Parking space created successfully!", "success")
+      }  
+      else {
+        await ParkingSpaceService.update(updateID,parkingSpace)
+        showSnack("Parking space updated successfully!", "success")
+      }
       clearAll()
       navigate("/personal/listings")
-      showSnack("Parking space created successfully!", "success")
     } catch (error) {
       for (var i = 0; i < imageIDs.length; i++) {
         await ParkingSpaceService.deleteImage(imageIDs[i]).catch(imageremoveerror => "could not delete this image with id" + imageIDs[i])
+        //showSnack(error.response.message, "error")
       }
     };
   }
@@ -212,7 +216,8 @@ const ParkingSpaceForm = () => {
       setBasePrice(updateParkingSpace.basePrice)
       setDayPrice(updateParkingSpace.dayPrice)
       setLongTermStayPrice(updateParkingSpace.longTermStayPrice)
-      setAvailability(updateParkingSpace.availability)
+      let availabilityUpdate = updateParkingSpace.availability.filter(value => value.to > moment().toISOString())
+      setAvailability(availabilityUpdate)
       setStreet(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[0])
       setHouseNumber(updateParkingSpace.formattedAddress.split(',')[0].split(' ')[1])
       setPostalCode(updateParkingSpace.formattedAddress.split(',')[1].split(' ')[1])
@@ -227,7 +232,7 @@ const ParkingSpaceForm = () => {
       setSecurityGate(updateParkingSpace.properties.cancellation_and_access.pin)
       setLoadUpdateData(false)
     } 
-    if (parkingSpaceName !== "" && size !== "" && availability.length !== 0 && basePrice !== "" && street !== "" && houseNumber !== "" && (postalCode !== "" || city !== ""))
+    if (parkingSpaceName !== "" && size !== "" && availability.length !== 0 && basePrice !== "" && street !== "" && houseNumber !== "" && postalCode !== "" && city !== "")
       setFormIncomplete(false)
     else {
       setFormIncomplete(true)
@@ -236,7 +241,7 @@ const ParkingSpaceForm = () => {
     console.log(error);
     return navigate('/login');
   }
-  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city]);
+  }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city,postalCode]);
 
   return (
     <div className="flex flex-col items-center ">
