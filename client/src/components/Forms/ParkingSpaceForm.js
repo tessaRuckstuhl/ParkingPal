@@ -210,7 +210,8 @@ const ParkingSpaceForm = () => {
       const updateParkingSpace = state
       setUpdateID(updateParkingSpace._id)
       setParkingSpaceName(updateParkingSpace.name)
-      //setImageIDs(updateParkingSpace.images)
+      setImageIDs(updateParkingSpace.images)
+      console.log(updateParkingSpace.images)
       setDescription(updateParkingSpace.description)
       setSize(updateParkingSpace.properties.size)
       setBasePrice(updateParkingSpace.basePrice)
@@ -238,7 +239,7 @@ const ParkingSpaceForm = () => {
       setFormIncomplete(true)
     }
   } catch (error) {
-    console.log(error);
+    showSnack(error.response.message, "error")
     return navigate('/login');
   }
   }, [parkingSpaceName,size,availability,basePrice,street,houseNumber,postalCode,city,postalCode]);
