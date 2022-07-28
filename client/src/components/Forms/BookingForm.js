@@ -45,6 +45,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { map } from 'lodash';
 import { ListItem } from '@material-ui/core';
+import { from } from 'form-data';
 
 
 
@@ -569,12 +570,13 @@ const BookingForm = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {availability.map((date, i) => (  
+                {availability.filter(value => value.to > moment().toISOString()).map((date, i) => (  
                   <StyledTableRow key={i} >
                     <StyledTableCell  component ="th" scope ="row"> Date: <b> {moment(date.from).format('DD.MM.YYYY,  HH:mm')}</b> </StyledTableCell>
                     <StyledTableCell  align="right">Date: <b> {moment(date.to).format('DD.MM.YYYY,  HH:mm')}</b></StyledTableCell>
                   </StyledTableRow>
                 ))}
+                
               </TableBody>
             </Table>
         </TableContainer>
@@ -599,10 +601,8 @@ const BookingForm = () => {
             Customer Ratings
 
           </div>
-
           <br></br>
           <br></br>
-
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Typography component="legend">Neighborhood</Typography>
