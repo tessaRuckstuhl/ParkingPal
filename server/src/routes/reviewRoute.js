@@ -9,7 +9,8 @@ router.post('/', reviewController.createReview);
 router.get('/:id', reviewController.findByID);
 
 // api/review/
-router.put('/:id', reviewController.updateById);
+router.patch('/:id', reviewController.updateReview);
+
 
 // api/review/
 router.delete('/:id', reviewController.deleteById);
