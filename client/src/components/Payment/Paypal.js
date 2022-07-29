@@ -48,6 +48,8 @@ const Paypal = () => {
       newSlots.splice(availabilityIndex, 1, { from: bookedSlot.from, to: bookedFrom });
       availabilityIndex++;
       
+    } else {
+      newSlots.splice(availabilityIndex, 1);
     }
     if (
       Math.abs(new Date(bookedTo) - new Date(bookedSlot.to)) /
@@ -55,7 +57,7 @@ const Paypal = () => {
       1
     ) {
       newSlots.splice(availabilityIndex, 0, { from: bookedTo, to: bookedSlot.to });
-    }
+    } 
     return newSlots
 
 
