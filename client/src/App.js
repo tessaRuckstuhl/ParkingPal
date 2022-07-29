@@ -43,7 +43,7 @@ const App = () => {
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="parking/create" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
                     <Route path="parking/update" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
-                    <Route path="parking/booking" element={<AuthComponent><CreateBooking/></AuthComponent>}></Route>
+                    <Route path="parking/booking" element={<CreateBooking/>}></Route>
                     <Route path="all" element={<AuthComponent><ListViewParkingSpaces /></AuthComponent>}></Route>
                     <Route path="signup" element={<Signup />}></Route>
                     <Route path="review/create" element={<AuthComponent><CreateReview /></AuthComponent>}></Route>

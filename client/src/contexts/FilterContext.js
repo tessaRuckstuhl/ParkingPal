@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import PSService from '../services/parkingSpace.service';
 import RService from '../services/review.service';
 import { useErrorSnack } from './ErrorContext';
@@ -8,6 +8,8 @@ const FilterContext = React.createContext();
 
 const FilterContextProvider = (props) => {
   const navigate = useNavigate()
+  const location = useLocation();
+
   const [filters, setFilters] = useState();
   const [results, setResults] = useState([]);
   const [loadingResults, setLoadingResults] = useState(false);
@@ -42,7 +44,9 @@ const FilterContextProvider = (props) => {
   }, [results]);
 
   useEffect(() => {
-    getAllParkingSpaces(filters);
+    if(location.pathname== '/'){
+      getAllParkingSpaces(filters);
+    }
   }, [navigate]);
 
   return (
