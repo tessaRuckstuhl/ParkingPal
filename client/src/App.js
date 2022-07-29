@@ -19,6 +19,7 @@ import Results from './pages/Results';
 import Dashboard from './pages/UserDashboard/Dashboard';
 import Bookings from './pages/UserDashboard/Bookings';
 import Listings from './pages/UserDashboard/Listings';
+import Reviews from './pages/UserDashboard/Reviews';
 import { ErrorContextProvider } from './contexts/ErrorContext';
 import Paypal from './components/Payment/Paypal';
 import PaymentSuccess from './pages/PaymentSuccess';
@@ -47,12 +48,15 @@ const App = () => {
                     <Route path="all" element={<AuthComponent><ListViewParkingSpaces /></AuthComponent>}></Route>
                     <Route path="signup" element={<Signup />}></Route>
                     <Route path="review/create" element={<AuthComponent><CreateReview /></AuthComponent>}></Route>
+                    <Route path="review/update" element={<AuthComponent><CreateReview/></AuthComponent>}></Route>
+
                     <Route path="about" element={<About />}></Route>
                     <Route path="/" element={<Results />}></Route>
                     {/* User Dashboard */}
                     <Route path="personal" element={<AuthComponent><Dashboard /></AuthComponent>}></Route>
                     <Route path="personal/bookings" element={<AuthComponent><Bookings /></AuthComponent>}></Route>
                     <Route path="personal/listings" element={<AuthComponent><Listings /></AuthComponent>}></Route>
+                    <Route path="personal/reviews" element={<AuthComponent><Reviews /></AuthComponent>}></Route>
                     <Route path="pay" element={<AuthComponent><Paypal/></AuthComponent>}></Route>
                     <Route path="pay/success" element={<AuthComponent><PaymentSuccess/></AuthComponent>}></Route>
 

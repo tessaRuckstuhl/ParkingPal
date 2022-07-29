@@ -30,8 +30,7 @@ import moment from 'moment';
 import { useErrorSnack } from '../../contexts/ErrorContext';
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-
+import { ContactlessOutlined } from '@mui/icons-material';
 
 
 
@@ -51,6 +50,8 @@ const ReviewForm = () => {
   const [amountParkingSpaceReviews, setAmountParkingSpaceReviews] = useState();
   const [averageParkingSpaceReview, setAverageParkingSpaceReview] = useState();
   const [parkingSpaceSize, setParkingSpaceSize] = useState();
+  const [updateID,setUpdateID] = useState("") 
+  const [loadUpdateData,setLoadUpdateData] = useState(true) 
   const {showSnack} = useErrorSnack()
   const navigate = useNavigate();
 
@@ -64,6 +65,8 @@ const ReviewForm = () => {
     boxShadow: "none",
     color: theme.palette.text.secondary,
   }));
+
+  const {state} = useLocation()
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -105,9 +108,17 @@ const ReviewForm = () => {
         parkingSpace: parkingSpace
       };
 
+      if(location.pathname === "/review/create"){
+        const response = await ReviewService.create(review);
+        showSnack('Review created.', 'success')
+      }  
+      else {
+        await ReviewService.update(updateID,review)
+        showSnack("Parking space updated successfully!", "success")
+      }
 
-      const response = await ReviewService.create(review);
-      showSnack('Review created.', 'success')
+
+  
       setTimeout(() => {  navigate("/personal"); }, 1500);
 
     } catch (error) {
@@ -133,13 +144,28 @@ const ReviewForm = () => {
 
 
   useEffect(async () => {
-    const bookingId = new URL(location.href).searchParams.get('bookingId')
+    let bookingId = new URL(location.href).searchParams.get('bookingId')
+
+    if(location.pathname === "/review/update" && loadUpdateData){
+      const updateReview = state
+      bookingId = updateReview.booking
+
+      setNeighborhoodRating(updateReview.neighborhoodRating)
+      setAccessRating(updateReview.accessRating)
+      setLocationRating(updateReview.locationRating)
+      setCommunicationRating(updateReview.communicationRating)
+      setAccessRating(updateReview.accessRating)
+      setValueRating(updateReview.valueRating)
+      setReviewDescription(updateReview.description)
+      setUpdateID(updateReview._id)
+    } 
+
+
     const resultBooking = await BookingService.getBooking(bookingId);
     setBooking(resultBooking.data);
 
     const resultParkingSpace = await ParkingSpaceService.listParkingSpace(resultBooking.data.parkingSpace)
     setParkingSpace(resultParkingSpace.data)
-    setParkingSpaceSize(resultParkingSpace.data.properties.size)
 
 
     const resultGuest = await UserService.getUser(resultBooking.data.guest)
@@ -177,6 +203,8 @@ const ReviewForm = () => {
             <StarIcon color="primary" fontSize="small"></StarIcon>
             {averageParkingSpaceReview} &emsp; {amountParkingSpaceReviews} reviews &emsp; {parkingSpace.formattedAddress}
           </div>
+          <Divider />
+          <br></br>
           <div>
             {parkingSpace.images?.length > 0 ? (
               <>
@@ -196,6 +224,8 @@ const ReviewForm = () => {
               (<></>)}
 
           </div>
+          <br></br>
+          <Divider />
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={8}>
