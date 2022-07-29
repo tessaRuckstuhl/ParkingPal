@@ -24,7 +24,7 @@ const Dashboard = () => {
     }
   }, [jwt, navigate, setJwt]);
   return (
-    <div className="flex flex-col justify-center items-center space-y-5 mt-5">
+    <div className="flex flex-col justify-center items-center space-y-5 mt-5 mb-5">
       <div className="w-4/5 p-2 border border-lighterGray rounded-2xl shadow-bar text-center grid grid-flow-row gap-3 grid-rows-3">
         <div>
           <div className=" mb-2 text-xl">{parsedData.firstName + ' ' + parsedData.surname}</div>{' '}
