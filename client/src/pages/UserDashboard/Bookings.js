@@ -78,7 +78,7 @@ const Bookings = () => {
             {`${moment(b.startDate).format('DD.MM.YYYY,  HH:mm')} to ${moment(b.endDate).format(
               'DD.MM.YYYY, HH:mm'
             )} in ${b.parkingSpaceProps?.name} at ${b.parkingSpaceProps?.formattedAddress}`}
-            <Button onClick={() => reviewBooking(b._id)}>Review</Button>{' '}
+            <Button disabled={moment(b.endDate) > moment(new Date())} onClick={() => reviewBooking(b._id)}>Review</Button>{' '}
           </div>
         ))
       ) : (
