@@ -40,15 +40,15 @@ const App = () => {
                 <Default>
                   {/* Routes */}
                   <Routes>
-                    <Route path="/login" element={<AuthComponent><Login /></AuthComponent>}></Route>
+                    <Route path="/login" element={<Login />}></Route>
                     <Route path="parking/create" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
                     <Route path="parking/update" element={<AuthComponent><CreateParkingSpace/></AuthComponent>}></Route>
                     <Route path="parking/booking" element={<AuthComponent><CreateBooking/></AuthComponent>}></Route>
                     <Route path="all" element={<AuthComponent><ListViewParkingSpaces /></AuthComponent>}></Route>
-                    <Route path="signup" element={<AuthComponent><Signup /></AuthComponent>}></Route>
+                    <Route path="signup" element={<Signup />}></Route>
                     <Route path="review/create" element={<AuthComponent><CreateReview /></AuthComponent>}></Route>
                     <Route path="about" element={<About />}></Route>
-                    <Route path="/" element={<AuthComponent><Results /></AuthComponent>}></Route>
+                    <Route path="/" element={<Results />}></Route>
                     {/* User Dashboard */}
                     <Route path="personal" element={<AuthComponent><Dashboard /></AuthComponent>}></Route>
                     <Route path="personal/bookings" element={<AuthComponent><Bookings /></AuthComponent>}></Route>

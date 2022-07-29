@@ -152,7 +152,7 @@ const SignupForm = () => {
               Sign Up
             </Button>
           <div className="flex justify-end mt-1">
-            <Link href="/" variant="body2">
+            <Link href="/login" variant="body2">
               {'Have an Account? Sign In'}
             </Link>
           </div>
