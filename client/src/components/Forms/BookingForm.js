@@ -52,21 +52,21 @@ import { from } from 'form-data';
 
 
 const BookingForm = () => {
-  const [parkingSpace,setParkingSpace] = useState([]);
-  const [parkingMapCenter,setParkingMapCenter] = useState({lat:48.1488436,lng:11.5658499});
+  const [parkingSpace, setParkingSpace] = useState([]);
+  const [parkingMapCenter, setParkingMapCenter] = useState({ lat: 48.1488436, lng: 11.5658499 });
   const [parkingSpaceName, setParkingSpaceName] = useState('');
   const [parkingSpaceId, setParkingSpaceId] = useState('');
   const [availability, setAvailability] = useState([]);
   const [basePrice, setBasePrice] = useState();
-  const [dayPrice,setDayPrice] = useState();
+  const [dayPrice, setDayPrice] = useState();
   const [longPrice, setLongPrice] = useState()
-  const [todayDate,setTodayDate] = useState('');
+  const [todayDate, setTodayDate] = useState('');
   const [parkingProp, setParkingProp] = useState('');
   const [parkingCandA, setParkingCandA] = useState('');
-  const [address,setParkingAddress] = useState('');
+  const [address, setParkingAddress] = useState('');
   const [parkingName, setParkingName] = useState('');
-  const [images,setParkingPics] = useState([])
-  const [desc,setParkingDesc] = useState('');
+  const [images, setParkingPics] = useState([])
+  const [desc, setParkingDesc] = useState('');
   const [owner, setOwner] = useState('');
   const [reviewamount, setReviewamount] = useState(0)
   const [overallRating, setOverallRating] = useState(0)
@@ -76,21 +76,21 @@ const BookingForm = () => {
   const [acr, setACR] = useState(5);
   const [lr, setLR] = useState(5);
   const [vr, setVR] = useState(5);
-  const [fromTime,setFromTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
-  const [untilTime,setUntilTime] = useState (new Date().getDate()+"-"+(new Date().getMonth()+1)+"-"+new Date().getFullYear());
-  const [totalPrice,setTotalPrice] = useState();
-  const [parkingPrice,setParkingPrice] = useState();
-  const [fee,setFee] = useState();
-  const [days,setDays] = useState(0);
-  const [hours,setHours] = useState(0);
-  const [parkingSpaceSize,setParkingSpaceSize] = useState();
+  const [fromTime, setFromTime] = useState(new Date().getDate() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getFullYear());
+  const [untilTime, setUntilTime] = useState(new Date().getDate() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getFullYear());
+  const [totalPrice, setTotalPrice] = useState();
+  const [parkingPrice, setParkingPrice] = useState();
+  const [fee, setFee] = useState();
+  const [days, setDays] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [parkingSpaceSize, setParkingSpaceSize] = useState();
   const [reviewsAry, setReviews] = useState([]);
   const navigate = useNavigate();
   const [startValue, setStartValue] = React.useState(new Date());
   const [endValue, setEndValue] = React.useState(new Date());
   const [reviewNameAry, setReviewNameAry] = useState({});
- 
-  
+
+
   const { showSnack } = useErrorSnack()
 
 
@@ -104,7 +104,7 @@ const BookingForm = () => {
 
   const StyledTableCell = withStyles((theme) => ({
     head: {
-      backgroundColor:'#6F11F2',
+      backgroundColor: '#6F11F2',
       color: theme.palette.common.white,
       fontSize: 16,
       fontWeight: 'bold'
@@ -142,50 +142,50 @@ const BookingForm = () => {
     event.preventDefault();
     try {
       const user = parseJwt(localStorage.getItem('token'))
-      if (user){
+      if (user) {
         const booking = {
           parkingSpace: parkingSpaceId,
-          guest: user._id, 
+          guest: user._id,
           owner: owner,
           issueDate: todayDate,
           startDate: startValue,
-          endDate: endValue, 
+          endDate: endValue,
           price: totalPrice,
-          payed:false
+          payed: false
         };
         const createdBooking = await BookingService.create(booking);
         // first we create the booking with payed set to false, then we handle payment and update payed field to true
         handlePayment(createdBooking.data)
       }
-      else{
-        showSnack("Please login first","error")
+      else {
+        showSnack("Please login first", "error")
       }
     }
     catch (error) {
       console.log(error)
-      }
+    }
   };
-  
-  
+
+
   // leave me here
   // redirect with state: price, other stats,search for booking id and update as payed
   // LOGIC: 1. handleSubmit (parkingSpace created) 2. handlePayment (forward to paypal, pay, update entry in db as payed) 3. redirect to some success page
   const handlePayment = (data) => {
     var okDate = false
-    for (let i = 0; i<availability.length;i++){
-      if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
+    for (let i = 0; i < availability.length; i++) {
+      if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to) {
         okDate = true
         break;
       }
     }
-    if (okDate) {navigate('/pay', {state: data})}
+    if (okDate) { navigate('/pay', { state: data }) }
     else {
-      showSnack("Your selected dates are not available. Please choose another date","error")
+      showSnack("Your selected dates are not available. Please choose another date", "error")
     }
   }
 
   const reviewName = async (reviews) => {
-    for (let i = 0; i<reviews.length; i++) {
+    for (let i = 0; i < reviews.length; i++) {
       let name = await UserService.getUser(reviews[i].reviewer) //id
       let firstname = name.data
       reviewNameAry[i] = firstname.surname
@@ -198,17 +198,17 @@ const BookingForm = () => {
     const parkingResult = await ParkingSpaceService.listParkingSpace(parkingId)
     const reviewResult = await ReviewService.getReviewStats(parkingId)
     const reviewResultlist = await ReviewService.getReviewsOfParkingSpace(parkingId)
-    
+
     //Owner Name
     const resultOwner = await UserService.getUser(parkingResult.data.owner)
     setOwner(resultOwner.data)
     //Reviewer Names
     await reviewName(reviewResultlist.data.reviews)
-    
+
     // Parking Space related
-    const formattedParkingSpaces = {...parkingResult.data, lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1]}
-    setParkingSpace([...parkingSpace,formattedParkingSpaces])
-    setParkingMapCenter({lat:parkingResult.data.location.coordinates[0], lng:parkingResult.data.location.coordinates[1]})
+    const formattedParkingSpaces = { ...parkingResult.data, lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1] }
+    setParkingSpace([...parkingSpace, formattedParkingSpaces])
+    setParkingMapCenter({ lat: parkingResult.data.location.coordinates[0], lng: parkingResult.data.location.coordinates[1] })
     setTodayDate(today)
     setParkingSpaceName(parkingResult.data.name)
     setParkingProp(parkingResult.data.properties.parking)
@@ -231,12 +231,12 @@ const BookingForm = () => {
     setAR(Number(reviewResult.data.averageAccessRating) || 0)
     setACR(Number(reviewResult.data.averageAccuracyRating) || 0)
     setLR(Number(reviewResult.data.averageLocationRating) || 0)
-    setVR(Number(reviewResult.data.averageValueRating) || 0) 
+    setVR(Number(reviewResult.data.averageValueRating) || 0)
     setReviews(reviewResultlist.data.reviews)
-   
+
     console.log(reviewNameAry)
     console.log(reviewsAry)
-    
+
   }, []);
   return (
     <div className="flex flex-col items-center ">
@@ -245,10 +245,13 @@ const BookingForm = () => {
           <b>{parkingName}</b>
         </div>
         <div className="mb-6 font-light text-s">
-        
+
           <b>{overallRating} ⭐ Rating from {reviewamount} reviews &nbsp; at &nbsp; {address}</b>
-          
+
         </div>
+
+        <Divider />
+        <br></br>
         <form className="text-3x2 font-bold mb-7" noValidate onSubmit={(e) => handleSubmit(e)}>
           <ImageList cols={2} rowHeight={400}>
             {images.map((picture, i) => (
@@ -260,6 +263,9 @@ const BookingForm = () => {
               </ImageListItem>
             ))}
           </ImageList>
+          <br></br>
+          <Divider />
+        
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={7}>
@@ -342,31 +348,31 @@ const BookingForm = () => {
                   <br></br>
                   <b>Description</b>
                   <br></br>
-                  <a>{desc}</a>                  
+                  <a>{desc}</a>
                 </div>
               </Item>
             </Grid>
             <Grid item xs={5}>
               <Item style={{ height: 400 }}>
 
-                <div className=" font-regular  text-s"  
+                <div className=" font-regular  text-s"
                   style={{
                     justifyContent: 'center',
                     textAlign: 'justify',
                   }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                      <b>↠ {basePrice} € / hour</b> 
+                      <b>↠ {basePrice} € / hour</b>
                       <br></br>
                       <b>↠ {dayPrice} € / day</b>
                       <br></br>
-                      
+
                     </Grid>
                     <Grid item xs={6}>
-                    <b>Rating:</b> ⭐  {overallRating} ({reviewamount})
+                      <b>Rating:</b> ⭐  {overallRating} ({reviewamount})
                     </Grid>
                   </Grid>
-                  
+
                   <a>Staying longer than 5h?</a> It's only <b>{longPrice}€ </b>for the rest of the day
                   <br></br>
                 </div>
@@ -376,7 +382,7 @@ const BookingForm = () => {
                       <Item style={{ height: 70 }} key={5} elevation={5}>
                         <b>CHECK-IN</b>
                         <br></br>
-                        <a> {fromTime.toString().substring(0,24)}</a>
+                        <a> {fromTime.toString().substring(0, 24)}</a>
                       </Item>
                     </Grid>
                     <Grid item xs={1}>
@@ -387,19 +393,19 @@ const BookingForm = () => {
                       <Item style={{ height: 70 }} key={5} elevation={5}>
                         <b>CHECK-OUT</b>
                         <br></br>
-                        <a>{untilTime.toString().substring(0,24)}</a>
+                        <a>{untilTime.toString().substring(0, 24)}</a>
                       </Item>
                     </Grid>
                   </Grid>
                 </div>
-                
+
                 <div className="mt-2 font-bold" style={{
                   justifyContent: 'center',
                   textAlign: 'justify',
                 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                    Total Time
+                      Total Time
                     </Grid>
                     <Grid item xs={6}>
                       {days} day(s) and {hours} hour(s)
@@ -412,7 +418,7 @@ const BookingForm = () => {
                 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                    Parking Price
+                      Parking Price
                     </Grid>
                     <Grid item xs={6}>
                       {parkingPrice} €
@@ -425,21 +431,21 @@ const BookingForm = () => {
                 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                    Fee
+                      Fee
                     </Grid>
                     <Grid item xs={6}>
                       {fee} €
                     </Grid>
                   </Grid>
                 </div>
-                
+
                 <div className="mt-2 mb-7 font-bold" style={{
                   justifyContent: 'center',
                   textAlign: 'justify',
                 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                    Total Price
+                      Total Price
                     </Grid>
                     <Grid item xs={6}>
                       {totalPrice} €
@@ -465,7 +471,7 @@ const BookingForm = () => {
           {/* <Divider /> */}
           <br></br>
           <br></br>
-          
+
           <div
             style={{
               marginTop: '5%',
@@ -496,12 +502,12 @@ const BookingForm = () => {
                   <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
                     label="From"
-                    disablePast = {true} 
+                    disablePast={true}
                     value={startValue}
-                    onChange={(start) => {  
+                    onChange={(start) => {
                       setStartValue(start);
                       setFromTime(start);
-                      
+
                     }}
                   />
                 </LocalizationProvider>
@@ -512,53 +518,54 @@ const BookingForm = () => {
                     renderInput={(props) => <TextField {...props} />}
                     label="Until"
                     value={endValue}
-                    disablePast = {true}
-                    minDateTime = {fromTime}
+                    disablePast={true}
+                    minDateTime={fromTime}
                     onChange={(end) => {
                       setEndValue(end);
                       setUntilTime(end)
-                      
+
                     }}
                   />
-                </LocalizationProvider> 
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={4}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => { 
-                  const myTimeDif = (untilTime-fromTime)
-                  const myDays = ((myTimeDif/(1000*86400)) >= 1 ? parseInt((myTimeDif/(1000*86400))) : 0 )
-                  const myHours = (myDays > 0 ? ((parseInt(myTimeDif/(1000*3600)) - myDays *24 )) : parseInt(myTimeDif/(1000*3600)))
-                  const remainHourPrice = (myHours > 5 ? (4*basePrice)+longPrice : (myHours)* basePrice)
-                  const myFee = ((myDays*dayPrice + remainHourPrice)*0.05).toFixed(2)
-                  var okDate = false
-                  for (let i = 0; i<availability.length;i++){
-                    if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to){
-                      okDate = true
-                      break;
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    const myTimeDif = (untilTime - fromTime)
+                    const myDays = ((myTimeDif / (1000 * 86400)) >= 1 ? parseInt((myTimeDif / (1000 * 86400))) : 0)
+                    const myHours = (myDays > 0 ? ((parseInt(myTimeDif / (1000 * 3600)) - myDays * 24)) : parseInt(myTimeDif / (1000 * 3600)))
+                    const remainHourPrice = (myHours > 5 ? (4 * basePrice) + longPrice : (myHours) * basePrice)
+                    const myFee = ((myDays * dayPrice + remainHourPrice) * 0.05).toFixed(2)
+                    var okDate = false
+                    for (let i = 0; i < availability.length; i++) {
+                      if (availability[i].from < fromTime.toISOString() && untilTime.toISOString() < availability[i].to) {
+                        okDate = true
+                        break;
+                      }
                     }
-                  }
-                  if (okDate) {
-                    setDays(myDays)
-                    setHours(myHours)
-                    setFee(myFee)
-                    setParkingPrice (myDays*dayPrice + remainHourPrice)
-                    setTotalPrice(parseFloat(myDays*dayPrice + remainHourPrice) + parseFloat(myFee))
-                  }
-                  else {
-                    showSnack("Your selected dates are not available. Please choose another date","error")
-                  }}}
-              >
-                Calculate Price
-              </Button>
-                
+                    if (okDate) {
+                      setDays(myDays)
+                      setHours(myHours)
+                      setFee(myFee)
+                      setParkingPrice(myDays * dayPrice + remainHourPrice)
+                      setTotalPrice(parseFloat(myDays * dayPrice + remainHourPrice) + parseFloat(myFee))
+                    }
+                    else {
+                      showSnack("Your selected dates are not available. Please choose another date", "error")
+                    }
+                  }}
+                >
+                  Calculate Price
+                </Button>
+
               </Grid>
-            </Grid> 
+            </Grid>
           </div>
           <br></br>
-          <div style ={{ marginBottom: '1pt'}}>
-          <a>List of available slots</a>
+          <div style={{ marginBottom: '1pt' }}>
+            <a>List of available slots</a>
           </div>
           <br></br>
           <TableContainer component={Paper}>
@@ -570,22 +577,22 @@ const BookingForm = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {availability.filter(value => value.to > moment().toISOString()).map((date, i) => (  
+                {availability.filter(value => value.to > moment().toISOString()).map((date, i) => (
                   <StyledTableRow key={i} >
-                    <StyledTableCell  component ="th" scope ="row"> Date: <b> {moment(date.from).format('DD.MM.YYYY,  HH:mm')}</b> </StyledTableCell>
-                    <StyledTableCell  align="right">Date: <b> {moment(date.to).format('DD.MM.YYYY,  HH:mm')}</b></StyledTableCell>
+                    <StyledTableCell component="th" scope="row"> Date: <b> {moment(date.from).format('DD.MM.YYYY,  HH:mm')}</b> </StyledTableCell>
+                    <StyledTableCell align="right">Date: <b> {moment(date.to).format('DD.MM.YYYY,  HH:mm')}</b></StyledTableCell>
                   </StyledTableRow>
                 ))}
-                
+
               </TableBody>
             </Table>
-        </TableContainer>
+          </TableContainer>
 
           <br></br>
           <br></br>
           <Divider />
           <br></br>
-          
+
           <div
             style={{
               marginTop: '10%',
@@ -626,25 +633,10 @@ const BookingForm = () => {
             </Grid>
           </Grid>
 
-          
+
           <br></br>
-          <Grid container spacing={2}>  
-            {reviewsAry.length <5 ? reviewsAry?.map((aryitem, i) => ( 
-              <Grid key={i} item xs={6}>
-                    <Item style={{ height: 100 }}>
-                      <div style={{
-                        margin: 'auto',
-                        fontSize: 15,
-                        justifyContent: 'begin',
-                        textAlign: 'justify',
-                      }}>
-                        <b>{reviewNameAry[i]}</b>
-                        <br></br>
-                        <a>{aryitem?.description}</a>
-                      </div>
-                    </Item> 
-              </Grid>
-            )): reviewsAry.slice(0,4).map((aryitem, i) => (
+          <Grid container spacing={2}>
+            {reviewsAry.length < 5 ? reviewsAry?.map((aryitem, i) => (
               <Grid key={i} item xs={6}>
                 <Item style={{ height: 100 }}>
                   <div style={{
@@ -657,16 +649,31 @@ const BookingForm = () => {
                     <br></br>
                     <a>{aryitem?.description}</a>
                   </div>
-                </Item> 
+                </Item>
               </Grid>
-          ))}
+            )) : reviewsAry.slice(0, 4).map((aryitem, i) => (
+              <Grid key={i} item xs={6}>
+                <Item style={{ height: 100 }}>
+                  <div style={{
+                    margin: 'auto',
+                    fontSize: 15,
+                    justifyContent: 'begin',
+                    textAlign: 'justify',
+                  }}>
+                    <b>{reviewNameAry[i]}</b>
+                    <br></br>
+                    <a>{aryitem?.description}</a>
+                  </div>
+                </Item>
+              </Grid>
+            ))}
           </Grid>
           <br></br>
           <br></br>
           <br></br>
           <h2>Where you'll be parking</h2>
           <br></br>
-          <br></br>  
+          <br></br>
           <div className="w-full">
             <MapWrapper results={parkingSpace} center={parkingMapCenter} setCenter={setParkingMapCenter} selected={true} />
           </div>
@@ -683,33 +690,33 @@ const BookingForm = () => {
             textAlign: 'justify',
             display: 'flex',
           }}>
-         </div>
+          </div>
 
-          <Grid container spacing={2}>  
+          <Grid container spacing={2}>
             <Grid item xs={7}>
-            <p>Parking Rules</p>
-            <div className="mb-6 font-light text-s">
-                  <br></br>
-                  <a>•  Please treat the parking space as if its yours</a>
-                  <br></br>
-                  <a>•  Refrain from destroying others properties</a>
-                  <br></br>
-                  <a>•  Comply with the owners rules regarding the parking place</a>
-                  <br></br>
-                  <a>•  Do not misuse the parking space </a>
-            </div>
+              <p>Parking Rules</p>
+              <div className="mb-6 font-light text-s">
+                <br></br>
+                <a>•  Please treat the parking space as if its yours</a>
+                <br></br>
+                <a>•  Refrain from destroying others properties</a>
+                <br></br>
+                <a>•  Comply with the owners rules regarding the parking place</a>
+                <br></br>
+                <a>•  Do not misuse the parking space </a>
+              </div>
             </Grid>
             <Grid item xs={2}>
-              </Grid>
+            </Grid>
             <Grid item xs={3}>
-            <strong>Provided by {owner.firstName}</strong>
+              <strong>Provided by {owner.firstName}</strong>
               <br></br>
               <br></br>
-                <Button
+              <Button
                 variant="outlined"
                 color="primary"
                 onClick={() => { window.location = "mailto:" + owner.username; }}
-                >
+              >
                 Contact Host
               </Button>
             </Grid>

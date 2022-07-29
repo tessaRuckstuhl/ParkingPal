@@ -21,7 +21,21 @@ module.exports = {
             return res.status(400).send({ error: 'There was an error trying to get all Reviews' });
         }
     },
-    async updateById(req, res) {
+    async listOwnedReviews(req, res) {
+        const { id } = req.params;
+        if (id) {
+            const allReviews = await Review.find({
+                reviewer: mongoose.Types.ObjectId(id),
+            }).sort({ _id: -1 });
+            return res.send(allReviews);
+        } else {
+            return res
+                .status(400)
+                .send({ error: 'There was an error trying to get owner parking spaces' });
+        }
+    },
+    async updateReview(req, res) {
+        console.log("oke")
         const { id } = req.params;
         const update = req.body;
         try {
@@ -99,10 +113,10 @@ module.exports = {
                 });
             }
             let sumOverallRating = 0
-            let sumNeighborhoodRating = 0 
+            let sumNeighborhoodRating = 0
             let sumAccessRating = 0
-            let sumLocationRating = 0 
-            let sumCommunicationRating = 0 
+            let sumLocationRating = 0
+            let sumCommunicationRating = 0
             let sumAccuracyRating = 0
             let sumValueRating = 0
 

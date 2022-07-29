@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Tile from '../../components/UserDashboard/Tile';
-import { LocalOfferOutlined, GarageOutlined, AccountCircle } from '@mui/icons-material';
+import { LocalOfferOutlined, RateReviewOutlined, GarageOutlined, AccountCircle } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import { Buffer } from 'buffer';
 import moment from 'moment';
@@ -55,6 +55,13 @@ const Dashboard = () => {
           link="/personal/listings"
           description="Here you can create, update and delete listings"
           Icon={LocalOfferOutlined}
+          ownerId={parsedData?._id}
+        />
+        <Tile
+          title="My Reviews"
+          link="/personal/reviews"
+          description="Here you can create, update and delete reviews"
+          Icon={RateReviewOutlined}
           ownerId={parsedData?._id}
         />
       </div>
