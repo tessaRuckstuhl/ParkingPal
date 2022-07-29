@@ -8,7 +8,7 @@ const AuthComponent = (props) => {
 
   useEffect(() => {
     if (!jwt || jwt === ''|| jwt === undefined) {
-      return navigate('/');
+      return navigate('/login');
     }
   }, [jwt]);
   return (
